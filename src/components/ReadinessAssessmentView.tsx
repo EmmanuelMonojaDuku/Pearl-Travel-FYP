@@ -36,7 +36,7 @@ export const ReadinessAssessmentView: React.FC<Props> = ({
   return (
     <div className="max-w-md mx-auto space-y-5">
       <div className="text-center">
-        <p className="text-[11px] font-bold uppercase tracking-wider text-pearl-gold">Malaba clearance score</p>
+        <p className="text-[11px] font-bold uppercase tracking-wider text-pearl-accent">Malaba clearance score</p>
         <div className="flex justify-center mt-4"><Ring value={score} label={`${score}%`} sub="Ready" size={150} tone={tone} /></div>
         <h2 className="mt-4 text-lg font-bold font-heading">Your Readiness Score</h2>
         <p className="text-xs text-pearl-text-secondary mt-1">{statusLabel} · {message}</p>
@@ -71,7 +71,7 @@ export const ReadinessAssessmentView: React.FC<Props> = ({
           onClick={() => setExplain((v) => !v)}
           className="w-full h-11 rounded-xl border border-pearl-border bg-pearl-surface text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer hover:bg-pearl-input"
         >
-          <Info className="w-4 h-4 text-pearl-gold" /> How does my score work?
+          <Info className="w-4 h-4 text-pearl-accent" /> How does my score work?
           <ChevronDown className={`w-4 h-4 transition-transform ${explain ? 'rotate-180' : ''}`} />
         </button>
         {explain && (

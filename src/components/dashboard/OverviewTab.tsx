@@ -228,13 +228,13 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
       {/* 1. Welcome Banner */}
       <section
         aria-label="Welcome Overview"
-        className="relative rounded-2xl bg-pearl-navy border border-pearl-dark overflow-hidden text-pearl-text"
+        className="relative rounded-2xl bg-pearl-navy border border-pearl-border overflow-hidden text-pearl-text"
       >
         <div className="grid grid-cols-1 md:grid-cols-12 items-stretch">
           {/* Left Copy */}
           <div className="md:col-span-7 p-5 sm:p-7 flex flex-col justify-between gap-4 relative z-10">
             <div className="space-y-1.5">
-              <p className="text-[11px] font-bold uppercase tracking-wider text-pearl-gold">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-pearl-accent">
                 Pre-Arrival Readiness
               </p>
               <h2 className="font-heading text-2xl sm:text-3xl font-bold text-pearl-text tracking-tight leading-tight">
@@ -268,7 +268,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
               <button
                 type="button"
                 onClick={() => onSelectTab('border-guide')}
-                className="min-h-[40px] px-4 py-2 rounded-xl bg-pearl-dark hover:bg-pearl-slate border border-pearl-slate text-pearl-text text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap"
+                className="min-h-[40px] px-4 py-2 rounded-xl bg-pearl-dark hover:bg-pearl-surface border border-pearl-border text-pearl-text text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap"
               >
                 Malaba Border Guide
               </button>
@@ -297,7 +297,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
 
             {/* Curved Pearl Gold accent divider connecting dark navy panel & border photo */}
             <svg
-              className="absolute inset-y-0 left-0 h-full w-14 text-pearl-gold pointer-events-none"
+              className="absolute inset-y-0 left-0 h-full w-14 text-pearl-accent pointer-events-none"
               viewBox="0 0 64 220"
               preserveAspectRatio="none"
               aria-hidden="true"
@@ -323,14 +323,14 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
         <div className="bg-pearl-dark border border-pearl-border rounded-2xl p-5 flex flex-col justify-between gap-4">
           <div className="flex items-start justify-between gap-3 pb-3 border-b border-pearl-border">
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-9 h-9 rounded-xl bg-pearl-navy text-pearl-gold flex items-center justify-center shrink-0">
+              <div className="w-9 h-9 rounded-xl bg-pearl-navy text-pearl-accent flex items-center justify-center shrink-0">
                 <Compass className="w-4 h-4" />
               </div>
               <div className="min-w-0">
                 <h3 className="font-heading text-sm font-bold text-pearl-text">
                   Your Upcoming Journey
                 </h3>
-                <p className={`text-[11px] font-semibold ${hasJourney ? 'text-pearl-success-light' : 'text-pearl-gold-light'}`}>
+                <p className={`text-[11px] font-semibold ${hasJourney ? 'text-pearl-success-light' : 'text-pearl-accent'}`}>
                   {hasJourney ? 'Journey configured' : 'No journey configured'}
                 </p>
               </div>
@@ -405,7 +405,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
         <div className="bg-pearl-dark border border-pearl-border rounded-2xl p-5 flex flex-col justify-between gap-4">
           <div className="flex items-start justify-between gap-3 pb-3 border-b border-pearl-border">
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-9 h-9 rounded-xl bg-pearl-navy text-pearl-gold flex items-center justify-center shrink-0">
+              <div className="w-9 h-9 rounded-xl bg-pearl-navy text-pearl-accent flex items-center justify-center shrink-0">
                 <User className="w-4 h-4" />
               </div>
               <div className="min-w-0">
@@ -414,7 +414,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
                 </h3>
                 <p
                   className={`text-[11px] font-semibold ${
-                    isProfileComplete ? 'text-pearl-success-light' : 'text-pearl-gold-light'
+                    isProfileComplete ? 'text-pearl-success-light' : 'text-pearl-accent'
                   }`}
                 >
                   {isProfileComplete ? 'Profile Complete' : 'Profile Incomplete'}
@@ -442,7 +442,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
                 className="w-12 h-12 rounded-xl object-cover border border-pearl-border shrink-0"
               />
             ) : (
-              <div className="w-12 h-12 rounded-xl bg-pearl-navy text-pearl-gold font-bold text-base flex items-center justify-center shrink-0">
+              <div className="w-12 h-12 rounded-xl bg-pearl-navy text-pearl-accent font-bold text-base flex items-center justify-center shrink-0">
                 {initials || 'PT'}
               </div>
             )}
@@ -463,7 +463,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
               <span className="text-[10px] font-bold uppercase tracking-wider text-pearl-placeholder block">
                 Profile Status
               </span>
-              <span className={`font-semibold truncate block mt-0.5 ${isProfileComplete ? 'text-pearl-success-light' : 'text-pearl-gold-light'}`}>
+              <span className={`font-semibold truncate block mt-0.5 ${isProfileComplete ? 'text-pearl-success-light' : 'text-pearl-accent'}`}>
                 {isProfileComplete ? 'Complete' : 'In progress'}
               </span>
             </div>
@@ -471,7 +471,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
               <button
                 type="button"
                 onClick={() => onSelectTab('profile')}
-                className="min-h-[36px] w-full text-left font-semibold text-pearl-text hover:text-pearl-gold-light transition-colors cursor-pointer"
+                className="min-h-[36px] w-full text-left font-semibold text-pearl-text hover:text-pearl-accent transition-colors cursor-pointer"
               >
                 Review profile details
               </button>
@@ -486,10 +486,10 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
         className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch"
       >
         {/* Dark Navy Travel Readiness Panel */}
-        <div className="lg:col-span-7 rounded-2xl bg-pearl-navy border border-pearl-dark p-5 sm:p-6 text-pearl-text flex flex-col justify-between gap-5">
-          <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-pearl-dark">
+        <div className="lg:col-span-7 rounded-2xl bg-pearl-navy border border-pearl-border p-5 sm:p-6 text-pearl-text flex flex-col justify-between gap-5">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-pearl-border">
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-pearl-gold block">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-pearl-accent block">
                 Deterministic Assessment
               </span>
               <h3 className="font-heading text-lg font-bold text-pearl-text">
@@ -505,7 +505,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
                   ? 'text-pearl-success-light'
                   : hasCriticalMissing
                   ? 'text-pearl-danger-light'
-                  : 'text-pearl-gold-light'
+                  : 'text-pearl-accent'
               }`}
             >
               {isAllReady ? (
@@ -533,7 +533,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
                   cx="55"
                   cy="55"
                   r={radius}
-                  stroke="#161619"
+                  stroke="var(--pearl-border)"
                   strokeWidth="10"
                   fill="transparent"
                 />
@@ -563,7 +563,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
             {/* Readiness Counters */}
             <div className="flex-1 w-full space-y-3">
               <div className="grid grid-cols-2 gap-3">
-                <div className="p-3 rounded-xl bg-pearl-dark border border-pearl-slate">
+                <div className="p-3 rounded-xl bg-pearl-dark border border-pearl-border">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-pearl-placeholder block">
                     Completed
                   </span>
@@ -573,7 +573,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
                   <span className="text-[11px] text-pearl-text-secondary">Documents verified</span>
                 </div>
 
-                <div className="p-3 rounded-xl bg-pearl-dark border border-pearl-slate">
+                <div className="p-3 rounded-xl bg-pearl-dark border border-pearl-border">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-pearl-placeholder block">
                     Outstanding
                   </span>
@@ -582,7 +582,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
                       readiness.missingMandatoryCount > 0
                         ? 'text-pearl-danger-light'
                         : readiness.missingItems.length > 0
-                        ? 'text-pearl-gold-light'
+                        ? 'text-pearl-accent'
                         : 'text-pearl-success-light'
                     }`}
                   >
@@ -611,7 +611,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-pearl-dark">
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-pearl-border">
             <button
               type="button"
               onClick={() => onSelectTab('checklist')}
@@ -625,9 +625,9 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
               type="button"
               id="btn-view-qr-summary"
               onClick={() => onSelectTab('qr')}
-              className="min-h-[40px] px-4 py-2 rounded-xl bg-pearl-dark hover:bg-pearl-slate border border-pearl-slate text-pearl-text text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
+              className="min-h-[40px] px-4 py-2 rounded-xl bg-pearl-dark hover:bg-pearl-surface border border-pearl-border text-pearl-text text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
             >
-              <QrCode className="w-3.5 h-3.5 text-pearl-gold" />
+              <QrCode className="w-3.5 h-3.5 text-pearl-accent" />
               <span>Open QR Summary</span>
             </button>
           </div>
@@ -646,7 +646,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
                     ? 'text-pearl-danger-light'
                     : nextActionTone === 'success'
                     ? 'text-pearl-success-light'
-                    : 'text-pearl-gold-light'
+                    : 'text-pearl-accent'
                 }`}
               >
                 {nextActionTone === 'critical'
@@ -693,7 +693,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
               className="w-full min-h-[42px] px-4 py-2.5 rounded-xl bg-pearl-navy hover:bg-pearl-dark text-pearl-text text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer"
             >
               <span>{nextActionButtonLabel}</span>
-              <ArrowRight className="w-3.5 h-3.5 text-pearl-gold" />
+              <ArrowRight className="w-3.5 h-3.5 text-pearl-accent" />
             </button>
 
             <p className="text-[11px] text-pearl-text-secondary text-center">
@@ -727,7 +727,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between gap-2">
-                    <div className="w-10 h-10 rounded-xl bg-pearl-navy text-pearl-gold flex items-center justify-center shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-pearl-navy text-pearl-accent flex items-center justify-center shrink-0">
                       <Icon className="w-5 h-5" />
                     </div>
                     <span className="text-[11px] font-semibold text-pearl-text-secondary tabular-nums">
@@ -753,7 +753,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
                     className="flex-1 min-h-[38px] px-3 py-1.5 rounded-lg bg-pearl-navy hover:bg-pearl-dark text-pearl-text text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
                   >
                     <span>Open</span>
-                    <ArrowRight className="w-3.5 h-3.5 text-pearl-gold" />
+                    <ArrowRight className="w-3.5 h-3.5 text-pearl-accent" />
                   </button>
 
                   {isMultimedia && (
@@ -781,7 +781,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
         className="bg-pearl-dark border border-pearl-border rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-pearl-navy text-pearl-gold flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-pearl-navy text-pearl-accent flex items-center justify-center shrink-0">
             <Download className="w-5 h-5" />
           </div>
           <div>

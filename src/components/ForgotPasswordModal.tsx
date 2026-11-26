@@ -56,7 +56,7 @@ export const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
           role="dialog"
           aria-modal="true"
           aria-labelledby="forgot-password-title"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-pearl-navy/75 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-pearl-scrim/75 backdrop-blur-sm"
         >
           <div className="absolute inset-0" onClick={handleClose} />
 
@@ -65,13 +65,13 @@ export const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 12 }}
             transition={{ duration: 0.2 }}
-            className="relative w-full max-w-md bg-pearl-navy/95 rounded-2xl p-6 sm:p-8 border border-white/10 shadow-[0_24px_64px_rgba(2,6,23,0.85)] backdrop-blur-md z-10"
+            className="relative w-full max-w-md bg-pearl-dark rounded-2xl p-6 sm:p-8 border border-pearl-border shadow-xl z-10"
           >
             <button
               type="button"
               id="close-forgot-modal"
               onClick={handleClose}
-              className="absolute top-5 right-5 w-8 h-8 rounded-lg border border-white/10 bg-pearl-dark hover:bg-pearl-surface flex items-center justify-center text-pearl-placeholder hover:text-pearl-text focus:outline-none focus-visible:ring-2 focus-visible:ring-pearl-gold cursor-pointer transition-colors"
+              className="absolute top-5 right-5 w-8 h-8 rounded-lg border border-pearl-border bg-pearl-surface hover:bg-pearl-border flex items-center justify-center text-pearl-placeholder hover:text-pearl-text focus:outline-none focus-visible:ring-2 focus-visible:ring-pearl-gold cursor-pointer transition-colors"
               aria-label="Close dialog"
             >
               <X className="w-4 h-4" />
@@ -79,8 +79,8 @@ export const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
 
             {!submitted ? (
               <div>
-                <div className="w-11 h-11 rounded-xl bg-pearl-dark border border-white/10 flex items-center justify-center text-pearl-text mb-4 shadow-sm">
-                  <Mail className="w-5 h-5 text-pearl-gold" />
+                <div className="w-11 h-11 rounded-xl bg-pearl-surface border border-pearl-border flex items-center justify-center text-pearl-text mb-4">
+                  <Mail className="w-5 h-5 text-pearl-accent" />
                 </div>
 
                 <h3
@@ -144,14 +144,14 @@ export const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
                   Recovery Request Recorded
                 </h3>
                 <p className="text-sm text-pearl-placeholder mb-6 leading-relaxed">
-                  If an account exists for <strong className="text-[#FFFFFF]">{email}</strong>, we&apos;ve sent instructions to reset your password.
+                  If an account exists for <strong className="text-pearl-text">{email}</strong>, we&apos;ve sent instructions to reset your password.
                 </p>
 
                 <button
                   type="button"
                   id="done-forgot-modal"
                   onClick={handleClose}
-                  className="w-full h-11 rounded-xl border border-white/10 bg-pearl-dark hover:bg-pearl-surface text-sm font-semibold text-[#FFFFFF] transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-pearl-gold"
+                  className="w-full h-11 rounded-xl border border-pearl-border bg-pearl-dark hover:bg-pearl-surface text-sm font-semibold text-pearl-text transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-pearl-gold"
                 >
                   Back to Sign In
                 </button>

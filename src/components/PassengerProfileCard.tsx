@@ -103,10 +103,10 @@ export const PassengerProfileCard: React.FC<PassengerProfileCardProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-5 border-b border-pearl-border gap-3">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-pearl-gold-light">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-pearl-accent">
               Passenger Data & Identity
             </span>
-            <span className={`text-[11px] font-semibold ${isProfileComplete ? 'text-pearl-success-light' : 'text-pearl-gold-light'}`}>
+            <span className={`text-[11px] font-semibold ${isProfileComplete ? 'text-pearl-success-light' : 'text-pearl-accent'}`}>
               • {isProfileComplete ? 'Profile Complete' : 'Profile In Progress'}
             </span>
           </div>
@@ -163,7 +163,7 @@ export const PassengerProfileCard: React.FC<PassengerProfileCardProps> = ({
         />
         <div className="min-w-0 flex-1 text-center md:text-left">
           <div className="flex items-center justify-center md:justify-start gap-1.5 text-xs font-bold text-pearl-text">
-            <Camera className="w-3.5 h-3.5 text-pearl-gold-light" />
+            <Camera className="w-3.5 h-3.5 text-pearl-accent" />
             <span>Traveller Profile Photo <span className="text-pearl-placeholder font-medium">(optional)</span></span>
           </div>
           <h3 className="mt-1 text-lg font-bold text-pearl-text truncate">
@@ -172,7 +172,7 @@ export const PassengerProfileCard: React.FC<PassengerProfileCardProps> = ({
           <p className="text-xs text-pearl-text-secondary mt-1">
             {profile.nationality || 'Nationality not set'}
           </p>
-          <p className={`text-xs font-semibold mt-1 ${isProfileComplete ? 'text-pearl-success-light' : 'text-pearl-gold-light'}`}>
+          <p className={`text-xs font-semibold mt-1 ${isProfileComplete ? 'text-pearl-success-light' : 'text-pearl-accent'}`}>
             {isProfileComplete ? 'Profile complete' : 'Profile in progress'}
           </p>
         </div>
@@ -281,7 +281,7 @@ export const PassengerProfileCard: React.FC<PassengerProfileCardProps> = ({
                   onClick={() => onChange({ ...profile, gender: g })}
                   className={`min-h-[44px] py-2.5 px-2 rounded-xl text-xs font-semibold transition-colors cursor-pointer border text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pearl-gold ${
                     isSelected
-                      ? 'bg-pearl-navy text-pearl-text border-pearl-gold ring-1 ring-pearl-gold'
+                      ? 'bg-pearl-gold/15 text-pearl-text border-pearl-gold ring-1 ring-pearl-gold'
                       : 'bg-pearl-surface text-pearl-text-secondary border-pearl-border hover:bg-pearl-input hover:text-pearl-text'
                   }`}
                 >
@@ -381,7 +381,7 @@ export const PassengerProfileCard: React.FC<PassengerProfileCardProps> = ({
           <div>
             <div className="flex items-center justify-between mb-1">
               <label htmlFor="emergency-contact-name" className="text-[11px] font-semibold text-pearl-text-secondary flex items-center gap-1">
-                <HeartHandshake className="w-3 h-3 text-pearl-gold-light" />
+                <HeartHandshake className="w-3 h-3 text-pearl-accent" />
                 <span>Emergency Contact Name</span>
               </label>
               {profile.emergencyContactName && (

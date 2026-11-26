@@ -24,7 +24,7 @@ export const BorderStepAccordion: React.FC<Props> = ({ steps }) => {
       {steps.map(step => (
         <div key={step.stepNumber} className="rounded-xl border bg-pearl-surface border-pearl-border p-4">
           <div className="flex items-center gap-2">
-            <span className="font-mono font-bold text-pearl-gold-light">{step.stepNumber}.</span>
+            <span className="font-mono font-bold text-pearl-accent">{step.stepNumber}.</span>
             <span className="font-bold text-pearl-text">{step.title}</span>
             <span className="text-pearl-placeholder text-xs hidden sm:inline">• {step.agency}</span>
             <span className="ml-auto text-pearl-text-secondary text-xs">{step.approxTime}</span>
@@ -36,12 +36,12 @@ export const BorderStepAccordion: React.FC<Props> = ({ steps }) => {
           <Accordion label="More details">
             <div className="p-2 space-y-2">
               <div className="flex items-center space-x-2">
-                <FileCheck className="w-4 h-4 text-pearl-gold-light" />
+                <FileCheck className="w-4 h-4 text-pearl-accent" />
                 <span className="font-medium">Officer Action:</span>
                 <span>{step.officerAction}</span>
               </div>
               <div className="flex items-center space-x-2">
-                <AlertCircle className="w-4 h-4 text-pearl-gold-light" />
+                <AlertCircle className="w-4 h-4 text-pearl-accent" />
                 <span className="font-medium">Traveller Tip:</span>
                 <span>{step.travelerTips}</span>
               </div>

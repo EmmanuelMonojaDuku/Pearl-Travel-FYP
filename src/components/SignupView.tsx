@@ -135,7 +135,7 @@ export const SignupView: React.FC<SignupViewProps> = ({ onSwitchToLogin, onBack,
 
         <p className="mt-6 text-center text-sm text-pearl-text-secondary">
           Already have an account?{' '}
-          <button type="button" onClick={() => onSwitchToLogin()} className="font-semibold text-pearl-gold hover:text-pearl-gold-light cursor-pointer">
+          <button type="button" onClick={() => onSwitchToLogin()} className="font-semibold text-pearl-accent hover:text-pearl-accent cursor-pointer">
             Login
           </button>
         </p>

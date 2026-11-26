@@ -93,7 +93,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
     .join('');
 
   return (
-    <header className="sticky top-0 z-30 h-14 sm:h-16 w-full bg-pearl-navy border-b border-pearl-dark px-3 sm:px-6 flex items-center justify-between gap-2 text-pearl-text">
+    <header className="sticky top-0 z-30 h-14 sm:h-16 w-full bg-pearl-navy border-b border-pearl-border px-3 sm:px-6 flex items-center justify-between gap-2 text-pearl-text">
       {/* Left: Drawer Trigger + Page Title */}
       <div className="flex items-center gap-2.5 min-w-0">
         <button
@@ -125,13 +125,13 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
           title={isOfflineMode ? 'Switch back to Live Online mode' : 'Simulate Offline Border mode'}
           className={`min-h-[36px] px-2.5 sm:px-3 py-1.5 rounded-lg border text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
             isOfflineMode
-              ? 'bg-pearl-gold/20 border-pearl-gold/50 text-pearl-gold-light'
-              : 'bg-pearl-dark border-pearl-slate text-pearl-text-secondary hover:text-pearl-text'
+              ? 'bg-pearl-gold/20 border-pearl-gold/50 text-pearl-accent'
+              : 'bg-pearl-dark border-pearl-border text-pearl-text-secondary hover:text-pearl-text'
           }`}
         >
           {isOfflineMode ? (
             <>
-              <WifiOff className="w-3.5 h-3.5 text-pearl-gold-light" />
+              <WifiOff className="w-3.5 h-3.5 text-pearl-accent" />
               <span className="hidden sm:inline">Offline Cache</span>
             </>
           ) : (
@@ -149,9 +149,9 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
           onClick={onSyncNow}
           disabled={isSyncing}
           title={`Last synced: ${lastSyncedTime}. Click to sync now.`}
-          className="hidden md:flex items-center gap-1.5 min-h-[36px] px-3 py-1.5 rounded-lg bg-pearl-dark border border-pearl-slate text-xs font-medium text-pearl-text-secondary hover:text-pearl-text hover:border-pearl-border transition-colors cursor-pointer disabled:opacity-60 whitespace-nowrap shrink-0"
+          className="hidden md:flex items-center gap-1.5 min-h-[36px] px-3 py-1.5 rounded-lg bg-pearl-dark border border-pearl-border text-xs font-medium text-pearl-text-secondary hover:text-pearl-text hover:border-pearl-border transition-colors cursor-pointer disabled:opacity-60 whitespace-nowrap shrink-0"
         >
-          <RefreshCw className={`w-3.5 h-3.5 text-pearl-gold ${isSyncing ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`w-3.5 h-3.5 text-pearl-accent ${isSyncing ? 'animate-spin' : ''}`} />
           <span className="tabular-nums text-[11px]">
             {isSyncing ? 'Syncing...' : `Synced ${lastSyncedTime}`}
           </span>
@@ -166,7 +166,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               setShowNotifications((prev) => !prev);
               setShowProfileMenu(false);
             }}
-            className="relative min-h-[44px] min-w-[44px] sm:min-h-[38px] sm:min-w-[38px] flex items-center justify-center rounded-xl bg-pearl-dark border border-pearl-slate text-pearl-text-secondary hover:text-pearl-text transition-colors cursor-pointer"
+            className="relative min-h-[44px] min-w-[44px] sm:min-h-[38px] sm:min-w-[38px] flex items-center justify-center rounded-xl bg-pearl-dark border border-pearl-border text-pearl-text-secondary hover:text-pearl-text transition-colors cursor-pointer"
           >
             <Bell className="w-4 h-4" />
             {alerts.length > 0 && (
@@ -213,7 +213,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
                           alert.severity === 'critical'
                             ? 'text-pearl-danger-light'
                             : alert.severity === 'warning'
-                            ? 'text-pearl-gold-light'
+                            ? 'text-pearl-accent'
                             : 'text-pearl-text'
                         }`}
                       />
@@ -239,7 +239,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               setShowProfileMenu((prev) => !prev);
               setShowNotifications(false);
             }}
-            className="min-h-[40px] pl-1.5 pr-2.5 py-1 rounded-xl bg-pearl-dark border border-pearl-slate hover:border-pearl-border flex items-center gap-2 transition-colors cursor-pointer"
+            className="min-h-[40px] pl-1.5 pr-2.5 py-1 rounded-xl bg-pearl-dark border border-pearl-border hover:border-pearl-border flex items-center gap-2 transition-colors cursor-pointer"
           >
             {profile.avatarUrl ? (
               <img

@@ -24,7 +24,7 @@ export const SupportContactModal: React.FC<SupportContactModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-pearl-navy/60 backdrop-blur-xs">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-pearl-scrim/60 backdrop-blur-xs">
       <div
         role="dialog"
         aria-modal="true"
@@ -67,7 +67,7 @@ export const SupportContactModal: React.FC<SupportContactModalProps> = ({
               onClick={handleCopyEmail}
               className="px-3 py-1.5 rounded-lg bg-pearl-navy hover:bg-pearl-dark text-pearl-text font-semibold flex items-center gap-1.5 cursor-pointer shrink-0"
             >
-              {copied ? <Check className="w-3.5 h-3.5 text-pearl-gold" /> : <Copy className="w-3.5 h-3.5 text-pearl-gold" />}
+              {copied ? <Check className="w-3.5 h-3.5 text-pearl-accent" /> : <Copy className="w-3.5 h-3.5 text-pearl-accent" />}
               <span>{copied ? 'Copied' : 'Copy'}</span>
             </button>
           </div>

@@ -315,7 +315,7 @@ This video guidance is published for public passenger orientation and traveler a
   return (
     <div className="w-full space-y-6">
       {/* Top Header Card with Uganda National Pride Colors */}
-      <div className="bg-pearl-navy border border-pearl-border rounded-3xl p-5 sm:p-7 shadow-2xl relative overflow-hidden">
+      <div className="bg-pearl-dark border border-pearl-border rounded-3xl p-5 sm:p-7 shadow-sm relative overflow-hidden">
         {/* National Tricolor Top Banner */}
         <div className="absolute top-0 left-0 right-0 h-2 flex">
           <div className="flex-1 bg-black" />
@@ -329,7 +329,7 @@ This video guidance is published for public passenger orientation and traveler a
               <span className="px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-pearl-gold text-pearl-text">
                 {isSw ? 'Mwongozo Rasmi wa Mpakani' : 'Official Border Walkthrough'}
               </span>
-              <span className="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-pearl-dark text-pearl-gold-light border border-pearl-slate">
+              <span className="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-pearl-dark text-pearl-accent border border-pearl-border">
                 4K UHD • 2160p
               </span>
               <span className="text-xs font-mono text-pearl-placeholder tabular-nums">
@@ -404,7 +404,7 @@ This video guidance is published for public passenger orientation and traveler a
                 className={`px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
                   activeTab === 'video'
                     ? 'bg-pearl-gold text-pearl-navy shadow-lg shadow-amber-500/20'
-                    : 'bg-pearl-dark text-pearl-text-secondary hover:bg-pearl-slate'
+                    : 'bg-pearl-dark text-pearl-text-secondary hover:bg-pearl-surface'
                 }`}
               >
                 <Play className="w-3.5 h-3.5" />
@@ -417,7 +417,7 @@ This video guidance is published for public passenger orientation and traveler a
                 className={`px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
                   activeTab === 'map'
                     ? 'bg-pearl-gold text-pearl-navy shadow-lg shadow-amber-500/20'
-                    : 'bg-pearl-dark text-pearl-text-secondary hover:bg-pearl-slate'
+                    : 'bg-pearl-dark text-pearl-text-secondary hover:bg-pearl-surface'
                 }`}
               >
                 <MapPin className="w-3.5 h-3.5" />
@@ -430,7 +430,7 @@ This video guidance is published for public passenger orientation and traveler a
                 className={`px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
                   activeTab === 'transcript'
                     ? 'bg-pearl-gold text-pearl-navy shadow-lg shadow-amber-500/20'
-                    : 'bg-pearl-dark text-pearl-text-secondary hover:bg-pearl-slate'
+                    : 'bg-pearl-dark text-pearl-text-secondary hover:bg-pearl-surface'
                 }`}
               >
                 <FileCheck className="w-3.5 h-3.5" />
@@ -440,10 +440,10 @@ This video guidance is published for public passenger orientation and traveler a
               <button
                 type="button"
                 onClick={handleDownloadTranscript}
-                className="px-3 py-2 rounded-xl text-xs font-bold bg-pearl-dark hover:bg-pearl-slate text-pearl-text-secondary border border-pearl-border flex items-center gap-1.5"
+                className="px-3 py-2 rounded-xl text-xs font-bold bg-pearl-dark hover:bg-pearl-surface text-pearl-text-secondary border border-pearl-border flex items-center gap-1.5"
                 title={isSw ? 'Pakua nakala rasmi ya mwongozo' : 'Download official passenger orientation guide'}
               >
-                <Download className="w-3.5 h-3.5 text-pearl-gold-light" />
+                <Download className="w-3.5 h-3.5 text-pearl-accent" />
                 <span className="hidden sm:inline">{isSw ? 'Nakala' : 'Script'}</span>
               </button>
 
@@ -458,9 +458,9 @@ This video guidance is published for public passenger orientation and traveler a
                     : 'Share video download link with All Video Downloaders, IDM, Snaptube, etc.'
                 }
               >
-                <Share2 className="w-3.5 h-3.5 text-pearl-gold" />
+                <Share2 className="w-3.5 h-3.5 text-pearl-accent" />
                 <span>{isSw ? 'Shiriki Video' : 'Share Video'}</span>
-                <span className="hidden lg:inline px-1.5 py-0.2 rounded bg-pearl-navy/40 text-[9px] font-black uppercase tracking-wider text-pearl-gold-light">
+                <span className="hidden lg:inline px-1.5 py-0.2 rounded bg-pearl-navy/40 text-[9px] font-black uppercase tracking-wider text-pearl-accent">
                   All Downloaders
                 </span>
               </button>
@@ -521,7 +521,7 @@ This video guidance is published for public passenger orientation and traveler a
                       </p>
                       <span className="w-1.5 h-1.5 rounded-full bg-pearl-success-light" />
                     </div>
-                    <p className="text-[10px] text-pearl-gold-light font-semibold">
+                    <p className="text-[10px] text-pearl-accent font-semibold">
                       {isSw ? 'Idara ya Uhamiaji ya Uganda • DCIC' : 'Uganda Immigration Service • DCIC'}
                     </p>
                   </div>
@@ -554,7 +554,7 @@ This video guidance is published for public passenger orientation and traveler a
               <div className="absolute top-16 sm:top-20 right-4 max-w-[280px] sm:max-w-xs z-20 pointer-events-none transition-all duration-500">
                 <div className="bg-pearl-navy/85 backdrop-blur-md border border-pearl-border/80 rounded-2xl p-3 sm:p-4 shadow-2xl text-left">
                   <div className="flex items-center justify-between gap-2 pb-2 border-b border-pearl-border mb-2.5">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-pearl-gold flex items-center gap-1">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-pearl-accent flex items-center gap-1">
                       <FileCheck className="w-3.5 h-3.5" /> {isSw ? 'Hati Zinazohitajika Kaunta' : 'Required at Counter'}
                     </span>
                     <span className="text-[10px] font-mono text-pearl-placeholder">
@@ -568,7 +568,7 @@ This video guidance is published for public passenger orientation and traveler a
                         key={item.id}
                         className="flex items-start gap-2 bg-pearl-navy/90 rounded-xl p-2 border border-pearl-border/80"
                       >
-                        <CheckCircle2 className="w-4 h-4 text-pearl-gold shrink-0 mt-0.5" />
+                        <CheckCircle2 className="w-4 h-4 text-pearl-accent shrink-0 mt-0.5" />
                         <div>
                           <p className="text-xs font-bold text-pearl-text leading-tight">
                             {item.name}
@@ -607,7 +607,7 @@ This video guidance is published for public passenger orientation and traveler a
               {showSubtitles && activeSubtitle && (
                 <div className="absolute bottom-16 sm:bottom-20 left-4 right-4 z-30 flex justify-center pointer-events-none">
                   <div className="bg-pearl-navy/90 text-pearl-text px-4 py-2 sm:px-6 sm:py-2.5 rounded-full border border-pearl-gold/40 text-xs sm:text-sm font-semibold max-w-2xl text-center shadow-2xl backdrop-blur-md">
-                    <span className="text-pearl-gold font-bold mr-1.5">
+                    <span className="text-pearl-accent font-bold mr-1.5">
                       {currentScene.officerName.split(' ')[1] || 'Officer'}:
                     </span>
                     <span className="text-pearl-text tracking-wide">
@@ -758,7 +758,7 @@ This video guidance is published for public passenger orientation and traveler a
                       type="button"
                       id="btn-player-share-link"
                       onClick={() => setIsShareModalOpen(true)}
-                      className="px-2 py-1 rounded-lg bg-pearl-gold/20 hover:bg-pearl-gold/20 text-pearl-gold-light hover:text-pearl-text transition flex items-center gap-1 cursor-pointer"
+                      className="px-2 py-1 rounded-lg bg-pearl-gold/20 hover:bg-pearl-gold/20 text-pearl-accent hover:text-pearl-text transition flex items-center gap-1 cursor-pointer"
                       title={
                         isSw
                           ? 'Shiriki kiungo cha video cha kupakua na programu zote za video downloader'
@@ -797,10 +797,10 @@ This video guidance is published for public passenger orientation and traveler a
           />
 
           {/* Universal Video Downloader Quick Share Bar */}
-          <div className="bg-pearl-navy border border-pearl-border rounded-2xl p-3 sm:p-4 shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-pearl-text">
+          <div className="bg-pearl-dark border border-pearl-border rounded-2xl p-3 sm:p-4 shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-pearl-text">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-pearl-danger text-pearl-text flex items-center justify-center shrink-0 shadow-md">
-                <Download className="w-5 h-5 text-pearl-gold" />
+                <Download className="w-5 h-5 text-pearl-accent" />
               </div>
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
@@ -841,7 +841,7 @@ This video guidance is published for public passenger orientation and traveler a
                     onShowToast('Direct video link ready.');
                   }
                 }}
-                className="flex-1 sm:flex-none px-3.5 py-2 rounded-xl bg-pearl-dark hover:bg-pearl-slate text-pearl-text-secondary border border-pearl-border text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer"
+                className="flex-1 sm:flex-none px-3.5 py-2 rounded-xl bg-pearl-dark hover:bg-pearl-surface text-pearl-text-secondary border border-pearl-border text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer"
                 title="Copy direct MP4 video URL"
               >
                 {isCopiedQuickLink ? (
@@ -851,7 +851,7 @@ This video guidance is published for public passenger orientation and traveler a
                   </>
                 ) : (
                   <>
-                    <Copy className="w-3.5 h-3.5 text-pearl-gold-light" />
+                    <Copy className="w-3.5 h-3.5 text-pearl-accent" />
                     <span>{isSw ? 'Nakili Kiungo' : 'Copy Direct Link'}</span>
                   </>
                 )}
@@ -870,10 +870,10 @@ This video guidance is published for public passenger orientation and traveler a
           </div>
 
           {/* Scene Chapter Selector Bar */}
-          <div className="bg-pearl-navy border border-pearl-border rounded-2xl p-3 sm:p-4 shadow-lg">
+          <div className="bg-pearl-dark border border-pearl-border rounded-2xl p-3 sm:p-4 shadow-lg">
             <div className="flex items-center justify-between gap-2 mb-3">
               <span className="text-xs font-black uppercase tracking-wider text-pearl-placeholder flex items-center gap-1.5">
-                <Layers className="w-3.5 h-3.5 text-pearl-gold" /> {isSw ? 'Ruka Kwenye Onyesho la Ukaguzi' : 'Jump to Border Clearance Scene'}
+                <Layers className="w-3.5 h-3.5 text-pearl-accent" /> {isSw ? 'Ruka Kwenye Onyesho la Ukaguzi' : 'Jump to Border Clearance Scene'}
               </span>
               <span className="text-xs text-pearl-placeholder">
                 {isSw ? 'Inayocheza:' : 'Active:'} <strong className="text-pearl-text">{isSw ? `Onyesho la ${currentScene.id}` : `Scene ${currentScene.id}`}</strong>
@@ -937,7 +937,7 @@ This video guidance is published for public passenger orientation and traveler a
                     {currentScene.title}
                   </h3>
                   <p className="text-xs text-pearl-text-secondary flex items-center gap-1.5 mt-0.5">
-                    <MapPin className="w-3.5 h-3.5 text-pearl-gold-light" />
+                    <MapPin className="w-3.5 h-3.5 text-pearl-accent" />
                     <span>{isSw ? `Eneo: ${currentScene.locationName}` : `Location: ${currentScene.locationName}`}</span>
                   </p>
                 </div>
@@ -955,7 +955,7 @@ This video guidance is published for public passenger orientation and traveler a
               {/* Officer Dialogue Quote */}
               <div className="bg-pearl-surface border border-pearl-gold/50 p-4 rounded-xl">
                 <div className="flex items-center gap-2 mb-1.5">
-                  <span className="font-bold text-xs text-pearl-gold-light">
+                  <span className="font-bold text-xs text-pearl-accent">
                     {isSw ? `Maneno Rasmi ya Afisa (${currentScene.officerName})` : `Official Dialogue (${currentScene.officerName})`}
                   </span>
                 </div>
@@ -984,19 +984,19 @@ This video guidance is published for public passenger orientation and traveler a
             </div>
 
             {/* Right Col: Required Documents Checklist for this specific scene */}
-            <div className="bg-pearl-navy text-pearl-text rounded-2xl p-5 border border-pearl-dark flex flex-col justify-between">
+            <div className="bg-pearl-dark text-pearl-text rounded-2xl p-5 border border-pearl-border flex flex-col justify-between">
               <div>
-                <div className="flex items-center justify-between pb-3 border-b border-pearl-dark mb-4">
+                <div className="flex items-center justify-between pb-3 border-b border-pearl-border mb-4">
                   <div>
                     <h4 className="text-sm font-bold text-pearl-text flex items-center gap-1.5">
-                      <FileCheck className="w-4 h-4 text-pearl-gold-light" />
+                      <FileCheck className="w-4 h-4 text-pearl-accent" />
                       <span>{isSw ? 'Hati Zinazohitajika Katika Hatua Hii' : 'Required at this Point'}</span>
                     </h4>
                     <p className="text-[11px] text-pearl-placeholder mt-0.5">
                       {isSw ? `Orodha ya Onyesho la ${currentScene.id}` : `Checklist for Scene ${currentScene.id}`}
                     </p>
                   </div>
-                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-pearl-dark text-pearl-gold-light tabular-nums">
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-pearl-dark text-pearl-accent tabular-nums">
                     {currentScene.onScreenChecklist.length} {isSw ? 'Hati' : 'Items'}
                   </span>
                 </div>
@@ -1005,7 +1005,7 @@ This video guidance is published for public passenger orientation and traveler a
                   {currentScene.onScreenChecklist.map((item) => (
                     <div
                       key={item.id}
-                      className="bg-pearl-dark p-3 rounded-xl border border-pearl-slate text-left"
+                      className="bg-pearl-dark p-3 rounded-xl border border-pearl-border text-left"
                     >
                       <div className="flex items-center justify-between gap-1 mb-1">
                         <span className="text-xs font-bold text-pearl-text">
@@ -1016,7 +1016,7 @@ This video guidance is published for public passenger orientation and traveler a
                             item.category === 'mandatory'
                               ? 'bg-pearl-danger/20 text-pearl-danger-light border border-pearl-danger/40'
                               : item.category === 'conditional'
-                              ? 'bg-pearl-gold/20 text-pearl-gold-light border border-pearl-gold/40'
+                              ? 'bg-pearl-gold/20 text-pearl-accent border border-pearl-gold/40'
                               : 'bg-pearl-success/25 text-pearl-success-light border border-pearl-success/50'
                           }`}
                         >
@@ -1032,7 +1032,7 @@ This video guidance is published for public passenger orientation and traveler a
               </div>
 
               {/* Pearl Travel Connection Card */}
-              <div className="mt-4 pt-4 border-t border-pearl-dark">
+              <div className="mt-4 pt-4 border-t border-pearl-border">
                 <div className="bg-pearl-dark p-3 rounded-xl border border-pearl-gold/35 flex items-center justify-between gap-2">
                   <div>
                     <p className="text-xs font-bold text-pearl-text">
@@ -1076,7 +1076,7 @@ This video guidance is published for public passenger orientation and traveler a
         <div className="bg-pearl-dark rounded-2xl p-6 border border-pearl-border space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-pearl-border">
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-pearl-gold-light bg-pearl-gold/10 px-2.5 py-0.5 rounded-md border border-pearl-gold/40 inline-block">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-pearl-accent bg-pearl-gold/10 px-2.5 py-0.5 rounded-md border border-pearl-gold/40 inline-block">
                 {isSw ? 'Nakala Kamili ya Maneno' : 'Verbatim Script'}
               </span>
               <h3 className="text-xl font-bold text-pearl-text font-heading mt-1.5">
@@ -1096,7 +1096,7 @@ This video guidance is published for public passenger orientation and traveler a
               onClick={handleDownloadTranscript}
               className="px-4 py-2 rounded-xl text-xs font-bold bg-pearl-navy text-pearl-text hover:bg-pearl-dark transition-colors flex items-center gap-2 self-start sm:self-auto cursor-pointer whitespace-nowrap shrink-0"
             >
-              <Download className="w-3.5 h-3.5 text-pearl-gold-light" />
+              <Download className="w-3.5 h-3.5 text-pearl-accent" />
               <span>{isSw ? 'Pakua Nakala Rasmi' : 'Download Official Text'}</span>
             </button>
           </div>
@@ -1109,7 +1109,7 @@ This video guidance is published for public passenger orientation and traveler a
               >
                 <div className="flex items-center justify-between gap-2 flex-wrap">
                   <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 rounded-md text-xs font-bold bg-pearl-navy text-pearl-gold-light">
+                    <span className="px-2 py-0.5 rounded-md text-xs font-bold bg-pearl-navy text-pearl-accent">
                       {isSw ? `Onyesho ${scene.id}` : `Scene ${scene.id}`}
                     </span>
                     <h4 className="text-sm font-bold text-pearl-text">
@@ -1167,9 +1167,9 @@ This video guidance is published for public passenger orientation and traveler a
 
           {/* Official Border Authorities Disclaimer */}
           <div className="bg-pearl-surface rounded-xl p-4 border border-pearl-gold/50 text-xs text-pearl-text flex items-start gap-3">
-            <Info className="w-5 h-5 text-pearl-gold-light shrink-0 mt-0.5" />
+            <Info className="w-5 h-5 text-pearl-accent shrink-0 mt-0.5" />
             <div>
-              <strong className="block font-bold text-pearl-gold-light mb-1">
+              <strong className="block font-bold text-pearl-accent mb-1">
                 {isSw ? 'Ilani Rasmi ya Kituo cha Mpaka' : 'Official Border Post Information Notice'}
               </strong>
               {isSw

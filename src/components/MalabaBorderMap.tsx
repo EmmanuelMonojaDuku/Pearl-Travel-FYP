@@ -121,9 +121,9 @@ export const MalabaBorderMap: React.FC<MalabaBorderMapProps> = ({
       </div>
 
       {/* Schematic Diagram of the Border Station */}
-      <div className="relative w-full bg-pearl-navy/70 border border-pearl-border rounded-xl p-4 mb-6">
+      <div className="relative w-full bg-pearl-surface border border-pearl-border rounded-xl p-4 mb-6">
         <div className="flex items-center justify-between text-[11px] font-mono text-pearl-placeholder pb-3 border-b border-pearl-border/80 mb-4">
-          <span className="flex items-center gap-1.5 text-pearl-gold-light font-bold">
+          <span className="flex items-center gap-1.5 text-pearl-accent font-bold">
             <MapPin className="w-3.5 h-3.5" /> {isSw ? 'KUINGIA KUTOKA MPAKA WA KENYA' : 'KENYA BORDER ENTRY'}
           </span>
           <span className="hidden sm:inline text-pearl-placeholder">
@@ -191,7 +191,7 @@ export const MalabaBorderMap: React.FC<MalabaBorderMapProps> = ({
 
       {/* Official Malaba OSBP Facts Banner */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-pearl-text-secondary">
-        <div className="bg-pearl-navy/50 p-3 rounded-xl border border-pearl-border/80">
+        <div className="bg-pearl-surface p-3 rounded-xl border border-pearl-border/80">
           <strong className="text-pearl-text block font-bold text-xs mb-1">
             {isSw ? 'Falsafa ya Kituo cha Pamoja' : 'One-Stop Philosophy'}
           </strong>
@@ -199,7 +199,7 @@ export const MalabaBorderMap: React.FC<MalabaBorderMapProps> = ({
             ? 'Wasafiri wanakaguliwa katika jengo moja la pamoja, bila kuhitaji kusimama mara mbili katika mipaka miwili tofauti.'
             : 'Passengers are processed in a single unified facility, eliminating the need to stop twice at separate national borders.'}
         </div>
-        <div className="bg-pearl-navy/50 p-3 rounded-xl border border-pearl-border/80">
+        <div className="bg-pearl-surface p-3 rounded-xl border border-pearl-border/80">
           <strong className="text-pearl-text block font-bold text-xs mb-1">
             {isSw ? 'Huduma Saa 24 Kila Siku' : '24/7 Operations'}
           </strong>
@@ -207,7 +207,7 @@ export const MalabaBorderMap: React.FC<MalabaBorderMapProps> = ({
             ? 'Ukaguzi wa abiria Malaba OSBP unafanyika saa 24 kila siku kupitia zamu za maafisa wa uhamiaji, forodha na afya.'
             : 'Malaba OSBP passenger clearance operates 24 hours a day with rotating shifts of immigration, customs, and port health officers.'}
         </div>
-        <div className="bg-pearl-navy/50 p-3 rounded-xl border border-pearl-border/80">
+        <div className="bg-pearl-surface p-3 rounded-xl border border-pearl-border/80">
           <strong className="text-pearl-text block font-bold text-xs mb-1">
             {isSw ? 'Kupiga Vita Mawakala Haramu' : 'Zero-Touting Enforcement'}
           </strong>

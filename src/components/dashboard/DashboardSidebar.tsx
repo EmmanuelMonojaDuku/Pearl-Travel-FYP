@@ -112,7 +112,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
   const sidebarContent = (compact: boolean) => (
     <div className="flex flex-col h-full bg-pearl-navy text-pearl-text select-none">
       {/* Brand Header */}
-      <div className="px-3.5 pt-4 pb-3 border-b border-pearl-dark flex flex-col gap-2">
+      <div className="px-3.5 pt-4 pb-3 border-b border-pearl-border flex flex-col gap-2">
         <div className="flex items-center justify-between gap-2">
           {renderLogo(compact)}
           {isMobileDrawerOpen && (
@@ -193,7 +193,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
       </nav>
 
       {/* Bottom Utility Section: Contact Support & Sign Out */}
-      <div className="px-2.5 py-3 border-t border-pearl-dark space-y-1">
+      <div className="px-2.5 py-3 border-t border-pearl-border space-y-1">
         <button
           type="button"
           id="btn-sidebar-support"
@@ -204,9 +204,9 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
           }}
           className={`w-full flex items-center ${
             compact ? 'justify-center px-2' : 'gap-2.5 px-3'
-          } min-h-[40px] py-2 rounded-xl text-[13px] font-medium text-pearl-text-secondary hover:bg-pearl-dark hover:text-pearl-gold-light transition-colors cursor-pointer whitespace-nowrap`}
+          } min-h-[40px] py-2 rounded-xl text-[13px] font-medium text-pearl-text-secondary hover:bg-pearl-dark hover:text-pearl-accent transition-colors cursor-pointer whitespace-nowrap`}
         >
-          <HelpCircle className="w-4 h-4 shrink-0 text-pearl-gold" />
+          <HelpCircle className="w-4 h-4 shrink-0 text-pearl-accent" />
           {!compact && <span>Contact Support</span>}
         </button>
 
@@ -232,7 +232,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
     <>
       {/* Desktop Fixed/Collapsible Sidebar */}
       <aside
-        className={`hidden lg:flex flex-col shrink-0 border-r border-pearl-dark sticky top-0 h-screen z-30 transition-all duration-200 ${
+        className={`hidden lg:flex flex-col shrink-0 border-r border-pearl-border sticky top-0 h-screen z-30 transition-all duration-200 ${
           isCollapsed ? 'w-[76px]' : 'w-64'
         }`}
       >
@@ -243,11 +243,11 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
       {isMobileDrawerOpen && (
         <div className="fixed inset-0 z-50 lg:hidden flex">
           <div
-            className="fixed inset-0 bg-pearl-navy/60 backdrop-blur-xs"
+            className="fixed inset-0 bg-pearl-scrim/60 backdrop-blur-xs"
             onClick={onCloseMobileDrawer}
             aria-hidden="true"
           />
-          <aside className="relative z-10 w-72 max-w-[85vw] h-full border-r border-pearl-dark shadow-2xl">
+          <aside className="relative z-10 w-72 max-w-[85vw] h-full border-r border-pearl-border shadow-2xl">
             {sidebarContent(false)}
           </aside>
         </div>

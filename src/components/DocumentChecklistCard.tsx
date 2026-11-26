@@ -63,7 +63,7 @@ export const DocumentChecklistCard: React.FC<DocumentChecklistCardProps> = ({
         <div className="flex items-center gap-4">
           <Ring value={applicable ? (done / applicable) * 100 : 0} label={`${done}/${applicable}`} sub="done" size={84} tone={done === applicable && applicable > 0 ? 'success' : 'gold'} />
           <div className="min-w-0">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-pearl-gold">Smart Checklist</span>
+            <span className="text-[11px] font-bold uppercase tracking-wider text-pearl-accent">Smart Checklist</span>
             <h2 className="text-lg font-bold text-pearl-text font-heading">{done} of {applicable} items completed</h2>
             <p className="text-xs text-pearl-text-secondary mt-0.5">Mark each document as Have It, Don&apos;t Have It, or N/A.</p>
             <div className="flex flex-wrap gap-1.5 mt-2">
@@ -109,7 +109,7 @@ export const DocumentChecklistCard: React.FC<DocumentChecklistCardProps> = ({
                         : isComplete
                         ? 'bg-pearl-success/15 text-pearl-success-light'
                         : isExpired
-                        ? 'bg-pearl-gold/15 text-pearl-gold-light'
+                        ? 'bg-pearl-gold/15 text-pearl-accent'
                         : 'bg-pearl-danger/15 text-pearl-danger-light'
                     }`}
                   >
@@ -165,7 +165,7 @@ export const DocumentChecklistCard: React.FC<DocumentChecklistCardProps> = ({
                     onClick={() => onUpdateItemStatus(item.id, 'missing')}
                     className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer flex items-center gap-1 ${
                       isMissing
-                        ? 'bg-pearl-danger text-pearl-navy'
+                        ? 'bg-pearl-danger text-white'
                         : 'bg-pearl-dark border border-pearl-border text-pearl-text-secondary hover:text-pearl-danger-light'
                     }`}
                   >
@@ -179,7 +179,7 @@ export const DocumentChecklistCard: React.FC<DocumentChecklistCardProps> = ({
                     className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer flex items-center gap-1 ${
                       isExpired
                         ? 'bg-pearl-gold text-pearl-navy'
-                        : 'bg-pearl-dark border border-pearl-border text-pearl-text-secondary hover:text-pearl-gold-light'
+                        : 'bg-pearl-dark border border-pearl-border text-pearl-text-secondary hover:text-pearl-accent'
                     }`}
                   >
                     <Clock className="w-3.5 h-3.5" />
@@ -191,7 +191,7 @@ export const DocumentChecklistCard: React.FC<DocumentChecklistCardProps> = ({
                     onClick={() => onUpdateItemStatus(item.id, 'not_applicable')}
                     className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer flex items-center gap-1 ${
                       isNA
-                        ? 'bg-pearl-text-secondary text-pearl-navy'
+                        ? 'bg-pearl-navy text-white'
                         : 'bg-pearl-dark border border-pearl-border text-pearl-text-secondary hover:text-pearl-text'
                     }`}
                   >

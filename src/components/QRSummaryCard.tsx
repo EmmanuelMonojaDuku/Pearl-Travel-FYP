@@ -38,7 +38,7 @@ export const QRSummaryCard: React.FC<QRSummaryCardProps> = ({ qrData, onClose })
     <div className="w-full bg-pearl-dark rounded-2xl p-5 sm:p-7 border border-pearl-border">
       <div className="flex flex-wrap items-center justify-between pb-4 mb-4 border-b border-pearl-border gap-3">
         <div>
-          <span className="text-[11px] font-bold uppercase tracking-wider text-pearl-gold-light">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-pearl-accent">
             QR Summary
           </span>
           <h2 className="text-xl font-bold text-pearl-text font-heading">
@@ -100,7 +100,7 @@ export const QRSummaryCard: React.FC<QRSummaryCardProps> = ({ qrData, onClose })
                 </span>
                 <span
                   className={`text-xs font-bold tabular-nums ${
-                    qrData.readinessScore >= 80 ? 'text-pearl-success-light' : 'text-pearl-gold-light'
+                    qrData.readinessScore >= 80 ? 'text-pearl-success-light' : 'text-pearl-accent'
                   }`}
                 >
                   {qrData.readinessScore}% Ready
@@ -147,7 +147,7 @@ export const QRSummaryCard: React.FC<QRSummaryCardProps> = ({ qrData, onClose })
                 onClick={handleCopyPayload}
                 className="px-3.5 py-2 rounded-lg text-xs font-bold bg-pearl-navy hover:bg-pearl-dark text-pearl-text transition-colors flex items-center gap-1.5 cursor-pointer"
               >
-                {copied ? <Check className="w-3.5 h-3.5 text-pearl-gold" /> : <Copy className="w-3.5 h-3.5 text-pearl-gold" />}
+                {copied ? <Check className="w-3.5 h-3.5 text-pearl-accent" /> : <Copy className="w-3.5 h-3.5 text-pearl-accent" />}
                 <span>{copied ? 'Copied Data' : 'Copy QR Data'}</span>
               </button>
             </div>
@@ -155,15 +155,15 @@ export const QRSummaryCard: React.FC<QRSummaryCardProps> = ({ qrData, onClose })
         </div>
       ) : (
         /* Officer Terminal View Simulator */
-        <div className="bg-pearl-navy text-pearl-success-light p-5 rounded-xl font-mono text-xs space-y-4 border border-pearl-dark">
-          <div className="flex flex-wrap items-center justify-between border-b border-pearl-dark pb-3 text-pearl-text-secondary gap-2">
+        <div className="bg-pearl-navy text-pearl-success-light p-5 rounded-xl font-mono text-xs space-y-4 border border-pearl-border">
+          <div className="flex flex-wrap items-center justify-between border-b border-pearl-border pb-3 text-pearl-text-secondary gap-2">
             <div className="flex items-center gap-2">
-              <Building className="w-4 h-4 text-pearl-gold" />
+              <Building className="w-4 h-4 text-pearl-accent" />
               <span className="font-bold text-pearl-text tracking-wider">
                 PEARL TRAVEL • OFFICER VIEW
               </span>
             </div>
-            <span className="bg-pearl-dark text-pearl-gold px-2 py-0.5 rounded text-[10px] border border-pearl-slate">
+            <span className="bg-pearl-dark text-pearl-accent px-2 py-0.5 rounded text-[10px] border border-pearl-border">
               NOT OFFICIAL
             </span>
           </div>
@@ -175,7 +175,7 @@ export const QRSummaryCard: React.FC<QRSummaryCardProps> = ({ qrData, onClose })
             </div>
             <div>
               <p className="text-pearl-placeholder text-[10px]">LOCAL REFERENCE</p>
-              <p className="text-pearl-gold font-bold tabular-nums">{qrData.referenceId}</p>
+              <p className="text-pearl-accent font-bold tabular-nums">{qrData.referenceId}</p>
             </div>
             <div>
               <p className="text-pearl-placeholder text-[10px]">NATIONALITY / PURPOSE</p>
@@ -199,7 +199,7 @@ export const QRSummaryCard: React.FC<QRSummaryCardProps> = ({ qrData, onClose })
             </div>
           </div>
 
-          <div className="border-t border-pearl-dark pt-3">
+          <div className="border-t border-pearl-border pt-3">
             <p className="text-[10px] text-pearl-placeholder mb-2">CHECKLIST SUMMARY:</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[11px]">
               <div>PASSPORT: {qrData.checklistSummary.passport.toUpperCase()}</div>
@@ -215,7 +215,7 @@ export const QRSummaryCard: React.FC<QRSummaryCardProps> = ({ qrData, onClose })
 
       {/* Notice */}
       <div className="mt-5 p-3.5 rounded-xl bg-pearl-surface border border-pearl-gold/50 flex items-start gap-2.5">
-        <ShieldAlert className="w-4 h-4 text-pearl-gold-light shrink-0 mt-0.5" />
+        <ShieldAlert className="w-4 h-4 text-pearl-accent shrink-0 mt-0.5" />
         <p className="text-[11px] text-pearl-text leading-relaxed font-medium">
           <strong>Notice:</strong> {qrData.disclaimer}
         </p>

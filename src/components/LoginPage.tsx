@@ -184,7 +184,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             <button
               type="button"
               onClick={() => onOpenForgotModal(formData.email)}
-              className="font-semibold text-pearl-gold hover:text-pearl-gold-light cursor-pointer"
+              className="font-semibold text-pearl-accent hover:text-pearl-accent cursor-pointer"
             >
               Forgot Password?
             </button>
@@ -203,7 +203,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
 
         <p className="mt-6 text-center text-sm text-pearl-text-secondary">
           Don&apos;t have an account?{' '}
-          <button type="button" onClick={onSwitchToSignup} className="font-semibold text-pearl-gold hover:text-pearl-gold-light cursor-pointer">
+          <button type="button" onClick={onSwitchToSignup} className="font-semibold text-pearl-accent hover:text-pearl-accent cursor-pointer">
             Register
           </button>
         </p>

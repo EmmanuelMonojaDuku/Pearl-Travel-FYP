@@ -10,18 +10,18 @@ type BtnProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 
 export const Button: React.FC<BtnProps> = ({ variant = 'primary', full = true, className = '', ...rest }) => {
   const base =
-    'min-h-[44px] px-5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pearl-gold focus-visible:ring-offset-2 focus-visible:ring-offset-pearl-slate';
+    'min-h-[44px] px-5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pearl-focus focus-visible:ring-offset-2 focus-visible:ring-offset-pearl-slate';
   const styles = {
-    primary: 'bg-pearl-gold hover:bg-pearl-gold-light text-pearl-navy',
-    outline: 'bg-transparent border border-pearl-border hover:bg-pearl-surface text-pearl-text',
-    danger: 'bg-pearl-danger/15 border border-pearl-danger/50 hover:bg-pearl-danger/25 text-pearl-danger-light',
+    primary: 'bg-pearl-gold hover:bg-pearl-gold-light active:brightness-95 text-pearl-navy shadow-sm',
+    outline: 'bg-pearl-dark border border-pearl-border hover:bg-pearl-surface hover:border-pearl-navy text-pearl-text',
+    danger: 'bg-pearl-dark border border-pearl-danger/50 hover:bg-pearl-danger/10 text-pearl-danger-light',
     ghost: 'bg-transparent hover:bg-pearl-surface text-pearl-text-secondary',
   }[variant];
   return <button type="button" {...rest} className={`${base} ${styles} ${full ? 'w-full' : ''} ${className}`} />;
 };
 
 export const Card: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className = '', ...rest }) => (
-  <div {...rest} className={`bg-pearl-dark border border-pearl-border rounded-2xl p-4 ${className}`} />
+  <div {...rest} className={`bg-pearl-dark border border-pearl-border rounded-2xl p-4 shadow-[var(--pearl-shadow)] ${className}`} />
 );
 
 export type PillTone = 'success' | 'danger' | 'warning' | 'neutral' | 'info';
@@ -33,7 +33,7 @@ export const Pill: React.FC<{ tone?: PillTone; children: React.ReactNode; classN
   const t = {
     success: 'bg-pearl-success/15 text-pearl-success-light border-pearl-success/40',
     danger: 'bg-pearl-danger/15 text-pearl-danger-light border-pearl-danger/40',
-    warning: 'bg-pearl-gold/15 text-pearl-gold-light border-pearl-gold/40',
+    warning: 'bg-pearl-gold/15 text-pearl-accent border-pearl-gold/40',
     info: 'bg-pearl-info/15 text-pearl-info border-pearl-info/40',
     neutral: 'bg-pearl-surface text-pearl-text-secondary border-pearl-border',
   }[tone];
@@ -70,7 +70,7 @@ export const ScreenHeader: React.FC<{
 );
 
 export const SectionLabel: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <h2 className="text-[11px] font-bold uppercase tracking-wider text-pearl-gold mb-2">{children}</h2>
+  <h2 className="text-[11px] font-bold uppercase tracking-wider text-pearl-accent mb-2">{children}</h2>
 );
 
 /** Progress ring used by checklist (x/y) and readiness (%). */
@@ -135,5 +135,22 @@ export const Field: React.FC<React.InputHTMLAttributes<HTMLInputElement> & { lab
       </div>
       {error && <p className="mt-1 text-xs text-pearl-danger-light">{error}</p>}
     </div>
+  );
+};
+
+/** Navy application bar shared by the officer and admin apps (the traveller app has its own header). */
+export const AppBar: React.FC<{ role: string; name: string }> = ({ role, name }) => {
+  const initials = name.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]?.toUpperCase()).join('') || 'PT';
+  return (
+    <header className="sticky top-0 z-30 w-full bg-pearl-navy border-b border-pearl-border">
+      <div className="mx-auto w-full max-w-2xl px-5 h-14 flex items-center gap-3">
+        <img src="/pearl-travel-logo.png" alt="" width={36} height={36} className="w-9 h-9 rounded-lg bg-white p-0.5 object-contain" />
+        <div className="min-w-0 flex-1">
+          <p className="font-heading font-extrabold text-sm leading-tight text-pearl-text">Pearl Travel</p>
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-pearl-accent">{role}</p>
+        </div>
+        <span title={name} className="w-9 h-9 rounded-full bg-pearl-gold text-pearl-navy text-xs font-bold flex items-center justify-center">{initials}</span>
+      </div>
+    </header>
   );
 };

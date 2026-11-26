@@ -29,7 +29,7 @@ export const OfflineAccessTab: React.FC<Props> = ({ isOfflineMode, isSyncing, la
 
     <Card className="space-y-4 mb-5">
       <div className="flex items-center justify-between">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-pearl-gold">Offline data summary</h3>
+        <h3 className="text-xs font-bold uppercase tracking-wider text-pearl-accent">Offline data summary</h3>
         <Pill tone={isOfflineMode ? 'danger' : 'success'}>{isOfflineMode ? 'No connection' : 'Connected'}</Pill>
       </div>
       <p className="text-[11px] text-pearl-placeholder">Last synchronized: {lastSyncedTime}</p>

@@ -175,7 +175,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-pearl-navy/50 backdrop-blur-xs">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-pearl-scrim/50 backdrop-blur-xs">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -195,12 +195,12 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
 
           {/* Header */}
           <div className="flex items-center gap-3 mb-6 pb-4 border-b border-pearl-border">
-            <div className="w-10 h-10 rounded-xl bg-pearl-navy text-pearl-gold-light flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-pearl-navy text-pearl-accent flex items-center justify-center shrink-0">
               <User className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-pearl-gold-light">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-pearl-accent">
                   Pearl Travel Account • Profile Settings
                 </span>
               </div>
@@ -216,30 +216,30 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
               type="button"
               onClick={() => setActiveTab('profile')}
               className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-colors cursor-pointer flex items-center justify-center gap-1.5 ${
-                activeTab === 'profile' ? 'bg-pearl-navy text-pearl-text' : 'text-pearl-text-secondary hover:text-pearl-text'
+                activeTab === 'profile' ? 'bg-pearl-gold text-pearl-navy font-bold' : 'text-pearl-text-secondary hover:text-pearl-text'
               }`}
             >
-              <User className={`w-3.5 h-3.5 ${activeTab === 'profile' ? 'text-pearl-gold-light' : 'text-pearl-placeholder'}`} />
+              <User className={`w-3.5 h-3.5 ${activeTab === 'profile' ? 'text-pearl-accent' : 'text-pearl-placeholder'}`} />
               <span>Identity & Avatar</span>
             </button>
             <button
               type="button"
               onClick={() => setActiveTab('contact')}
               className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-colors cursor-pointer flex items-center justify-center gap-1.5 ${
-                activeTab === 'contact' ? 'bg-pearl-navy text-pearl-text' : 'text-pearl-text-secondary hover:text-pearl-text'
+                activeTab === 'contact' ? 'bg-pearl-gold text-pearl-navy font-bold' : 'text-pearl-text-secondary hover:text-pearl-text'
               }`}
             >
-              <Phone className={`w-3.5 h-3.5 ${activeTab === 'contact' ? 'text-pearl-gold-light' : 'text-pearl-placeholder'}`} />
+              <Phone className={`w-3.5 h-3.5 ${activeTab === 'contact' ? 'text-pearl-accent' : 'text-pearl-placeholder'}`} />
               <span>Contact & Emergency</span>
             </button>
             <button
               type="button"
               onClick={() => setActiveTab('travel')}
               className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-colors cursor-pointer flex items-center justify-center gap-1.5 ${
-                activeTab === 'travel' ? 'bg-pearl-navy text-pearl-text' : 'text-pearl-text-secondary hover:text-pearl-text'
+                activeTab === 'travel' ? 'bg-pearl-gold text-pearl-navy font-bold' : 'text-pearl-text-secondary hover:text-pearl-text'
               }`}
             >
-              <Compass className={`w-3.5 h-3.5 ${activeTab === 'travel' ? 'text-pearl-gold-light' : 'text-pearl-placeholder'}`} />
+              <Compass className={`w-3.5 h-3.5 ${activeTab === 'travel' ? 'text-pearl-accent' : 'text-pearl-placeholder'}`} />
               <span>Travel Purpose</span>
             </button>
           </div>
@@ -367,8 +367,8 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                         }}
                         className={`min-h-[44px] py-2 px-3 rounded-xl text-xs font-bold transition-colors cursor-pointer border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pearl-gold ${
                           gender === g
-                            ? 'bg-pearl-navy text-pearl-text border-pearl-gold ring-1 ring-pearl-gold-light'
-                            : 'bg-pearl-input text-pearl-text border-pearl-border hover:bg-pearl-slate hover:border-pearl-gold'
+                            ? 'bg-pearl-gold/15 text-pearl-text border-pearl-gold ring-1 ring-pearl-gold'
+                            : 'bg-pearl-input text-pearl-text border-pearl-border hover:bg-pearl-surface hover:border-pearl-gold'
                         }`}
                       >
                         {g}
@@ -452,7 +452,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                 <div className="p-4 rounded-xl bg-pearl-surface border border-pearl-border space-y-3.5">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <HeartHandshake className="w-4 h-4 text-pearl-gold-light" />
+                      <HeartHandshake className="w-4 h-4 text-pearl-accent" />
                       <span className="text-xs font-bold text-pearl-text uppercase tracking-wide">
                         Next of Kin & Emergency Contact
                       </span>
@@ -530,7 +530,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                   <p className="text-xs text-pearl-text-secondary leading-relaxed">
                     Selecting your primary purpose of travel allows Pearl Travel and the immigration rule engine to calculate your applicable requirements.
                   </p>
-                  <span className="text-[10px] font-bold text-pearl-gold-light bg-pearl-gold/10 px-2 py-0.5 rounded-md border border-pearl-gold/40 whitespace-nowrap">
+                  <span className="text-[10px] font-bold text-pearl-accent bg-pearl-gold/10 px-2 py-0.5 rounded-md border border-pearl-gold/40 whitespace-nowrap">
                     Required Rule
                   </span>
                 </div>

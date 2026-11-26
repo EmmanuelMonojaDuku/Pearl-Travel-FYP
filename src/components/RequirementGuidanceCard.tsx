@@ -42,7 +42,7 @@ export const RequirementGuidanceCard: React.FC<RequirementGuidanceCardProps> = (
     <div className="w-full bg-pearl-dark rounded-2xl p-5 sm:p-7 border border-pearl-border">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-4 border-b border-pearl-border gap-2">
         <div>
-          <span className="text-[11px] font-bold uppercase tracking-wider text-pearl-gold-light">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-pearl-accent">
             Official Compliance & Rules
           </span>
           <h2 className="text-xl font-bold text-pearl-text font-heading">

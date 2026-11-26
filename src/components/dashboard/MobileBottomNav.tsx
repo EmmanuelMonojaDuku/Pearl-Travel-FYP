@@ -24,7 +24,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   return (
     <nav
       aria-label="Mobile Quick Navigation"
-      className="md:hidden fixed bottom-0 left-0 right-0 z-40 h-16 bg-pearl-navy/95 backdrop-blur-md border-t border-pearl-dark grid grid-cols-4 items-center px-1"
+      className="md:hidden fixed bottom-0 left-0 right-0 z-40 h-16 bg-pearl-navy/95 backdrop-blur-md border-t border-pearl-border grid grid-cols-4 items-center px-1"
     >
       {items.map((item) => {
         const Icon = item.icon;
@@ -37,7 +37,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             aria-current={isActive ? 'page' : undefined}
             onClick={() => onSelectTab(item.id)}
             className={`min-h-[52px] min-w-0 flex flex-col items-center justify-center gap-1 rounded-lg transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pearl-gold ${
-              isActive ? 'text-pearl-gold' : 'text-pearl-placeholder hover:text-pearl-text'
+              isActive ? 'text-pearl-accent' : 'text-pearl-placeholder hover:text-pearl-text'
             }`}
           >
             <span className="relative">

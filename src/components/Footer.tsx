@@ -13,10 +13,10 @@ interface FooterProps {
 }
 
 const linkClass =
-  'inline-block py-0.5 text-[13px] text-pearl-text-secondary hover:text-pearl-gold transition-colors underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pearl-gold rounded-sm';
+  'inline-block py-0.5 text-[13px] text-pearl-text-secondary hover:text-pearl-accent transition-colors underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pearl-gold rounded-sm';
 
 const Heading: React.FC<{ id: string; children: React.ReactNode }> = ({ id, children }) => (
-  <h2 id={id} className="text-[11px] font-bold uppercase tracking-wider text-pearl-gold mb-1">{children}</h2>
+  <h2 id={id} className="text-[11px] font-bold uppercase tracking-wider text-pearl-accent mb-1">{children}</h2>
 );
 
 const QuickLink: React.FC<{ link: FooterLink }> = ({ link }) =>
@@ -53,7 +53,7 @@ export const Footer: React.FC<FooterProps> = ({ quickLinks, variant = 'full', cl
               <img src="/pearl-travel-logo.png" alt="" width={44} height={44} className="w-11 h-11 rounded-xl bg-white p-0.5 object-contain" />
               <div>
                 <p className="font-heading font-extrabold text-base leading-tight">{SITE.name}</p>
-                <p className="text-[11px] font-semibold text-pearl-gold">{SITE.tagline}</p>
+                <p className="text-[11px] font-semibold text-pearl-accent">{SITE.tagline}</p>
               </div>
             </div>
             <p className="hidden lg:block mt-2 text-[13px] text-pearl-text-secondary max-w-xs">{SITE.blurb}</p>
@@ -86,11 +86,11 @@ export const Footer: React.FC<FooterProps> = ({ quickLinks, variant = 'full', cl
             <Heading id="footer-contact">Contact</Heading>
             <ul className="space-y-1.5 text-[13px] text-pearl-text-secondary" aria-labelledby="footer-contact">
               <li className="flex items-start gap-2">
-                <Mail className="w-3.5 h-3.5 mt-1 shrink-0 text-pearl-gold" aria-hidden="true" />
-                <a href={`mailto:${SITE.supportEmail}`} aria-label={`Email support at ${SITE.supportEmail}`} className="hover:text-pearl-gold hover:underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pearl-gold rounded-sm">{SITE.supportEmail}</a>
+                <Mail className="w-3.5 h-3.5 mt-1 shrink-0 text-pearl-accent" aria-hidden="true" />
+                <a href={`mailto:${SITE.supportEmail}`} aria-label={`Email support at ${SITE.supportEmail}`} className="hover:text-pearl-accent hover:underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pearl-gold rounded-sm">{SITE.supportEmail}</a>
               </li>
               <li className="flex items-start gap-2">
-                <MapPin className="w-3.5 h-3.5 mt-1 shrink-0 text-pearl-gold" aria-hidden="true" />
+                <MapPin className="w-3.5 h-3.5 mt-1 shrink-0 text-pearl-accent" aria-hidden="true" />
                 <span>{SITE.region}</span>
               </li>
             </ul>

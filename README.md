@@ -28,7 +28,7 @@ Create or verify the administrator account through the app, then sign in. The AP
 
 ## App structure (wireframe implementation)
 
-One design system drives every screen: near-black surfaces with a single Pearl yellow (`--pearl-*` tokens in `src/index.css`, shared building blocks in `src/components/ui.tsx`).
+One design system drives every screen: the bright Navy · Yellow · White palette defined once as `--pearl-*` tokens in `src/index.css` (shared building blocks in `src/components/ui.tsx`).
 
 | Role | Screens |
 |---|---|
@@ -58,3 +58,20 @@ Limitations: Officer scan history, admin content and AI suggestions are stored i
 - **Footer and legal pages:** edit `src/config/site.ts` (email, resource links, legal links, social profiles) and `src/content/legal.ts` (Privacy Policy, Terms, Disclaimer). Add real social profile URLs to `SITE.social` and a Social section appears automatically. The footer component is `src/components/Footer.tsx` (`full` and `compact` variants).
 - **Assistant topics:** add or edit articles in `src/data/verifiedKnowledgeBase.ts`. Articles marked `approvedByAdmin: false` carry a "confirm on the official DCIC portal" note in the answer. Review them against official sources, then set it to `true`.
 - **QR scanner:** the officer's camera scan works in any modern browser (software QR decoding), needs `https://` or `http://localhost`, and falls back to uploading a QR image or manual search.
+
+
+## Design system (colours)
+
+All colours live in `src/index.css` as `--pearl-*` variables and are used through Tailwind classes such as `bg-pearl-dark` (white card), `bg-pearl-slate` (page), `text-pearl-text`, `bg-pearl-gold` (primary yellow). Do not hard-code hex values in components.
+
+| Token | Value | Use |
+|---|---|---|
+| `--pearl-navy` / `--pearl-navy-2` | #0F172A / #1E293B | Sidebar, headers, footer, important text |
+| `--pearl-gold` / `--pearl-gold-light` | #FFC400 / #EAB308 | Primary buttons, active navigation, badges; golden accent for hover |
+| `--pearl-slate` / `--pearl-surface` / `--pearl-dark` | #F5F7FB / #F1F5F9 / #FFFFFF | Page background / light grey / cards and modals |
+| `--pearl-border` | #E2E8F0 | Borders |
+| `--pearl-text` / `-secondary` / `--pearl-placeholder` | #0F172A / #334155 / #5B6B83 | Primary, secondary, muted text |
+| `--pearl-success` / `--pearl-danger` | #16A34A / #DC2626 | Status |
+| `--pearl-accent`, `--pearl-success-light`, `--pearl-danger-light`, `--pearl-info` | darker shades | Gold, green, red and blue **text** on light surfaces (WCAG AA) |
+
+Any element with a navy background (`bg-pearl-navy`) automatically switches these tokens to white-on-navy values for itself and its children, so components placed in the sidebar, header or footer stay readable. Use `bg-pearl-scrim/60` (not `bg-pearl-navy/60`) for modal backdrops.

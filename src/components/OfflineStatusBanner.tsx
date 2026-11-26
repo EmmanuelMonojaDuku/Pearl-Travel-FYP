@@ -29,7 +29,7 @@ export const OfflineStatusBanner: React.FC<OfflineStatusBannerProps> = ({
         <div
           className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
             isOffline
-              ? 'bg-pearl-gold/15 text-pearl-gold-light'
+              ? 'bg-pearl-gold/15 text-pearl-accent'
               : 'bg-pearl-success/15 text-pearl-success-light'
           }`}
         >
@@ -47,7 +47,7 @@ export const OfflineStatusBanner: React.FC<OfflineStatusBannerProps> = ({
             </span>
             <span
               className={`text-[10px] font-bold uppercase tracking-wider ${
-                isOffline ? 'text-pearl-gold-light' : 'text-pearl-success-light'
+                isOffline ? 'text-pearl-accent' : 'text-pearl-success-light'
               }`}
             >
               • {isOffline ? 'Cached Locally' : 'Synchronized'}
@@ -76,7 +76,7 @@ export const OfflineStatusBanner: React.FC<OfflineStatusBannerProps> = ({
             </>
           ) : (
             <>
-              <WifiOff className="w-3.5 h-3.5 text-pearl-gold-light" />
+              <WifiOff className="w-3.5 h-3.5 text-pearl-accent" />
               <span>Simulate Offline</span>
             </>
           )}
@@ -89,7 +89,7 @@ export const OfflineStatusBanner: React.FC<OfflineStatusBannerProps> = ({
           disabled={isSyncing}
           className="px-3.5 py-1.5 rounded-lg font-bold text-xs bg-pearl-navy text-pearl-text hover:bg-pearl-dark transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
         >
-          <RefreshCw className={`w-3.5 h-3.5 text-pearl-gold ${isSyncing ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`w-3.5 h-3.5 text-pearl-accent ${isSyncing ? 'animate-spin' : ''}`} />
           <span>{isSyncing ? 'Syncing...' : 'Sync Now'}</span>
         </button>
       </div>

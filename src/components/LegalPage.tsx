@@ -18,7 +18,7 @@ export const LegalPage: React.FC<Props> = ({ slug, onBack }) => {
   return (
     <div className="min-h-screen flex flex-col bg-pearl-slate text-pearl-text">
       <main className="flex-1 w-full max-w-3xl mx-auto px-5 sm:px-8 py-8">
-        <button type="button" onClick={onBack} className="mb-5 inline-flex items-center gap-2 text-sm font-semibold text-pearl-gold hover:text-pearl-gold-light cursor-pointer">
+        <button type="button" onClick={onBack} className="mb-5 inline-flex items-center gap-2 text-sm font-semibold text-pearl-accent hover:text-pearl-accent cursor-pointer">
           <ArrowLeft className="w-4 h-4" /> Back
         </button>
         <h1 className="text-3xl font-bold font-heading">{doc.title}</h1>
@@ -29,7 +29,7 @@ export const LegalPage: React.FC<Props> = ({ slug, onBack }) => {
             <h2 className="text-lg font-bold font-heading">{s.heading}</h2>
             {s.paragraphs?.map((p) => <p key={p} className="mt-2 text-sm text-pearl-text-secondary leading-relaxed">{p}</p>)}
             {s.bullets && (
-              <ul className="mt-2 space-y-1.5 list-disc pl-5 text-sm text-pearl-text-secondary leading-relaxed marker:text-pearl-gold">
+              <ul className="mt-2 space-y-1.5 list-disc pl-5 text-sm text-pearl-text-secondary leading-relaxed marker:text-pearl-accent">
                 {s.bullets.map((b) => <li key={b}>{b}</li>)}
               </ul>
             )}

@@ -116,7 +116,7 @@ export const BorderStepByStepGuideCard: React.FC<BorderStepByStepGuideCardProps>
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-pearl-border">
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-pearl-navy text-pearl-gold flex items-center justify-center shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-pearl-navy text-pearl-accent flex items-center justify-center shrink-0">
             <Compass className="w-5 h-5" />
           </div>
           <div>
@@ -124,7 +124,7 @@ export const BorderStepByStepGuideCard: React.FC<BorderStepByStepGuideCardProps>
               <h3 className="text-sm font-bold text-pearl-text uppercase tracking-wide font-heading">
                 Border Guide: What to Expect
               </h3>
-              <span className="text-[10px] font-bold uppercase text-pearl-gold-light">
+              <span className="text-[10px] font-bold uppercase text-pearl-accent">
                 • Malaba OSBP Walkthrough
               </span>
             </div>
@@ -142,18 +142,18 @@ export const BorderStepByStepGuideCard: React.FC<BorderStepByStepGuideCardProps>
       </div>
 
       {/* Overview Banner */}
-      <div className="p-4 rounded-xl bg-pearl-navy text-pearl-text flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs border border-pearl-dark">
+      <div className="p-4 rounded-xl bg-pearl-navy text-pearl-text flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs border border-pearl-border">
         <div>
-          <span className="text-pearl-gold font-bold uppercase text-[10px] tracking-wider block">
+          <span className="text-pearl-accent font-bold uppercase text-[10px] tracking-wider block">
             The One-Stop Border Post Concept
           </span>
           <p className="text-pearl-text-secondary text-[11px] mt-0.5 leading-relaxed">
             You only stop ONCE on the Ugandan side of the border. Kenya exit and Uganda entry officers sit side-by-side in the same clearance hall.
           </p>
         </div>
-        <div className="px-3 py-2 rounded-lg bg-pearl-dark border border-pearl-slate shrink-0 text-center">
+        <div className="px-3 py-2 rounded-lg bg-pearl-dark border border-pearl-border shrink-0 text-center">
           <span className="block text-[9px] uppercase text-pearl-placeholder font-bold">Total Est. Clearance</span>
-          <span className="font-mono font-bold text-sm text-pearl-gold tabular-nums">25 - 45 mins</span>
+          <span className="font-mono font-bold text-sm text-pearl-accent tabular-nums">25 - 45 mins</span>
         </div>
       </div>
 
@@ -226,7 +226,7 @@ export const BorderStepByStepGuideCard: React.FC<BorderStepByStepGuideCardProps>
                             key={doc}
                             className="px-2.5 py-1 rounded-lg bg-pearl-surface border border-pearl-border text-pearl-text text-[11px] font-semibold flex items-center gap-1.5"
                           >
-                            <FileCheck className="w-3 h-3 text-pearl-gold-light" />
+                            <FileCheck className="w-3 h-3 text-pearl-accent" />
                             {doc}
                           </span>
                         ))}
@@ -241,7 +241,7 @@ export const BorderStepByStepGuideCard: React.FC<BorderStepByStepGuideCardProps>
                     </div>
 
                     <div className="p-3 rounded-xl bg-pearl-surface border border-pearl-gold/50 text-pearl-text flex items-start gap-2">
-                      <AlertCircle className="w-4 h-4 text-pearl-gold-light shrink-0 mt-0.5" />
+                      <AlertCircle className="w-4 h-4 text-pearl-accent shrink-0 mt-0.5" />
                       <div>
                         <strong className="font-bold">Traveller Tip: </strong>
                         <span>{step.travelerTips}</span>

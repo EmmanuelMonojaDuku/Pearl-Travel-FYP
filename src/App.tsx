@@ -135,7 +135,7 @@ export default function App() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -16 }}
           transition={{ duration: 0.2 }}
-          className="fixed top-4 right-4 left-4 sm:left-auto sm:right-6 z-[70] sm:max-w-sm px-4 py-3 rounded-xl bg-pearl-surface border border-pearl-border shadow-lg flex items-center gap-3 text-sm font-medium text-pearl-text"
+          className="fixed top-4 right-4 left-4 sm:left-auto sm:right-6 z-[70] sm:max-w-sm px-4 py-3 rounded-xl bg-pearl-navy border border-pearl-border shadow-lg flex items-center gap-3 text-sm font-medium text-pearl-text"
         >
           <div className="w-6 h-6 rounded-full bg-pearl-success/15 border border-pearl-success/40 text-pearl-success-light flex items-center justify-center shrink-0">
             <Check className="w-3.5 h-3.5 stroke-[3]" />

@@ -30,7 +30,7 @@ export const NotificationsTab: React.FC<Props> = ({ onSelectTab, ...state }) => 
     try { localStorage.setItem(KEY, JSON.stringify(next)); } catch { /* ignore */ }
   };
   const icon = (a: PortalAlert) =>
-    a.severity === 'critical' ? <ShieldAlert className="w-4 h-4 text-pearl-danger-light" /> : a.severity === 'warning' ? <AlertTriangle className="w-4 h-4 text-pearl-gold" /> : <Info className="w-4 h-4 text-pearl-info" />;
+    a.severity === 'critical' ? <ShieldAlert className="w-4 h-4 text-pearl-danger-light" /> : a.severity === 'warning' ? <AlertTriangle className="w-4 h-4 text-pearl-accent" /> : <Info className="w-4 h-4 text-pearl-info" />;
 
   return (
     <div className="max-w-2xl mx-auto">

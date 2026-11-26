@@ -33,7 +33,7 @@ import {
   type ContentStatus,
   type ModuleId,
 } from '../utils/opsStore';
-import { Button, Card, Pill, ScreenHeader, SectionLabel } from './ui';
+import { AppBar, Button, Card, Pill, ScreenHeader, SectionLabel } from './ui';
 import { Footer } from './Footer';
 
 interface AdminDashboardProps {
@@ -146,8 +146,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ currentUser, onL
   }
 
   return (
-    <div className="min-h-screen bg-pearl-slate text-pearl-text flex justify-center">
-      <div className="w-full max-w-2xl flex flex-col min-h-screen">
+    <div className="min-h-screen bg-pearl-slate text-pearl-text flex flex-col">
+      <AppBar role="Administrator" name={currentUser.name} />
+      <div className="flex-1 flex justify-center">
+      <div className="w-full max-w-2xl flex flex-col">
         <main className="flex-1 px-5 pt-6 pb-24">{body}</main>
         <Footer variant="compact" quickLinks={[]} className="mb-16" />
         <nav aria-label="Admin navigation" className="fixed bottom-0 inset-x-0 z-40 flex justify-center bg-pearl-navy border-t border-pearl-border">
@@ -160,7 +162,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ currentUser, onL
                   type="button"
                   aria-current={active ? 'page' : undefined}
                   onClick={() => { setTab(id); setView({ name: 'tab' }); }}
-                  className={`flex flex-col items-center justify-center gap-1 text-[10px] font-semibold cursor-pointer ${active ? 'text-pearl-gold' : 'text-pearl-placeholder hover:text-pearl-text'}`}
+                  className={`flex flex-col items-center justify-center gap-1 text-[10px] font-semibold cursor-pointer ${active ? 'text-pearl-accent' : 'text-pearl-placeholder hover:text-pearl-text'}`}
                 >
                   <Icon className="w-5 h-5" />
                   {label}
@@ -169,6 +171,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ currentUser, onL
             })}
           </div>
         </nav>
+      </div>
       </div>
     </div>
   );
@@ -188,7 +191,7 @@ const Home: React.FC<{
     } />
     <div className="grid grid-cols-3 gap-3 mb-6">
       <Card className="text-center py-3"><p className="text-2xl font-bold font-heading tabular-nums">{total}</p><p className="text-[10px] text-pearl-placeholder">Total Content</p></Card>
-      <button type="button" onClick={() => onOpen('requirements')} className="text-center py-3 rounded-2xl border border-pearl-gold bg-pearl-dark cursor-pointer"><p className="text-2xl font-bold font-heading text-pearl-gold tabular-nums">{pendingContent}</p><p className="text-[10px] text-pearl-placeholder">Pending Review</p></button>
+      <button type="button" onClick={() => onOpen('requirements')} className="text-center py-3 rounded-2xl border border-pearl-gold bg-pearl-dark cursor-pointer"><p className="text-2xl font-bold font-heading text-pearl-accent tabular-nums">{pendingContent}</p><p className="text-[10px] text-pearl-placeholder">Pending Review</p></button>
       <button type="button" onClick={onAi} className="text-center py-3 rounded-2xl border border-pearl-border bg-pearl-dark cursor-pointer hover:border-pearl-gold"><p className="text-2xl font-bold font-heading tabular-nums">{pendingAi}</p><p className="text-[10px] text-pearl-placeholder">AI Suggestions</p></button>
     </div>
 
@@ -199,7 +202,7 @@ const Home: React.FC<{
         return (
           <li key={m.id}>
             <button type="button" onClick={() => onOpen(m.id)} className="w-full flex items-center gap-3 p-3.5 rounded-xl bg-pearl-dark border border-pearl-border hover:border-pearl-gold text-left cursor-pointer">
-              <span className="w-9 h-9 rounded-lg bg-pearl-surface text-pearl-gold flex items-center justify-center"><Icon className="w-4 h-4" /></span>
+              <span className="w-9 h-9 rounded-lg bg-pearl-surface text-pearl-accent flex items-center justify-center"><Icon className="w-4 h-4" /></span>
               <span className="flex-1"><span className="block text-sm font-semibold">{m.label}</span><span className="block text-[11px] text-pearl-placeholder">{m.blurb}</span></span>
             </button>
           </li>
@@ -207,7 +210,7 @@ const Home: React.FC<{
       })}
       <li>
         <button type="button" onClick={onAi} className="w-full flex items-center gap-3 p-3.5 rounded-xl bg-pearl-dark border border-pearl-border hover:border-pearl-gold text-left cursor-pointer">
-          <span className="w-9 h-9 rounded-lg bg-pearl-surface text-pearl-gold flex items-center justify-center"><Bot className="w-4 h-4" /></span>
+          <span className="w-9 h-9 rounded-lg bg-pearl-surface text-pearl-accent flex items-center justify-center"><Bot className="w-4 h-4" /></span>
           <span className="flex-1"><span className="block text-sm font-semibold">AI Change Review</span><span className="block text-[11px] text-pearl-placeholder">Approve or reject suggested updates</span></span>
           {pendingAi > 0 && <Pill tone="warning">{pendingAi}</Pill>}
         </button>
@@ -245,7 +248,7 @@ const ContentHub: React.FC<{ items: ContentItem[]; onOpen: (id: ModuleId) => voi
         return (
           <li key={m.id}>
             <button type="button" onClick={() => onOpen(m.id)} className="w-full flex items-center gap-3 p-3.5 rounded-xl bg-pearl-dark border border-pearl-border hover:border-pearl-gold text-left cursor-pointer">
-              <span className="w-9 h-9 rounded-lg bg-pearl-surface text-pearl-gold flex items-center justify-center"><Icon className="w-4 h-4" /></span>
+              <span className="w-9 h-9 rounded-lg bg-pearl-surface text-pearl-accent flex items-center justify-center"><Icon className="w-4 h-4" /></span>
               <span className="flex-1 text-sm font-semibold">{m.label}</span>
               <Pill>{list.length} items</Pill>
             </button>
@@ -355,7 +358,7 @@ const AiReview: React.FC<{ items: AiSuggestion[]; onDecide: (s: AiSuggestion, d:
           {shown.map((s) => (
             <li key={s.id} className="p-4 rounded-xl bg-pearl-dark border border-pearl-border">
               <div className="flex justify-between text-[10px] font-bold mb-1">
-                <span className={s.kind === 'ADD' ? 'text-pearl-success-light' : 'text-pearl-gold'}>{s.kind}</span>
+                <span className={s.kind === 'ADD' ? 'text-pearl-success-light' : 'text-pearl-accent'}>{s.kind}</span>
                 <span className="text-pearl-placeholder">{MODULES.find((m) => m.id === s.module)?.label}</span>
               </div>
               <p className="text-sm font-semibold">{s.title}</p>

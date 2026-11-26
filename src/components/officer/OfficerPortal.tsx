@@ -16,7 +16,7 @@ import {
   XCircle,
 } from 'lucide-react';
 import type { DocumentStatus, QRSummaryData, UserProfile } from '../../types';
-import { Button, Card, Pill, ScreenHeader, SectionLabel } from '../ui';
+import { AppBar, Button, Card, Pill, ScreenHeader, SectionLabel } from '../ui';
 import { Footer } from '../Footer';
 import { addScan, getScans, parseQrPayload, searchQr, type ScanRecord } from '../../utils/opsStore';
 
@@ -71,8 +71,10 @@ export const OfficerPortal: React.FC<Props> = ({ currentUser, onLogout }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-pearl-slate text-pearl-text flex justify-center">
-      <div className="w-full max-w-md flex flex-col min-h-screen">
+    <div className="min-h-screen bg-pearl-slate text-pearl-text flex flex-col">
+      <AppBar role="Border Officer" name={currentUser.name} />
+      <div className="flex-1 flex justify-center">
+      <div className="w-full max-w-md flex flex-col">
         <main className="flex-1 px-5 pt-6 pb-24">
           {selected ? (
             <Verification qr={selected} onBack={() => setSelected(null)} onDecide={decide} />
@@ -107,7 +109,7 @@ export const OfficerPortal: React.FC<Props> = ({ currentUser, onLogout }) => {
                   type="button"
                   aria-current={active ? 'page' : undefined}
                   onClick={() => { setSelected(null); setTab(id); }}
-                  className={`flex flex-col items-center justify-center gap-1 text-[10px] font-semibold cursor-pointer ${active ? 'text-pearl-gold' : 'text-pearl-placeholder hover:text-pearl-text'}`}
+                  className={`flex flex-col items-center justify-center gap-1 text-[10px] font-semibold cursor-pointer ${active ? 'text-pearl-accent' : 'text-pearl-placeholder hover:text-pearl-text'}`}
                 >
                   <Icon className="w-5 h-5" />
                   {label}
@@ -116,6 +118,7 @@ export const OfficerPortal: React.FC<Props> = ({ currentUser, onLogout }) => {
             })}
           </div>
         </nav>
+      </div>
       </div>
     </div>
   );
@@ -291,7 +294,7 @@ const Scanner: React.FC<{ onResult: (q: QRSummaryData) => void }> = ({ onResult 
           </>
         ) : (
           <div className="text-center px-6">
-            <QrCode className="w-14 h-14 mx-auto text-pearl-gold mb-3" />
+            <QrCode className="w-14 h-14 mx-auto text-pearl-accent mb-3" />
             <Button full={false} className="mx-auto" disabled={cameraState === 'starting'} onClick={() => void startCamera()}>
               <Camera className="w-4 h-4" /> {cameraState === 'starting' ? 'Opening camera…' : 'Start camera'}
             </Button>

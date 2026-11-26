@@ -67,7 +67,7 @@ export const GoogleSignIn: React.FC<Props> = ({ onIdentity, onError }) => {
         <div role="dialog" aria-modal="true" aria-label="Choose a Google account (demo)" className="fixed inset-0 z-[80] bg-black/70 flex items-end sm:items-center justify-center p-4">
           <form onSubmit={submitDemo} className="w-full max-w-sm bg-pearl-dark border border-pearl-border rounded-2xl p-5 space-y-4">
             <div className="flex items-center gap-2"><GoogleMark /><h2 className="font-bold">Choose a Google account</h2></div>
-            <p className="text-[11px] text-pearl-gold">Demo mode: no real Google call is made. Set VITE_GOOGLE_CLIENT_ID for real Google sign-in.</p>
+            <p className="text-[11px] text-pearl-accent">Demo mode: no real Google call is made. Set VITE_GOOGLE_CLIENT_ID for real Google sign-in.</p>
             <Field label="Name" value={demo.name} onChange={(e) => setDemo((d) => ({ ...d, name: e.target.value }))} placeholder="Amina Kato" autoFocus />
             <Field label="Gmail address" type="email" value={demo.email} onChange={(e) => setDemo((d) => ({ ...d, email: e.target.value }))} placeholder="amina@gmail.com" />
             <div className="grid grid-cols-2 gap-3">
@@ -86,7 +86,7 @@ export const DemoAccess: React.FC<{ onPick: (role: 'traveller' | 'border_officer
   if (!isDemoMode) return null;
   return (
     <div className="mt-6 p-3 rounded-xl border border-dashed border-pearl-gold/50">
-      <p className="text-[11px] font-bold uppercase tracking-wider text-pearl-gold mb-2">Demo access</p>
+      <p className="text-[11px] font-bold uppercase tracking-wider text-pearl-accent mb-2">Demo access</p>
       <div className="grid grid-cols-3 gap-2">
         <Button variant="outline" onClick={() => onPick('traveller')} className="!px-2 text-xs">Traveller</Button>
         <Button variant="outline" onClick={() => onPick('border_officer')} className="!px-2 text-xs">Officer</Button>

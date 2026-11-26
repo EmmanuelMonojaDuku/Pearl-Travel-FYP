@@ -22,7 +22,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onGetStarted, onLo
         <Button variant="outline" onClick={onLogin}>Login</Button>
         <p className="pt-3 text-center text-xs text-pearl-placeholder">
           Don&apos;t have an account?{' '}
-          <button type="button" onClick={onGetStarted} className="font-semibold text-pearl-gold cursor-pointer">
+          <button type="button" onClick={onGetStarted} className="font-semibold text-pearl-accent cursor-pointer">
             Register
           </button>
         </p>

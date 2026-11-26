@@ -44,9 +44,9 @@ export class ErrorBoundary extends Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-pearl-navy text-pearl-text flex items-center justify-center p-6">
-          <div className="max-w-md w-full bg-pearl-navy border border-pearl-border rounded-2xl p-6 shadow-2xl space-y-6 text-center">
-            <div className="w-16 h-16 bg-pearl-gold/10 border border-pearl-gold/20 text-pearl-gold-light rounded-2xl flex items-center justify-center mx-auto">
+        <div className="min-h-screen bg-pearl-slate text-pearl-text flex items-center justify-center p-6">
+          <div className="max-w-md w-full bg-pearl-dark border border-pearl-border rounded-2xl p-6 shadow-lg space-y-6 text-center">
+            <div className="w-16 h-16 bg-pearl-gold/10 border border-pearl-gold/20 text-pearl-accent rounded-2xl flex items-center justify-center mx-auto">
               <AlertTriangle className="w-8 h-8" />
             </div>
 
@@ -60,7 +60,7 @@ export class ErrorBoundary extends Component<Props, State> {
             </div>
 
             {this.state.error && (
-              <div className="bg-pearl-navy/60 rounded-lg p-3 text-left border border-pearl-border/80">
+              <div className="bg-pearl-surface rounded-lg p-3 text-left border border-pearl-border/80">
                 <p className="text-xs font-mono text-pearl-danger-light break-words">
                   {this.state.error.message}
                 </p>
@@ -80,7 +80,7 @@ export class ErrorBoundary extends Component<Props, State> {
               <button
                 id="btn-reset-clear-cache"
                 onClick={this.handleResetAll}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-pearl-dark hover:bg-pearl-slate text-pearl-text-secondary text-sm font-medium rounded-xl transition border border-pearl-border"
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-pearl-dark hover:bg-pearl-surface text-pearl-text-secondary text-sm font-medium rounded-xl transition border border-pearl-border"
               >
                 <Trash2 className="w-4 h-4 text-pearl-placeholder" />
                 Reset Data

@@ -166,7 +166,7 @@ export const JourneySetupView: React.FC<JourneySetupViewProps> = ({
 
         {/* Title & Subtitle */}
         <div className="mt-6 mb-7 text-center sm:text-left">
-          <div className="inline-flex items-center gap-1.5 text-pearl-gold-light text-xs font-bold mb-2 uppercase tracking-wider">
+          <div className="inline-flex items-center gap-1.5 text-pearl-accent text-xs font-bold mb-2 uppercase tracking-wider">
             <Compass className="w-3.5 h-3.5" />
             <span>Itinerary & Border Configuration</span>
           </div>
@@ -196,14 +196,14 @@ export const JourneySetupView: React.FC<JourneySetupViewProps> = ({
                     aria-pressed={isSelected}
                     className={`p-3.5 rounded-xl border text-left transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pearl-gold ${
                       isSelected
-                        ? 'bg-pearl-navy text-pearl-text border-pearl-border ring-2 ring-pearl-gold'
+                        ? 'bg-pearl-gold/15 text-pearl-text border-pearl-gold ring-1 ring-pearl-gold'
                         : 'bg-pearl-surface border-pearl-border text-pearl-text hover:bg-pearl-input'
                     }`}
                   >
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-xs font-bold">{item.label}</span>
                       {isSelected && (
-                        <CheckCircle2 className="w-3.5 h-3.5 text-pearl-gold-light" />
+                        <CheckCircle2 className="w-3.5 h-3.5 text-pearl-accent" />
                       )}
                     </div>
                     <span className={`text-[11px] leading-tight block ${isSelected ? 'text-pearl-text-secondary' : 'text-pearl-text-secondary'}`}>
@@ -222,7 +222,7 @@ export const JourneySetupView: React.FC<JourneySetupViewProps> = ({
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                <MapPin className="w-4 h-4 text-pearl-gold-light" />
+                <MapPin className="w-4 h-4 text-pearl-accent" />
               </div>
               <select
                 id="select-setup-destination"
@@ -263,7 +263,7 @@ export const JourneySetupView: React.FC<JourneySetupViewProps> = ({
                     aria-pressed={isSelected}
                     className={`w-full p-3.5 rounded-xl border text-left transition-colors cursor-pointer flex items-start justify-between gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pearl-gold ${
                       isSelected
-                        ? 'bg-pearl-navy text-pearl-text border-pearl-border ring-2 ring-pearl-gold'
+                        ? 'bg-pearl-gold/15 text-pearl-text border-pearl-gold ring-1 ring-pearl-gold'
                         : bp.featured
                         ? 'bg-pearl-surface border-pearl-gold/50 text-pearl-text hover:bg-pearl-input'
                         : 'bg-pearl-surface border-pearl-border text-pearl-text hover:bg-pearl-input'
@@ -346,11 +346,11 @@ export const JourneySetupView: React.FC<JourneySetupViewProps> = ({
                       aria-pressed={isSelected}
                       className={`py-2.5 px-2 rounded-xl border text-center transition-colors cursor-pointer flex flex-col items-center justify-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pearl-gold ${
                         isSelected
-                          ? 'bg-pearl-navy text-pearl-text border-pearl-border ring-2 ring-pearl-gold'
+                          ? 'bg-pearl-gold/15 text-pearl-text border-pearl-gold ring-1 ring-pearl-gold'
                           : 'bg-pearl-surface border-pearl-border text-pearl-text hover:bg-pearl-input'
                       }`}
                     >
-                      <Icon className={`w-4 h-4 ${isSelected ? 'text-pearl-gold-light' : 'text-pearl-text-secondary'}`} />
+                      <Icon className={`w-4 h-4 ${isSelected ? 'text-pearl-accent' : 'text-pearl-text-secondary'}`} />
                       <span className="text-xs font-bold leading-none">{item.label}</span>
                       <span className={`text-[10px] ${isSelected ? 'text-pearl-text-secondary' : 'text-pearl-placeholder'}`}>{item.desc}</span>
                     </button>
@@ -366,8 +366,8 @@ export const JourneySetupView: React.FC<JourneySetupViewProps> = ({
           </div>
 
           {/* System Logic Explanation Card */}
-          <div className="p-4 rounded-xl bg-pearl-navy text-pearl-text space-y-2 border border-pearl-dark">
-            <div className="flex items-center gap-2 text-xs font-bold text-pearl-gold-light uppercase tracking-wider">
+          <div className="p-4 rounded-xl bg-pearl-surface text-pearl-text space-y-2 border border-pearl-border">
+            <div className="flex items-center gap-2 text-xs font-bold text-pearl-accent uppercase tracking-wider">
               <Sparkles className="w-4 h-4" />
               <span>How Pearl Travel Computes Your Requirements</span>
             </div>
