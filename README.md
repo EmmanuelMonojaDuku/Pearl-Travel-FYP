@@ -52,3 +52,9 @@ Limitations: Officer scan history, admin content and AI suggestions are stored i
   3. Without a client ID, demo mode shows a clearly labelled demo account chooser instead; a normal build shows a "not set up" message.
   Google accounts are stored as browser-local travellers (the API has no Google endpoint yet).
 - Without the API running, registration and login work from browser storage. Start the API (`api/`) to use server accounts and the admin live totals.
+
+## Maintaining content
+
+- **Footer and legal pages:** edit `src/config/site.ts` (email, resource links, legal links, social profiles) and `src/content/legal.ts` (Privacy Policy, Terms, Disclaimer). Add real social profile URLs to `SITE.social` and a Social section appears automatically. The footer component is `src/components/Footer.tsx` (`full` and `compact` variants).
+- **Assistant topics:** add or edit articles in `src/data/verifiedKnowledgeBase.ts`. Articles marked `approvedByAdmin: false` carry a "confirm on the official DCIC portal" note in the answer. Review them against official sources, then set it to `true`.
+- **QR scanner:** the officer's camera scan works in any modern browser (software QR decoding), needs `https://` or `http://localhost`, and falls back to uploading a QR image or manual search.

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { User, Mail, Lock, Phone, Eye, EyeOff, AlertCircle, Loader2, ChevronLeft } from 'lucide-react';
 import { PearlTravelLogo } from './PearlTravelLogo';
 import { Button, Field } from './ui';
+import { Footer } from './Footer';
 import { GoogleSignIn } from './SocialAuthButtons';
 import { FormErrors } from '../types';
 import { ApiUnavailableError, isBootstrapAdminEmail, loginWithApi, registerWithApi } from '../utils/apiClient';
@@ -82,7 +83,8 @@ export const SignupView: React.FC<SignupViewProps> = ({ onSwitchToLogin, onBack,
   };
 
   return (
-    <div className="min-h-screen w-full bg-pearl-slate text-pearl-text flex justify-center">
+    <div className="min-h-screen w-full bg-pearl-slate text-pearl-text flex flex-col">
+      <div className="flex-1 flex justify-center">
       <main className="w-full max-w-md px-6 py-8">
         {onBack && (
           <button type="button" onClick={onBack} aria-label="Back to welcome" className="w-9 h-9 rounded-xl bg-pearl-surface border border-pearl-border flex items-center justify-center hover:bg-pearl-input cursor-pointer mb-4">
@@ -138,6 +140,8 @@ export const SignupView: React.FC<SignupViewProps> = ({ onSwitchToLogin, onBack,
           </button>
         </p>
       </main>
+      </div>
+      <Footer quickLinks={[{ label: 'Login', onClick: () => onSwitchToLogin() }, ...(onBack ? [{ label: 'Welcome screen', onClick: onBack }] : [])]} />
     </div>
   );
 };

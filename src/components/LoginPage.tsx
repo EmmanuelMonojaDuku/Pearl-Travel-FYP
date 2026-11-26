@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff, AlertCircle, Loader2, ChevronLeft } from 'lucide-react';
 import { PearlTravelLogo } from './PearlTravelLogo';
 import { Button, Field } from './ui';
+import { Footer } from './Footer';
 import { DemoAccess, GoogleSignIn } from './SocialAuthButtons';
 import { FormErrors, LoginFormState, UserProfile } from '../types';
 import {
@@ -111,7 +112,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({
 
   /* ───────────────────────── RENDER ───────────────────────── */
   return (
-    <div className="min-h-screen w-full bg-pearl-slate text-pearl-text flex justify-center">
+    <div className="min-h-screen w-full bg-pearl-slate text-pearl-text flex flex-col">
+      <div className="flex-1 flex justify-center">
       <main className="w-full max-w-md px-6 py-8 flex flex-col">
         {onBack && (
           <button
@@ -206,6 +208,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({
           </button>
         </p>
       </main>
+      </div>
+      <Footer quickLinks={[{ label: 'Create an account', onClick: onSwitchToSignup }, ...(onBack ? [{ label: 'Welcome screen', onClick: onBack }] : [])]} />
     </div>
   );
 };

@@ -20,6 +20,7 @@ import { getPortalHash, getPortalTabFromHash, PortalTab } from './dashboard/navT
 import { DashboardSidebar } from './dashboard/DashboardSidebar';
 import { DashboardHeader } from './dashboard/DashboardHeader';
 import { ReadinessAssessmentView } from './ReadinessAssessmentView';
+import { Footer } from './Footer';
 import { NotificationsTab } from './NotificationsTab';
 import { OfflineAccessTab } from './OfflineAccessTab';
 import { buildAlerts } from '../utils/alerts';
@@ -778,6 +779,17 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
             )}
           </AnimatePresence>
         </div>
+
+        <Footer
+          className="pb-20 md:pb-0"
+          quickLinks={[
+            { label: 'Dashboard', href: '#/traveller/dashboard' },
+            { label: 'Document Checklist', href: '#/traveller/checklist' },
+            { label: 'Requirements', href: '#/traveller/requirements' },
+            { label: 'Readiness', href: '#/traveller/readiness' },
+            { label: 'QR Pass', href: '#/traveller/qr' },
+          ]}
+        />
       </div>
 
       {/* Mobile Fixed Thumb-Zone Bottom Navigation */}

@@ -14,6 +14,7 @@ import {
   Building,
 } from 'lucide-react';
 import { QRSummaryData } from '../types';
+import { compactQr } from '../utils/opsStore';
 
 interface QRSummaryCardProps {
   qrData: QRSummaryData;
@@ -25,6 +26,7 @@ export const QRSummaryCard: React.FC<QRSummaryCardProps> = ({ qrData, onClose })
   const [officerMode, setOfficerMode] = useState(false);
 
   const qrPayloadString = JSON.stringify(qrData);
+  const qrImageValue = compactQr(qrData);
 
   const handleCopyPayload = () => {
     navigator.clipboard.writeText(qrPayloadString);
@@ -69,7 +71,7 @@ export const QRSummaryCard: React.FC<QRSummaryCardProps> = ({ qrData, onClose })
           <div className="md:col-span-5 flex flex-col items-center justify-center p-5 rounded-xl bg-pearl-surface border border-pearl-border">
             <div className="p-3 bg-pearl-input rounded-xl border border-pearl-border">
               <QRCodeSVG
-                value={qrPayloadString}
+                value={qrImageValue}
                 size={180}
                 level="M"
                 includeMargin={true}

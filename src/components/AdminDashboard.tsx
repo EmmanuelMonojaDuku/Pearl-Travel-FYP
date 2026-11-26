@@ -34,6 +34,7 @@ import {
   type ModuleId,
 } from '../utils/opsStore';
 import { Button, Card, Pill, ScreenHeader, SectionLabel } from './ui';
+import { Footer } from './Footer';
 
 interface AdminDashboardProps {
   currentUser: UserProfile;
@@ -148,6 +149,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ currentUser, onL
     <div className="min-h-screen bg-pearl-slate text-pearl-text flex justify-center">
       <div className="w-full max-w-2xl flex flex-col min-h-screen">
         <main className="flex-1 px-5 pt-6 pb-24">{body}</main>
+        <Footer variant="compact" quickLinks={[]} className="mb-16" />
         <nav aria-label="Admin navigation" className="fixed bottom-0 inset-x-0 z-40 flex justify-center bg-pearl-navy border-t border-pearl-border">
           <div className="w-full max-w-2xl grid grid-cols-4 h-16">
             {nav.map(({ id, label, icon: Icon }) => {

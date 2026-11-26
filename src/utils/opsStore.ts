@@ -1,4 +1,4 @@
-import type { QRSummaryData } from '../types';
+import type { DocumentStatus, QRSummaryData } from '../types';
 
 /**
  * Browser-local store used by the officer and admin portals.
@@ -33,10 +33,55 @@ export function publishQr(qr: QRSummaryData): void {
   write(KEY_QR, reg);
 }
 
+/* Compact QR payload: small enough to scan quickly from a phone screen, and self-contained so an
+   officer's device can verify it without any shared storage. */
+const STATUS_CODE: Record<DocumentStatus, string> = { complete: 'c', missing: 'm', expired: 'e', not_applicable: 'n' };
+const CODE_STATUS: Record<string, DocumentStatus> = { c: 'complete', m: 'missing', e: 'expired', n: 'not_applicable' };
+const READINESS_CODE: Record<QRSummaryData['readinessStatus'], string> = { Ready: 'R', 'Action Needed': 'A', 'Critical Requirements Missing': 'C' };
+const CODE_READINESS: Record<string, QRSummaryData['readinessStatus']> = { R: 'Ready', A: 'Action Needed', C: 'Critical Requirements Missing' };
+
+export function compactQr(q: QRSummaryData): string {
+  const s = q.checklistSummary;
+  return JSON.stringify({
+    v: 'PT1',
+    r: q.referenceId,
+    n: q.passengerName,
+    c: q.nationality,
+    p: q.travelPurpose,
+    d: q.destination,
+    s: q.readinessScore,
+    t: READINESS_CODE[q.readinessStatus],
+    k: [s.passport, s.visa, s.yellowFever, s.returnTicket, s.accommodation, s.travelInsurance].map((x) => STATUS_CODE[x]).join(''),
+    at: q.timestamp,
+  });
+}
+
+function expandQr(o: Record<string, unknown>): QRSummaryData | null {
+  if (o.v !== 'PT1' || typeof o.r !== 'string' || typeof o.k !== 'string' || o.k.length !== 6) return null;
+  const st = (i: number): DocumentStatus => CODE_STATUS[(o.k as string)[i]] ?? 'missing';
+  return {
+    version: 'PEARL-QR-PT1',
+    referenceId: o.r,
+    passengerName: String(o.n ?? 'Unknown'),
+    nationality: String(o.c ?? 'Not provided'),
+    destination: String(o.d ?? 'Not set'),
+    travelPurpose: String(o.p ?? 'Not set'),
+    travellerType: 'Not set',
+    readinessScore: Number(o.s) || 0,
+    readinessStatus: CODE_READINESS[String(o.t)] ?? 'Action Needed',
+    checklistSummary: { passport: st(0), visa: st(1), yellowFever: st(2), returnTicket: st(3), accommodation: st(4), travelInsurance: st(5) },
+    timestamp: String(o.at ?? new Date().toISOString()),
+    cachedOffline: false,
+    disclaimer: 'Informational readiness snapshot scanned from a traveller QR. Not an entry approval.',
+  };
+}
+
 export function parseQrPayload(text: string): QRSummaryData | null {
   const t = text.trim();
   try {
     const obj = JSON.parse(t);
+    const compact = expandQr(obj);
+    if (compact) return compact;
     if (obj && typeof obj.referenceId === 'string' && obj.checklistSummary) return obj as QRSummaryData;
   } catch {
     /* not JSON — treat as a reference id below */

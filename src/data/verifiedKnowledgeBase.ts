@@ -132,6 +132,222 @@ Prohibited / Restricted Goods:
     lastReviewedDate: '2026-08-20',
     keywords: ['transit', 'rwanda', 'drc', 'south sudan', 'congo', 'route', '7 days', 'overland'],
   },
+  {
+    id: 'kb-land-border-general',
+    category: 'border_post',
+    title: 'Crossing Any Uganda Land Border: Step by Step',
+    summary: 'The same core steps apply at every Uganda land crossing, whichever neighbouring country you come from.',
+    detailedContent: `Whichever land border you use, expect these steps in roughly this order:
+
+1. Exit formalities with the country you are leaving (passport stamp or exit record).
+2. Port Health screening: present your WHO Yellow Fever card and expect a temperature check.
+3. Uganda immigration: show your passport and your eVisa approval letter if you need a visa. Fingerprints and a photo are taken.
+4. Customs (URA): declare goods for sale and any cash above USD 10,000, and have bags scanned if asked.
+5. Vehicles only: present registration, driving licence, insurance and the temporary movement permit.
+
+Good practice:
+• Keep every document together, in originals, in one easy-to-reach pouch.
+• Complete all formalities at the official post only. Informal crossing points are illegal and unsafe.
+• Pay official fees only at official counters and keep the receipt. No payment is needed to speed up clearance.
+• Check your entry stamp before leaving the counter: it shows how long you may stay.
+• Opening hours: busy posts generally run extended or round-the-clock operations, smaller crossings may close in the evening. Hours can change, so confirm before you travel.`,
+    officialAuthority: 'Compiled from public DCIC, URA and EAC guidance — confirm on official channels before travel',
+    approvedByAdmin: false,
+    lastReviewedDate: '2026-11-26',
+    keywords: ['crossing', 'land border', 'entry point', 'entry points', 'steps to cross', 'any border', 'all borders', 'border posts', 'how to cross', 'hours', 'opening hours', 'open', 'close', 'receipt', 'bribe', 'informal', 'panya', 'cross any'],
+  },
+  {
+    id: 'kb-border-list',
+    category: 'border_post',
+    title: 'Main Border Crossings Into Uganda',
+    summary: 'Where you can enter Uganda by land or air, grouped by neighbouring country.',
+    detailedContent: `Uganda borders five countries. Main entry points:
+
+• Kenya: Malaba and Busia (the busiest), plus Lwakhakha and Suam in the east.
+• Tanzania: Mutukula (on the Masaka to Bukoba road) and Kikagati/Murongo.
+• Rwanda: Katuna (Gatuna), Cyanika near Kisoro, and Mirama Hills (Kagitumba).
+• Democratic Republic of Congo: Mpondwe (Kasindi), Bunagana, Goli and Vurra.
+• South Sudan: Elegu (Nimule) and Oraba.
+• By air: Entebbe International Airport.
+
+Uganda has no direct border with Burundi, so travellers from Burundi usually route through Rwanda or Tanzania.
+
+The Pearl Travel journey planner currently covers Malaba, Busia, Entebbe, Katuna, Mutukula and Elegu. The core rules for visas, Yellow Fever and customs are the same at all of them.`,
+    officialAuthority: 'Compiled from public DCIC, URA and EAC guidance — confirm on official channels before travel',
+    approvedByAdmin: false,
+    lastReviewedDate: '2026-11-26',
+    keywords: ['borders', 'list of borders', 'which borders', 'neighbouring', 'neighboring', 'neighbour', 'neighbors', 'entry points', 'main crossings', 'border points', 'where can i enter', 'burundi border', 'all crossings', 'which border crossings', 'crossings can i use', 'border crossings', 'which crossing', 'burundi', 'does uganda border'],
+  },
+  {
+    id: 'kb-busia',
+    category: 'border_post',
+    title: 'Busia Border (Kenya – Uganda)',
+    summary: 'A major Kenya–Uganda crossing used by buses, trucks and private vehicles, with joint clearance like Malaba.',
+    detailedContent: `Busia is the second main crossing between Kenya and Uganda, on the route towards Jinja and Kampala.
+
+• It operates as a One-Stop Border Post, so exit from Kenya and entry into Uganda are handled together on one side.
+• The documents are the same as at Malaba: passport or EAC ID, a Uganda eVisa if you need one, and your Yellow Fever card.
+• Drivers need vehicle registration, a valid licence, COMESA insurance and the temporary movement permit.
+• Busia is a busy trading town. Always clear at the official post, never at informal footpaths.
+• Opening hours: confirm before you travel. Busy posts generally run extended or round-the-clock operations, but hours can change.`,
+    officialAuthority: 'Compiled from public DCIC, URA and EAC guidance — confirm on official channels before travel',
+    approvedByAdmin: false,
+    lastReviewedDate: '2026-11-26',
+    keywords: ['busia'],
+  },
+  {
+    id: 'kb-katuna-rwanda',
+    category: 'border_post',
+    title: 'Katuna / Gatuna, Cyanika and Mirama Hills (Rwanda – Uganda)',
+    summary: 'The main road links between Uganda and Rwanda, used for Kampala–Kigali and gorilla-trekking trips.',
+    detailedContent: `Rwanda and Uganda are connected by several crossings:
+
+• Katuna (Uganda side) and Gatuna (Rwanda side): the main Kampala to Kigali road via Mbarara and Kabale, run as a One-Stop Border Post.
+• Cyanika, near Kisoro: popular with gorilla-trekking visitors.
+• Mirama Hills and Kagitumba: in the east, on the route to northern Rwanda.
+
+What to know:
+• Rwandan and Ugandan citizens may travel with a valid national ID card under EAC arrangements.
+• Visitors who need a visa can use the East Africa Tourist Visa, which covers Uganda, Kenya and Rwanda, provided the trip starts in the country that issued it.
+• You will need your Yellow Fever card when entering Uganda.
+• This border has been closed or restricted in the past, so check its current status before you travel.`,
+    officialAuthority: 'Compiled from public DCIC, URA and EAC guidance — confirm on official channels before travel',
+    approvedByAdmin: false,
+    lastReviewedDate: '2026-11-26',
+    keywords: ['katuna', 'gatuna', 'cyanika', 'kisoro', 'mirama', 'kagitumba', 'kigali', 'rwanda border', 'gorilla', 'from rwanda', 'to rwanda', 'into rwanda'],
+  },
+  {
+    id: 'kb-mutukula-tanzania',
+    category: 'border_post',
+    title: 'Mutukula and Kikagati (Tanzania – Uganda)',
+    summary: 'The main road crossings between Tanzania and Uganda, including the Masaka to Bukoba route.',
+    detailedContent: `Tanzania and Uganda connect mainly at:
+
+• Mutukula, on the road between Masaka and Bukoba, run as a One-Stop Border Post.
+• Kikagati/Murongo, in the south-west.
+
+What to know:
+• Tanzanian citizens are EAC citizens and enjoy visa-free entry with a valid passport or accepted EAC document.
+• Other visitors need a Uganda eVisa unless exempt.
+• Carry your Yellow Fever card, as at every Uganda border.
+• Vehicles need registration, a valid licence, COMESA insurance and the temporary movement permit.
+• Opening hours: confirm before you travel, as hours at smaller posts can change.`,
+    officialAuthority: 'Compiled from public DCIC, URA and EAC guidance — confirm on official channels before travel',
+    approvedByAdmin: false,
+    lastReviewedDate: '2026-11-26',
+    keywords: ['mutukula', 'kikagati', 'murongo', 'tanzania border', 'bukoba', 'masaka', 'tanzanian', 'from tanzania', 'to tanzania', 'into tanzania'],
+  },
+  {
+    id: 'kb-elegu-south-sudan',
+    category: 'border_post',
+    title: 'Elegu / Nimule and Oraba (South Sudan – Uganda)',
+    summary: 'The main crossings between South Sudan and northern Uganda, on the Gulu to Juba route.',
+    detailedContent: `South Sudan and Uganda connect mainly at:
+
+• Elegu (Uganda) and Nimule (South Sudan): the main road from Gulu towards Juba.
+• Oraba, in the north-west near Koboko.
+
+What to know:
+• South Sudan is an EAC member, so South Sudanese citizens travel visa-free with accepted travel documents.
+• Other nationals need a Uganda eVisa if required, and must arrange any South Sudan visa separately.
+• Yellow Fever vaccination proof is required for entry into Uganda.
+• Trucks and cargo have additional transit and tracking requirements handled by URA Customs.
+• Check current travel advisories and road conditions before you set out.`,
+    officialAuthority: 'Compiled from public DCIC, URA and EAC guidance — confirm on official channels before travel',
+    approvedByAdmin: false,
+    lastReviewedDate: '2026-11-26',
+    keywords: ['elegu', 'nimule', 'oraba', 'juba', 'gulu', 'koboko', 'south sudan border', 'south sudanese', 'from south sudan', 'to south sudan', 'into south sudan'],
+  },
+  {
+    id: 'kb-drc-borders',
+    category: 'border_post',
+    title: 'DRC Crossings: Mpondwe, Bunagana, Goli and Vurra',
+    summary: 'Land crossings between the Democratic Republic of Congo and western or north-western Uganda.',
+    detailedContent: `The main crossings with the Democratic Republic of Congo are:
+
+• Mpondwe (Kasese district), opposite Kasindi in the DRC.
+• Bunagana, near Kisoro.
+• Goli and Vurra, in the north-west.
+
+What to know:
+• Congolese citizens are EAC citizens and travel visa-free with accepted documents.
+• Other visitors need a Uganda eVisa if required, and a DRC visa arranged separately.
+• Carry your Yellow Fever card. Port Health may apply extra health screening if there is a disease outbreak.
+• Conditions at some DRC crossings have changed because of security concerns or closures. Check your embassy's travel advice and confirm the crossing is open before you travel.`,
+    officialAuthority: 'Compiled from public DCIC, URA and EAC guidance — confirm on official channels before travel',
+    approvedByAdmin: false,
+    lastReviewedDate: '2026-11-26',
+    keywords: ['mpondwe', 'kasindi', 'bunagana', 'goli', 'vurra', 'drc border', 'congo border', 'kasese', 'congolese', 'from congo', 'to congo', 'from drc', 'to drc', 'into congo'],
+  },
+  {
+    id: 'kb-entebbe-airport',
+    category: 'border_post',
+    title: 'Arriving at Entebbe International Airport',
+    summary: 'What happens when you arrive in Uganda by air, and what to have ready.',
+    detailedContent: `When you land at Entebbe International Airport:
+
+1. Port Health: show your WHO Yellow Fever card at the health desk.
+2. Immigration: present your passport and your printed eVisa approval letter if you need a visa. Fingerprints and a photo are taken.
+3. Baggage claim, then customs: declare goods and any cash above USD 10,000.
+
+Tips:
+• Have your approval letter, passport, Yellow Fever card and accommodation details together before you reach the counters.
+• Keep your onward or return ticket available, as officers may ask for it.
+• For departures, arrive early for international flights and keep your boarding documents ready.`,
+    officialAuthority: 'Compiled from public DCIC, URA and EAC guidance — confirm on official channels before travel',
+    approvedByAdmin: false,
+    lastReviewedDate: '2026-11-26',
+    keywords: ['entebbe', 'airport', 'flight', 'fly', 'flying', 'plane', 'eia', 'arrive by air', 'air travel'],
+  },
+  {
+    id: 'kb-minors',
+    category: 'immigration',
+    title: 'Travelling With Children',
+    summary: 'Documents commonly requested when a child crosses the border.',
+    detailedContent: `Officers may ask for proof of the relationship between an adult and a child:
+
+• A passport or accepted travel document for the child.
+• The child's birth certificate.
+• If the child travels without both parents, a signed letter of consent from the absent parent or parents, ideally with a copy of their ID.
+• If travelling with a guardian or school group, a letter from the legal guardian or school.
+• The child's Yellow Fever card, if vaccination is required for their age.
+
+Airlines have their own rules for unaccompanied minors, so check with your airline.`,
+    officialAuthority: 'Compiled from public DCIC, URA and EAC guidance — confirm on official channels before travel',
+    approvedByAdmin: false,
+    lastReviewedDate: '2026-11-26',
+    keywords: ['child', 'children', 'kid', 'kids', 'minor', 'minors', 'baby', 'infant', 'son', 'daughter', 'family trip', 'birth certificate', 'consent letter'],
+  },
+  {
+    id: 'kb-problems-border',
+    category: 'immigration',
+    title: 'Overstaying, Lost Documents and Problems at the Border',
+    summary: 'What to do if your stay is running out, your passport is lost, or you are refused entry.',
+    detailedContent: `• Extending your stay: apply to the Directorate of Citizenship and Immigration Control (DCIC) before your permitted stay ends. Overstaying can lead to fines or removal.
+• Lost or stolen passport: report it to the police and get a report, then contact your embassy for an emergency travel document, and inform DCIC.
+• Lost Yellow Fever card: ask the clinic that vaccinated you for a replacement or a certified copy before you travel.
+• Refused entry or delays: stay calm, ask for the reason, and contact your embassy or the DCIC if you think the decision is wrong.
+• If someone asks for an unofficial payment, decline and report it to the immigration authorities.`,
+    officialAuthority: 'Compiled from public DCIC, URA and EAC guidance — confirm on official channels before travel',
+    approvedByAdmin: false,
+    lastReviewedDate: '2026-11-26',
+    keywords: ['overstay', 'overstayed', 'extend', 'extension', 'extend my stay', 'lost passport', 'lost my passport', 'stolen', 'refused entry', 'denied entry', 'deport', 'deported', 'fine', 'fines', 'embassy', 'emergency', 'problem', 'complaint'],
+  },
+  {
+    id: 'kb-money-border',
+    category: 'customs',
+    title: 'Money and Payments Near the Border',
+    summary: 'Currency, cash declarations and ways to pay when you cross into Uganda.',
+    detailedContent: `• The local currency is the Uganda shilling (UGX). US dollars are widely accepted at many tourist services, but you will need UGX for everyday costs.
+• Foreign currency exchange is available at banks and licensed forex bureaus in border towns. Compare rates and avoid street changers.
+• Mobile money such as MTN MoMo and Airtel Money is widely used across Uganda, though registering a local SIM may be needed.
+• Card machines can be unreliable near borders, so carry some cash in small notes.
+• Declare cash or negotiable instruments above USD 10,000 (or equivalent) to URA Customs on arrival.`,
+    officialAuthority: 'Compiled from public DCIC, URA and EAC guidance — confirm on official channels before travel',
+    approvedByAdmin: false,
+    lastReviewedDate: '2026-11-26',
+    keywords: ['money', 'exchange', 'forex', 'shilling', 'ugx', 'currency exchange', 'mobile money', 'momo', 'airtel money', 'atm', 'card', 'dollars', 'change money', 'payments'],
+  },
 ];
 
 export interface QueryResult {
@@ -219,4 +435,9 @@ export const SUGGESTED_QUESTIONS = [
   'Can EAC citizens enter with their National ID card?',
   'What are the customs allowances for cash and personal luggage?',
   'How does joint clearance work at Malaba One-Stop Border Post?',
+  'How do I cross any Uganda land border?',
+  'Which border crossings can I use?',
+  'What happens at Busia border?',
+  'Arriving at Entebbe airport',
+  'Can I travel with my child?',
 ];

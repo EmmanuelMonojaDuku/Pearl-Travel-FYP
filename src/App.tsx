@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { WelcomeScreen } from './components/WelcomeScreen';
 import { SignupView } from './components/SignupView';
 import { OfficerPortal } from './components/officer/OfficerPortal';
+import { LegalPage } from './components/LegalPage';
+import { getLegalSlugFromHash, type LegalSlug } from './config/site';
 import { LoginPage } from './components/LoginPage';
 import { ForgotPasswordModal } from './components/ForgotPasswordModal';
 import { AdminDashboard } from './components/AdminDashboard';
@@ -34,6 +36,25 @@ export default function App() {
     initialSession?.rememberMe ?? true
   );
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  /* Legal pages live at #/legal/<slug> and are reachable from every footer. */
+  const [legalSlug, setLegalSlug] = useState<LegalSlug | null>(() => getLegalSlugFromHash(window.location.hash));
+  const lastAppHash = React.useRef('');
+  useEffect(() => {
+    const sync = () => {
+      const slug = getLegalSlugFromHash(window.location.hash);
+      if (!slug) lastAppHash.current = window.location.hash;
+      setLegalSlug(slug);
+    };
+    sync();
+    window.addEventListener('hashchange', sync);
+    return () => window.removeEventListener('hashchange', sync);
+  }, []);
+  const closeLegal = () => {
+    window.location.hash = lastAppHash.current;
+    if (!lastAppHash.current) window.history.replaceState(null, '', window.location.pathname + window.location.search);
+    setLegalSlug(null);
+  };
 
   /* Forgot-password modal state (used by the new LoginPage) */
   const [forgotModalOpen, setForgotModalOpen] = useState(false);
@@ -176,7 +197,7 @@ export default function App() {
   return (
     <div className="relative min-h-screen w-full overflow-x-hidden bg-pearl-slate text-pearl-text selection:bg-pearl-gold selection:text-pearl-navy">
       {toast}
-      {screen}
+      {legalSlug ? <LegalPage slug={legalSlug} onBack={closeLegal} /> : screen}
     </div>
   );
 }

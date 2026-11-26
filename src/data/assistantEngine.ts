@@ -35,6 +35,7 @@ const DOMAIN_WORDS = [
   'luggage', 'baggage', 'cash', 'currency', 'declare', 'vehicle', 'car', 'drive', 'bus', 'transit', 'eac', 'kenya', 'tanzania', 'rwanda',
   'congo', 'sudan', 'burundi', 'somalia', 'accommodation', 'hotel', 'stay', 'qr', 'checklist', 'readiness', 'score', 'profile', 'offline',
   'notification', 'alert', 'app', 'pearl', 'officer', 'biometric', 'fingerprint', 'stamp', 'quarantine', 'comesa', 'drone', 'tourist',
+  'busia', 'katuna', 'gatuna', 'mutukula', 'elegu', 'nimule', 'mpondwe', 'bunagana', 'cyanika', 'oraba', 'airport', 'flight', 'child', 'children', 'minor', 'overstay', 'embassy', 'money', 'exchange', 'shilling',
 ];
 
 const STOP = new Set(['the', 'a', 'an', 'is', 'are', 'do', 'does', 'i', 'to', 'for', 'of', 'in', 'on', 'at', 'and', 'or', 'my', 'me', 'can', 'what', 'how', 'when', 'where', 'which', 'need', 'have', 'there', 'it', 'with', 'about', 'any', 'will', 'should', 'this', 'that', 'be']);
@@ -63,7 +64,8 @@ function bullets(article: KnowledgeArticle, max = 4): string[] {
 }
 
 function related(article: KnowledgeArticle): string[] {
-  const picks = VERIFIED_KNOWLEDGE_ARTICLES.filter((a) => a.id !== article.id).slice(0, 2);
+  const others = VERIFIED_KNOWLEDGE_ARTICLES.filter((a) => a.id !== article.id);
+  const picks = [...others.filter((a) => a.category === article.category), ...others.filter((a) => a.category !== article.category)].slice(0, 2);
   const titles: Record<string, string> = {
     'kb-malaba-osbp-clearing': 'How does clearance work at Malaba?',
     'kb-yellow-fever': 'What are the Yellow Fever card rules?',
@@ -72,6 +74,17 @@ function related(article: KnowledgeArticle): string[] {
     'kb-road-vehicle-clearance': 'What do I need to drive a car across?',
     'kb-customs-allowances': 'What are the customs allowances?',
     'kb-transit-rules': 'What are the transit rules through Uganda?',
+    'kb-land-border-general': 'How do I cross any Uganda land border?',
+    'kb-border-list': 'Which border crossings can I use?',
+    'kb-busia': 'What happens at Busia border?',
+    'kb-katuna-rwanda': 'Tell me about the Rwanda crossings',
+    'kb-mutukula-tanzania': 'Tell me about Mutukula (Tanzania)',
+    'kb-elegu-south-sudan': 'Tell me about Elegu (South Sudan)',
+    'kb-drc-borders': 'Tell me about the DRC crossings',
+    'kb-entebbe-airport': 'What happens at Entebbe airport?',
+    'kb-minors': 'Can I travel with my child?',
+    'kb-problems-border': 'What if I overstay or lose my passport?',
+    'kb-money-border': 'How do I pay and exchange money?',
   };
   return picks.map((p) => titles[p.id] || p.title);
 }
@@ -85,6 +98,25 @@ function scoreArticle(q: string, a: KnowledgeArticle): number {
   for (const tw of a.title.toLowerCase().split(/[^a-z]+/)) if (tw.length > 3 && !GENERIC.has(tw) && q.includes(tw)) s += 1.5;
   return s;
 }
+
+const rank = (id: string) => (id === 'kb-land-border-general' || id === 'kb-border-list' ? 0 : PLACE_IDS.has(id) ? 1 : 2);
+const PLACE_IDS = new Set(['kb-malaba-osbp-clearing', 'kb-busia', 'kb-katuna-rwanda', 'kb-mutukula-tanzania', 'kb-elegu-south-sudan', 'kb-drc-borders', 'kb-entebbe-airport']);
+// [name found in text, article id, display name]
+const PLACE_BY_NAME: [string, string, string][] = [
+  ['malaba', 'kb-malaba-osbp-clearing', 'Malaba'],
+  ['busia', 'kb-busia', 'Busia'],
+  ['katuna', 'kb-katuna-rwanda', 'Katuna'],
+  ['gatuna', 'kb-katuna-rwanda', 'Gatuna'],
+  ['cyanika', 'kb-katuna-rwanda', 'Cyanika'],
+  ['mirama', 'kb-katuna-rwanda', 'Mirama Hills'],
+  ['mutukula', 'kb-mutukula-tanzania', 'Mutukula'],
+  ['kikagati', 'kb-mutukula-tanzania', 'Kikagati'],
+  ['elegu', 'kb-elegu-south-sudan', 'Elegu'],
+  ['oraba', 'kb-elegu-south-sudan', 'Oraba'],
+  ['mpondwe', 'kb-drc-borders', 'Mpondwe'],
+  ['bunagana', 'kb-drc-borders', 'Bunagana'],
+  ['entebbe', 'kb-entebbe-airport', 'Entebbe'],
+];
 
 function personalNote(a: KnowledgeArticle, ctx: AssistantContext): string {
   const nationality = ctx.profile?.nationality || '';
@@ -103,8 +135,9 @@ function articleReply(a: KnowledgeArticle, ctx: AssistantContext, full = false):
   const body = full
     ? `${personalNote(a, ctx)}${a.detailedContent}`
     : `${personalNote(a, ctx)}${a.summary}${points.length ? '\n\n' + points.map((p) => `• ${p}`).join('\n') : ''}`;
+  const caution = a.approvedByAdmin ? '' : '\n\nBorder conditions can change. Confirm on the official DCIC portal before you travel.';
   return {
-    text: body,
+    text: body + caution,
     articleId: a.id,
     kind: 'knowledge',
     citations: [a.officialAuthority, `Reviewed ${a.lastReviewedDate}`],
@@ -212,13 +245,36 @@ export function answerQuestion(rawQuestion: string, ctx: AssistantContext): Assi
   }
 
   // 5. Verified knowledge base
+  // "my border" questions use the border chosen in the journey planner.
+  if (/\b(my|selected|chosen) (border|crossing|border post)\b|which border am i|where am i crossing/.test(q)) {
+    const chosen = (ctx.journey?.intendedBorderPoint || '').toLowerCase();
+    const id = PLACE_BY_NAME.find(([n]) => chosen.includes(n))?.[1];
+    const art = id ? VERIFIED_KNOWLEDGE_ARTICLES.find((a) => a.id === id) : undefined;
+    if (art) return { ...articleReply(art, ctx), text: `You chose ${ctx.journey?.intendedBorderPoint}.\n\n${articleReply(art, ctx).text}` };
+    return { kind: 'app', text: 'You have not chosen a border post yet. Open Home, tap Configure Journey and pick one, then ask me again.', citations: ['Pearl Travel app guide'], followUps: ['Which border crossings can I use?'] };
+  }
+
   let best: KnowledgeArticle | null = null;
   let top = 0;
   for (const a of VERIFIED_KNOWLEDGE_ARTICLES) {
     const s = scoreArticle(q, a);
-    if (s > top) { top = s; best = a; }
+    // ties: topic articles (visa, Yellow Fever...) beat place articles, which beat the general overview
+    if (s > top || (s === top && best && rank(a.id) > rank(best.id))) { top = s; best = a; }
   }
-  if (best && top >= 2) return articleReply(best, ctx);
+  if (best && top >= 2) {
+    const place = PLACE_BY_NAME.find(([n]) => hasWord(q, n));
+    // General hours/steps questions that name a crossing are answered by that crossing's article.
+    if (place && best.id === 'kb-land-border-general') {
+      const art = VERIFIED_KNOWLEDGE_ARTICLES.find((a) => a.id === place[1]);
+      if (art) return articleReply(art, ctx);
+    }
+    // Topic questions that name a crossing: answer the topic and say the rules apply there too.
+    if (place && !PLACE_IDS.has(best.id) && best.id !== 'kb-border-list') {
+      const r = articleReply(best, ctx);
+      return { ...r, text: `At ${place[2]} the same rules apply as at other Uganda crossings.\n\n${r.text}` };
+    }
+    return articleReply(best, ctx);
+  }
 
   // 6. Administrator-published FAQs (so content added in the admin portal is answerable)
   const qTokens = new Set(words);
