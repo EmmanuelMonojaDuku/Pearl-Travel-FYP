@@ -22,14 +22,14 @@ export interface AssistantReply {
   citations: string[];
   followUps: string[];
   articleId?: string;
-  kind: 'greeting' | 'personal' | 'knowledge' | 'app' | 'followup' | 'no-data' | 'out-of-scope';
+  kind: 'greeting' | 'personal' | 'knowledge' | 'app' | 'followup' | 'no-data' | 'out-of-scope' | 'refusal';
 }
 
 export const OUT_OF_SCOPE_TEXT =
   "I can only help with travelling to Uganda through the border (visas, passports, Yellow Fever, customs, vehicles, Malaba clearance) and with using the Pearl Travel app. I can't help with that topic, but I'm happy to answer something in those areas.";
 
 const DOMAIN_WORDS = [
-  'uganda', 'ugandan', 'malaba', 'busia', 'katuna', 'entebbe', 'osbp', 'border', 'immigration', 'dcic', 'ura', 'customs', 'duty',
+  'uganda', 'ugandan', 'malaba', 'queue', 'pay', 'payment', 'fee', 'fees', 'bribe', 'official', 'busia', 'katuna', 'entebbe', 'osbp', 'border', 'immigration', 'dcic', 'ura', 'customs', 'duty',
   'visa', 'evisa', 'passport', 'permit', 'yellow', 'fever', 'vaccin', 'health', 'travel', 'traveller', 'traveler', 'trip', 'journey',
   'entry', 'enter', 'exit', 'cross', 'crossing', 'clearance', 'checkpoint', 'document', 'documents', 'ticket', 'invitation', 'insurance',
   'luggage', 'baggage', 'cash', 'currency', 'declare', 'vehicle', 'car', 'drive', 'bus', 'transit', 'eac', 'kenya', 'tanzania', 'rwanda',
@@ -92,10 +92,17 @@ function related(article: KnowledgeArticle): string[] {
 // Words that appear in many articles say little about the topic, so they never count on their own.
 const GENERIC = new Set(['malaba', 'border', 'kenya', 'uganda', 'road', 'travel', 'osbp', 'east africa', 'citizen', 'procedure', 'route', 'online', 'health', 'medical', 'stop', 'post', 'operating', 'procedures', 'international']);
 
+const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+/** Whole-word match; short keywords (e.g. "car") must match exactly so they never fire inside "carry". */
+function hasKeyword(q: string, kw: string): boolean {
+  const e = escapeRe(kw);
+  return new RegExp(kw.length <= 4 ? `\\b${e}(s)?\\b` : `\\b${e}`).test(q);
+}
+
 function scoreArticle(q: string, a: KnowledgeArticle): number {
   let s = 0;
-  for (const kw of a.keywords) if (!GENERIC.has(kw) && q.includes(kw)) s += 2;
-  for (const tw of a.title.toLowerCase().split(/[^a-z]+/)) if (tw.length > 3 && !GENERIC.has(tw) && q.includes(tw)) s += 1.5;
+  for (const kw of a.keywords) if (!GENERIC.has(kw) && hasKeyword(q, kw)) s += 2;
+  for (const tw of a.title.toLowerCase().split(/[^a-z]+/)) if (tw.length > 3 && !GENERIC.has(tw) && hasKeyword(q, tw)) s += 1.5;
   return s;
 }
 
@@ -150,6 +157,16 @@ export function answerQuestion(rawQuestion: string, ctx: AssistantContext): Assi
   const name = firstName(ctx.profile);
   const words = tokens(q);
 
+  // 0. Never help evade the rules.
+  if (/\b(fake|forged|forge|counterfeit|fraudulent)\b|\bsmuggl|\bevade\b|\bavoid (customs|immigration|inspection)|\billegal(ly)? (cross|enter)|\bwithout (a )?(passport|visa|documents)\b.*\b(cross|enter)/.test(q)) {
+    return {
+      kind: 'refusal',
+      text: "I can't help with that. Using false documents or crossing outside an official post is illegal. I can explain which documents you need and how to get them properly.",
+      citations: [],
+      followUps: ['Do I need a visa?', 'What am I still missing?'],
+    };
+  }
+
   // 1. Greetings, thanks, capabilities
   if (/^(hi|hello|hey|good (morning|afternoon|evening)|habari|jambo|mambo|sasa)\b/.test(q) && words.length <= 4) {
     return {
@@ -162,7 +179,7 @@ export function answerQuestion(rawQuestion: string, ctx: AssistantContext): Assi
   if (/\b(thanks|thank you|asante|cheers|great|perfect)\b/.test(q) && words.length <= 5) {
     return { kind: 'greeting', text: `You're welcome, ${name}! Ask me anything else about your border crossing.`, citations: [], followUps: ['What am I still missing?', 'How does clearance work at Malaba?'] };
   }
-  if (/(who are you|what can you do|what do you do|help me|^help$|what can i ask)/.test(q)) {
+  if (/(who are you|what can you do|what do you do|what can i ask)/.test(q) || /^(help|help me|can you help( me)?|i need help)[?! .]*$/.test(q)) {
     return {
       kind: 'greeting',
       text: `I'm the Pearl Travel assistant. I answer only from verified Uganda immigration and customs information and from your own checklist. I can help with:\n${CAPABILITIES.map((c) => `• ${c}`).join('\n')}`,
@@ -204,7 +221,8 @@ export function answerQuestion(rawQuestion: string, ctx: AssistantContext): Assi
       followUps: ['What am I still missing?'],
     };
   }
-  if (/\bwhat documents|which documents|documents (do i|should i|to) (need|carry|bring)|\bdocuments needed|show documents\b/.test(q) || (hasWord(q, 'documents') && /(need|carry|bring|required)/.test(q))) {
+  const topicHit = VERIFIED_KNOWLEDGE_ARTICLES.some((a) => scoreArticle(q, a) >= 2);
+  if (!topicHit && (/\bwhat documents|which documents|documents (do i|should i|to) (need|carry|bring)|\bdocuments needed|show documents\b/.test(q) || (hasWord(q, 'documents') && /(need|carry|bring|required)/.test(q)))) {
     const sym = (i: ChecklistItem) => (i.status === 'complete' ? '✔' : i.status === 'not_applicable' ? '–' : '✖');
     const list = ctx.checklist.map((i) => `${sym(i)} ${i.title}${i.mandatory ? '' : ' (optional)'}`);
     if (list.length) {

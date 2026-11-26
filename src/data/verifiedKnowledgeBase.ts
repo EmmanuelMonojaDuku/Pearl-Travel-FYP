@@ -154,7 +154,7 @@ Good practice:
     officialAuthority: 'Compiled from public DCIC, URA and EAC guidance — confirm on official channels before travel',
     approvedByAdmin: false,
     lastReviewedDate: '2026-11-26',
-    keywords: ['crossing', 'land border', 'entry point', 'entry points', 'steps to cross', 'any border', 'all borders', 'border posts', 'how to cross', 'hours', 'opening hours', 'open', 'close', 'receipt', 'bribe', 'informal', 'panya', 'cross any'],
+    keywords: ['crossing', 'land border', 'entry point', 'entry points', 'steps to cross', 'any border', 'all borders', 'border posts', 'how to cross', 'hours', 'opening hours', 'open', 'close', 'receipt', 'bribe', 'informal', 'panya', 'cross any', 'queue', 'skip the queue', 'speed up', 'pay someone', 'unofficial payment', 'payment', 'fees'],
   },
   {
     id: 'kb-border-list',

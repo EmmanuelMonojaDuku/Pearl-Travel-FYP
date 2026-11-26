@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Pearl Travel – Research Poster</title>
+<style>
+  @page { size: 841mm 594mm; margin: 0; }
+  :root {
+    --navy:#0F172A; --navy2:#1E293B; --yellow:#FFC400; --gold:#EAB308; --white:#FFFFFF;
+    --bg:#F5F7FB; --grey:#F1F5F9; --line:#E2E8F0; --text:#0F172A; --text2:#334155; --muted:#5B6B83;
+    --ok:#16A34A; --okdark:#166534; --bad:#DC2626; --info:#1D4ED8; --amberdark:#92560A;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  body { font-family:'Inter','Liberation Sans',Arial,sans-serif; color:var(--text); }
+
+  .poster { width:841mm; height:594mm; background:var(--bg); display:grid; grid-template-rows:64mm 1fr 15mm; overflow:hidden; position:relative; }
+
+  /* ───── Header ───── */
+  header { background:var(--navy); color:#fff; display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:12mm; padding:0 14mm; position:relative; }
+  header::after { content:''; position:absolute; left:0; right:0; bottom:0; height:5mm; background:linear-gradient(90deg,#000 0 33.3%,var(--yellow) 33.3% 66.6%,#D21034 66.6%); }
+  .logo-tile { background:#fff; border-radius:4mm; padding:3.5mm 4.5mm; display:flex; align-items:center; }
+  .logo-tile img { height:19mm; width:auto; display:block; }
+  h1 { font-size:51pt; line-height:1.08; font-weight:800; letter-spacing:-0.4pt; }
+  .sub { margin-top:3.2mm; font-size:23pt; font-weight:600; color:var(--yellow); }
+  .author { text-align:right; font-size:17pt; line-height:1.4; color:#CBD5E1; }
+  .author b { color:#fff; font-size:25pt; font-weight:700; display:block; margin-bottom:1mm; }
+  .author .pill { display:inline-block; margin-top:2mm; background:var(--yellow); color:var(--navy); font-weight:700; font-size:14pt; padding:1mm 4mm; border-radius:20mm; }
+
+  /* ───── Body grid ───── */
+  main { display:grid; grid-template-columns:repeat(4,1fr); gap:8mm; padding:8mm 12mm 6mm; min-height:0; }
+  .col { display:flex; flex-direction:column; gap:6.5mm; min-height:0; }
+  .card { background:#fff; border:0.4mm solid var(--line); border-radius:4mm; padding:5.5mm 6mm 6mm; box-shadow:0 0.6mm 2mm rgba(15,23,42,.06); display:flex; flex-direction:column; min-height:0; }
+  .card.grow { flex:1; }
+  .card.navy { background:var(--navy); border-color:var(--navy); color:#fff; }
+  h2 { display:flex; align-items:center; gap:3.2mm; font-size:25pt; font-weight:800; letter-spacing:-.2pt; margin-bottom:3.6mm; color:var(--navy); }
+  .card.navy h2 { color:#fff; }
+  h2 .n { flex:none; width:11mm; height:11mm; border-radius:50%; background:var(--yellow); color:var(--navy); display:flex; align-items:center; justify-content:center; font-size:19pt; font-weight:800; }
+  h3 { font-size:16.5pt; font-weight:800; text-transform:uppercase; letter-spacing:.6pt; color:var(--amberdark); margin:3.2mm 0 1.6mm; }
+  .card.navy h3 { color:var(--yellow); }
+  p, li { font-size:18pt; line-height:1.34; color:var(--text2); }
+  .card.navy p, .card.navy li { color:#E2E8F0; }
+  ul { list-style:none; }
+  li { position:relative; padding-left:6mm; margin-bottom:2mm; }
+  li::before { content:''; position:absolute; left:0; top:3.2mm; width:2.6mm; height:2.6mm; border-radius:50%; background:var(--yellow); }
+  li b, p b { color:var(--navy); font-weight:700; }
+  .card.navy li b, .card.navy p b { color:#fff; }
+  .callout { margin-top:2.5mm; border-left:1.8mm solid var(--yellow); background:#FFF8DB; border-radius:0 2.5mm 2.5mm 0; padding:3mm 4mm; }
+  .callout p { color:var(--navy); font-size:17.5pt; font-weight:600; }
+  .small { font-size:14.5pt !important; line-height:1.3 !important; }
+  .muted { color:var(--muted) !important; }
+
+  /* Objectives */
+  .obj { display:grid; grid-template-columns:9mm 1fr; gap:2.4mm 3mm; align-items:start; margin-bottom:1.6mm; }
+  .obj .k { width:9mm; height:9mm; border-radius:2mm; background:var(--navy); color:var(--yellow); font-weight:800; font-size:14pt; display:flex; align-items:center; justify-content:center; margin-top:0.6mm; }
+  .obj p { font-size:17pt; }
+
+  /* Tables */
+  table { width:100%; border-collapse:collapse; }
+  th { text-align:left; font-size:13.5pt; text-transform:uppercase; letter-spacing:.5pt; color:var(--muted); font-weight:700; padding:1.4mm 2mm; border-bottom:0.5mm solid var(--line); }
+  td { font-size:15.5pt; line-height:1.25; padding:1.9mm 2mm; border-bottom:0.3mm solid var(--line); vertical-align:top; color:var(--text2); }
+  td b { color:var(--navy); }
+  .chip { display:inline-block; font-size:12.5pt; font-weight:800; padding:0.4mm 3mm; border-radius:20mm; text-transform:uppercase; letter-spacing:.4pt; white-space:nowrap; }
+  .done { background:#DCF1E4; color:var(--okdark); } .part { background:#FFF1C2; color:var(--amberdark); }
+  .plan { background:var(--grey); color:var(--muted); border:0.3mm solid var(--line); } .chg { background:#DBE7FB; color:var(--info); }
+
+  /* Phones */
+  .phones { display:grid; grid-template-columns:repeat(3,1fr); gap:3.5mm 3mm; }
+  .phone { text-align:center; }
+  .frame { background:var(--navy); border-radius:6.5mm; padding:1.6mm; box-shadow:0 1mm 3mm rgba(15,23,42,.25); }
+  .frame img { display:block; width:100%; aspect-ratio:390/660; object-fit:cover; object-position:top; border-radius:5mm; }
+  .phone .cap { margin-top:1.6mm; font-size:14.5pt; font-weight:700; color:var(--navy); line-height:1.15; }
+  .phone .cap span { display:block; font-weight:500; font-size:12.5pt; color:var(--muted); }
+
+  .steps { display:grid; grid-template-columns:repeat(4,1fr); gap:2.4mm; margin-bottom:3.5mm; }
+  .step { background:var(--grey); border-radius:3mm; padding:2.2mm 2.4mm; text-align:center; }
+  .step .b { width:8mm; height:8mm; border-radius:50%; background:var(--yellow); color:var(--navy); font-weight:800; font-size:14pt; display:flex; align-items:center; justify-content:center; margin:0 auto 1mm; }
+  .step p { font-size:13.5pt; line-height:1.15; color:var(--navy); font-weight:600; }
+
+  /* KPI */
+  .kpis { display:grid; grid-template-columns:1fr 1fr; gap:3mm; margin-bottom:3mm; }
+  .kpi { background:var(--navy); color:#fff; border-radius:3.2mm; padding:3.2mm 4mm; }
+  .kpi .v { font-size:34pt; font-weight:800; color:var(--yellow); line-height:1; }
+  .kpi .l { font-size:13.5pt; line-height:1.2; color:#CBD5E1; margin-top:1.4mm; }
+  .pending { margin-top:3mm; border:0.5mm dashed var(--gold); border-radius:3mm; padding:3mm 4mm; background:#FFFBEA; }
+  .pending p { font-size:15.5pt; color:var(--navy); }
+  .legend { display:flex; gap:5mm; font-size:13pt; color:var(--muted); margin-top:1.5mm; flex-wrap:wrap; }
+  .refs p { font-size:12.5pt; line-height:1.28; color:var(--text2); margin-bottom:0.8mm; }
+
+  svg text { font-family:'Inter','Liberation Sans',Arial,sans-serif; }
+
+  footer { background:var(--navy); color:#CBD5E1; display:grid; grid-template-columns:1.25fr 1fr auto; gap:10mm; align-items:center; padding:0 14mm; font-size:13.5pt; line-height:1.3; }
+  footer b { color:var(--yellow); }
+</style>
+</head>
+<body>
+<div class="poster">
+
+<!-- ═════════════ HEADER ═════════════ -->
+<header>
+  <div class="logo-tile"><img src="assets/ucu-logo.png" alt="Uganda Christian University" /></div>
+  <div>
+    <h1>Mobile Pre-Arrival Guidance and Traveller Readiness Application for Uganda Land Border Points</h1>
+    <div class="sub">Case study: Malaba One-Stop Border Post (OSBP) &nbsp;•&nbsp; Prototype: Pearl Travel</div>
+  </div>
+  <div class="author">
+    <b>Emmanuel Monoja Duku</b>
+    Reg. No. S24B13/056 &nbsp;|&nbsp; Student No. B30265<br/>
+    BSc Information Technology · Dept. of Computing and Technology<br/>
+    Faculty of Engineering, Design and Technology<br/>
+    <span class="pill">DSC3114 · Research Dissemination Poster · Advent 2026</span>
+  </div>
+</header>
+
+<main>
+
+<!-- ═════════════ COLUMN 1 — RESEARCH GROUNDING ═════════════ -->
+<section class="col">
+
+  <div class="card">
+    <h2><span class="n">1</span>Background</h2>
+    <ul>
+      <li>Uganda offers <b>e-Visa and e-immigration</b> services, and East African <b>One-Stop Border Posts</b> clear both countries’ formalities in one place.</li>
+      <li><b>Malaba</b> (Uganda–Kenya) is one of the busiest Northern Corridor crossings: traders, students, patients and families.</li>
+      <li>Official systems focus on applications and compliance, not on <b>personal pre-arrival readiness</b>.</li>
+      <li>Entry information is spread across websites, notices, social media and informal “touts”. Border-town internet is often <b>unreliable or costly</b>.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">2</span>Problem</h2>
+    <ul>
+      <li>Travellers may not find <b>clear, personalised</b> information for their nationality and purpose of travel.</li>
+      <li>Online-only guidance fails when connectivity is weak.</li>
+      <li>How big the problem is at Malaba has <b>not yet been established</b>, so the study investigates it instead of assuming it.</li>
+    </ul>
+    <div class="callout"><p><b>Research gap:</b> no traveller-centred tool for Uganda’s land borders combines a personalised checklist, readiness score, offline access and grounded Q&amp;A.</p></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">3</span>Objectives</h2>
+    <p style="margin-bottom:2.6mm"><b>General:</b> design, develop and evaluate <b>Pearl Travel</b>, a pre-arrival guidance and readiness prototype for travellers entering Uganda through Malaba OSBP.</p>
+    <div class="obj"><div class="k">1</div><p>Investigate travellers’ and officials’ information needs and preparation challenges.</p></div>
+    <div class="obj"><div class="k">2</div><p>Identify official requirements and organise them into a <b>verified knowledge base</b>.</p></div>
+    <div class="obj"><div class="k">3</div><p>Design the profiling model, rule engine and architecture.</p></div>
+    <div class="obj"><div class="k">4</div><p>Build a working prototype: checklist, readiness, offline, assistant, QR.</p></div>
+    <div class="obj"><div class="k">5</div><p>Evaluate rule correctness, answer quality, offline use, usability and acceptance.</p></div>
+  </div>
+
+  <div class="card grow">
+    <h2><span class="n">4</span>Scope</h2>
+    <ul>
+      <li><b>Site:</b> Malaba OSBP only; other borders are future work.</li>
+      <li><b>People:</b> adult inbound travellers and passenger-clearance officials.</li>
+      <li><b>Purposes:</b> tourism, business, study, medical, family visits, transit.</li>
+      <li><b>Advisory only:</b> no visas issued, no entry guarantee, no replacement of officers.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═════════════ COLUMN 2 — METHODS + DESIGN ═════════════ -->
+<section class="col">
+
+  <div class="card">
+    <h2><span class="n">5</span>Methods</h2>
+    <p style="margin-bottom:2mm"><b>Design Science Research</b> (build and evaluate an artefact) with <b>mixed-methods</b> data collection. The study is <b>formative</b>.</p>
+
+    <svg viewBox="0 0 1000 232" width="100%" role="img" aria-label="Five-stage research process">
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#0F172A"/></marker></defs>
+      <g font-size="27" font-weight="800" fill="#0F172A" text-anchor="middle">
+        <g transform="translate(0,0)"><rect x="4" y="6" width="176" height="148" rx="16" fill="#0F172A"/><circle cx="92" cy="40" r="19" fill="#FFC400"/><text x="92" y="49" fill="#0F172A" font-size="24">1</text><text x="92" y="92" fill="#fff" font-size="23">Investigate</text><text x="92" y="122" fill="#CBD5E1" font-size="17" font-weight="500">survey ·</text><text x="92" y="142" fill="#CBD5E1" font-size="17" font-weight="500">interviews</text></g>
+        <g transform="translate(200,0)"><rect x="4" y="6" width="176" height="148" rx="16" fill="#0F172A"/><circle cx="92" cy="40" r="19" fill="#FFC400"/><text x="92" y="49" fill="#0F172A" font-size="24">2</text><text x="92" y="92" fill="#fff" font-size="23">Define rules</text><text x="92" y="122" fill="#CBD5E1" font-size="17" font-weight="500">official sources</text><text x="92" y="142" fill="#CBD5E1" font-size="17" font-weight="500">→ knowledge base</text></g>
+        <g transform="translate(400,0)"><rect x="4" y="6" width="176" height="148" rx="16" fill="#0F172A"/><circle cx="92" cy="40" r="19" fill="#FFC400"/><text x="92" y="49" fill="#0F172A" font-size="24">3</text><text x="92" y="92" fill="#fff" font-size="23">Design</text><text x="92" y="122" fill="#CBD5E1" font-size="17" font-weight="500">profile model ·</text><text x="92" y="142" fill="#CBD5E1" font-size="17" font-weight="500">rules · UI</text></g>
+        <g transform="translate(600,0)"><rect x="4" y="6" width="176" height="148" rx="16" fill="#0F172A"/><circle cx="92" cy="40" r="19" fill="#FFC400"/><text x="92" y="49" fill="#0F172A" font-size="24">4</text><text x="92" y="92" fill="#fff" font-size="23">Build</text><text x="92" y="122" fill="#CBD5E1" font-size="17" font-weight="500">5 Agile</text><text x="92" y="142" fill="#CBD5E1" font-size="17" font-weight="500">sprints</text></g>
+        <g transform="translate(800,0)"><rect x="4" y="6" width="176" height="148" rx="16" fill="#FFC400"/><circle cx="92" cy="40" r="19" fill="#0F172A"/><text x="92" y="49" fill="#FFC400" font-size="24">5</text><text x="92" y="92" fill="#0F172A" font-size="23">Evaluate</text><text x="92" y="122" fill="#0F172A" font-size="17" font-weight="600">tests · SUS</text><text x="92" y="142" fill="#0F172A" font-size="17" font-weight="600">· TAM</text></g>
+      </g>
+      <g stroke="#0F172A" stroke-width="3" fill="none" marker-end="url(#ar)"><path d="M182 80 H200"/><path d="M382 80 H400"/><path d="M582 80 H600"/><path d="M782 80 H800"/></g>
+      <path d="M890 160 V205 H92 V160" fill="none" stroke="#EAB308" stroke-width="4" stroke-dasharray="12 9" marker-end="url(#ar)"/>
+      <text x="490" y="226" text-anchor="middle" font-size="22" font-weight="700" fill="#92560A">design feedback: findings refine the next version</text>
+    </svg>
+
+    <h3>Data collection and evaluation</h3>
+    <table>
+      <tr><th style="width:36%">Method</th><th>Planned sample / measure</th></tr>
+      <tr><td><b>Traveller survey</b></td><td>40 target (30 min.), convenience sample, needs and connectivity</td></tr>
+      <tr><td><b>Official interviews</b></td><td>10 target (5 min.), purposive, thematic analysis</td></tr>
+      <tr><td><b>Usability sessions</b></td><td>10 target (8 min.), task success, <b>SUS</b> and <b>TAM</b></td></tr>
+      <tr><td><b>Document analysis</b></td><td>EAC OSBP Act 2016, DCIC and URA sources, each rule dated and versioned</td></tr>
+      <tr><td><b>Technical tests</b></td><td>Rule test profiles, assistant benchmark, offline (airplane-mode) tests</td></tr>
+    </table>
+    <p class="small muted" style="margin-top:2mm">Ethics: informed consent, anonymised officials, no passport numbers stored. Results are indicative only, not generalisable.</p>
+  </div>
+
+  <div class="card grow">
+    <h2><span class="n">6</span>Design</h2>
+    <h3 style="margin-top:0">Conceptual framework</h3>
+    <svg viewBox="0 0 1000 255" width="100%" role="img" aria-label="Conceptual framework">
+      <defs><marker id="ar2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#0F172A"/></marker></defs>
+      <g text-anchor="middle" font-weight="800">
+        <rect x="4" y="6" width="226" height="150" rx="16" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="2"/>
+        <text x="117" y="44" font-size="25" fill="#0F172A">Inputs</text><text x="117" y="80" font-size="18.5" fill="#334155" font-weight="500">nationality</text><text x="117" y="104" font-size="18.5" fill="#334155" font-weight="500">purpose of travel</text><text x="117" y="128" font-size="18.5" fill="#334155" font-weight="500">traveller category</text>
+        <rect x="262" y="6" width="226" height="150" rx="16" fill="#0F172A"/>
+        <text x="375" y="44" font-size="25" fill="#FFC400">Processing</text><text x="375" y="80" font-size="18.5" fill="#E2E8F0" font-weight="500">rule engine</text><text x="375" y="104" font-size="18.5" fill="#E2E8F0" font-weight="500">Q&amp;A assistant</text><text x="375" y="128" font-size="18.5" fill="#E2E8F0" font-weight="500">offline storage</text>
+        <rect x="520" y="6" width="226" height="150" rx="16" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="2"/>
+        <text x="633" y="44" font-size="25" fill="#0F172A">Outputs</text><text x="633" y="80" font-size="18.5" fill="#334155" font-weight="500">checklist</text><text x="633" y="104" font-size="18.5" fill="#334155" font-weight="500">readiness score</text><text x="633" y="128" font-size="18.5" fill="#334155" font-weight="500">guidance · QR pass</text>
+        <rect x="778" y="6" width="218" height="150" rx="16" fill="#FFC400"/>
+        <text x="887" y="44" font-size="25" fill="#0F172A">Evaluation</text><text x="887" y="80" font-size="18.5" fill="#0F172A" font-weight="600">correctness</text><text x="887" y="104" font-size="18.5" fill="#0F172A" font-weight="600">answer quality</text><text x="887" y="128" font-size="18.5" fill="#0F172A" font-weight="600">usability · TAM</text>
+      </g>
+      <g stroke="#0F172A" stroke-width="3.5" fill="none" marker-end="url(#ar2)"><path d="M232 81 H260"/><path d="M490 81 H518"/><path d="M748 81 H776"/></g>
+      <path d="M887 160 V228 H117 V160" fill="none" stroke="#EAB308" stroke-width="4" stroke-dasharray="12 9" marker-end="url(#ar2)"/>
+      <text x="500" y="246" text-anchor="middle" font-size="20" font-weight="700" fill="#92560A">design feedback</text>
+    </svg>
+
+    <h3>System architecture (designed) and what is built</h3>
+    <svg viewBox="0 0 1000 438" width="100%" role="img" aria-label="Layered system architecture">
+      <style>
+        .ly{fill:#fff;stroke:#CBD5E1;stroke-width:2.5}.lt{font-size:19px;font-weight:800;fill:#92560A;letter-spacing:.8px;text-transform:uppercase}
+        .bx{fill:#F1F5F9;stroke:#CBD5E1;stroke-width:2}.bt{font-size:19.5px;font-weight:700;fill:#0F172A;text-anchor:middle}
+      </style>
+      <!-- Presentation -->
+      <rect class="ly" x="2" y="2" width="996" height="108" rx="14"/><text class="lt" x="18" y="30">Presentation (React web app, mobile-first)</text>
+      <g><rect class="bx" x="18" y="42" width="226" height="56" rx="10"/><text class="bt" x="131" y="77">Traveller app</text>
+      <rect class="bx" x="258" y="42" width="226" height="56" rx="10"/><text class="bt" x="371" y="77">Officer module</text>
+      <rect class="bx" x="498" y="42" width="226" height="56" rx="10"/><text class="bt" x="611" y="77">Admin module</text>
+      <rect class="bx" x="738" y="42" width="244" height="56" rx="10"/><text class="bt" x="860" y="77">Offline cache</text></g>
+      <!-- API -->
+      <rect class="ly" x="2" y="122" width="996" height="86" rx="14"/><text class="lt" x="18" y="150">API and security (Node.js)</text>
+      <g><rect class="bx" x="18" y="160" width="226" height="40" rx="10"/><text class="bt" x="131" y="187" font-size="18">REST API</text>
+      <rect class="bx" x="258" y="160" width="226" height="40" rx="10"/><text class="bt" x="371" y="187" font-size="18">JWT login</text>
+      <rect class="bx" x="498" y="160" width="226" height="40" rx="10"/><text class="bt" x="611" y="187" font-size="18">Role-based access</text>
+      <rect class="bx" x="738" y="160" width="244" height="40" rx="10"/><text class="bt" x="860" y="187" font-size="18">Rate limiting</text></g>
+      <!-- Services -->
+      <rect class="ly" x="2" y="220" width="996" height="108" rx="14"/><text class="lt" x="18" y="248">Application services</text>
+      <g><rect class="bx" x="18" y="260" width="170" height="58" rx="10"/><text class="bt" x="103" y="296" font-size="17">Profile</text>
+      <rect class="bx" x="200" y="260" width="190" height="58" rx="10"/><text class="bt" x="295" y="296" font-size="17">Rule engine</text>
+      <rect class="bx" x="402" y="260" width="196" height="58" rx="10"/><text class="bt" x="500" y="287" font-size="16">Checklist &amp;</text><text class="bt" x="500" y="307" font-size="16">readiness</text>
+      <rect class="bx" x="610" y="260" width="120" height="58" rx="10"/><text class="bt" x="670" y="296" font-size="17">QR</text>
+      <rect class="bx" x="742" y="260" width="240" height="58" rx="10"/><text class="bt" x="862" y="287" font-size="16">Assistant</text><text class="bt" x="862" y="307" font-size="14.5" font-weight="500">keyword retrieval</text></g>
+      <!-- Data -->
+      <rect class="ly" x="2" y="340" width="996" height="96" rx="14"/><text class="lt" x="18" y="368">Data</text>
+      <g><rect class="bx" x="18" y="378" width="226" height="48" rx="10"/><text class="bt" x="131" y="409" font-size="17.5">PostgreSQL</text>
+      <rect class="bx" x="258" y="378" width="226" height="48" rx="10"/><text class="bt" x="371" y="409" font-size="17.5">Knowledge base</text>
+      <rect class="bx" x="498" y="378" width="226" height="48" rx="10"/><text class="bt" x="611" y="409" font-size="17.5">Browser storage</text>
+      <rect x="738" y="378" width="244" height="48" rx="10" fill="#fff" stroke="#94A3B8" stroke-width="2.5" stroke-dasharray="9 7"/><text class="bt" x="860" y="409" font-size="16.5" fill="#5B6B83">Vector store + LLM</text></g>
+      <!-- status dots -->
+      <g stroke="#fff" stroke-width="2.5">
+        <!-- built = green -->
+        <circle cx="232" cy="52" r="9" fill="#16A34A"/><circle cx="472" cy="52" r="9" fill="#EAB308"/><circle cx="712" cy="52" r="9" fill="#EAB308"/><circle cx="970" cy="52" r="9" fill="#EAB308"/>
+        <circle cx="232" cy="170" r="9" fill="#16A34A"/><circle cx="472" cy="170" r="9" fill="#16A34A"/><circle cx="712" cy="170" r="9" fill="#16A34A"/><circle cx="970" cy="170" r="9" fill="#16A34A"/>
+        <circle cx="176" cy="270" r="9" fill="#16A34A"/><circle cx="378" cy="270" r="9" fill="#16A34A"/><circle cx="586" cy="270" r="9" fill="#16A34A"/><circle cx="718" cy="270" r="9" fill="#EAB308"/><circle cx="970" cy="270" r="9" fill="#EAB308"/>
+        <circle cx="232" cy="388" r="9" fill="#16A34A"/><circle cx="472" cy="388" r="9" fill="#16A34A"/><circle cx="712" cy="388" r="9" fill="#16A34A"/><circle cx="970" cy="388" r="9" fill="#CBD5E1"/>
+      </g>
+    </svg>
+    <div class="legend"><span><svg width="14" height="14" viewBox="0 0 14 14" style="vertical-align:-2px"><circle cx="7" cy="7" r="6" fill="#16A34A"/></svg> built</span><span><svg width="14" height="14" viewBox="0 0 14 14" style="vertical-align:-2px"><circle cx="7" cy="7" r="6" fill="#EAB308"/></svg> partly built</span><span><svg width="14" height="14" viewBox="0 0 14 14" style="vertical-align:-2px"><circle cx="7" cy="7" r="6" fill="#CBD5E1"/></svg> planned</span></div>
+    <p class="small" style="margin-top:2mm"><b>Rule records</b> carry the source, version, effective date and verifier. Unknown rules show a warning and refer the traveller to official channels.</p>
+  </div>
+</section>
+
+<!-- ═════════════ COLUMN 3 — IMPLEMENTATION ═════════════ -->
+<section class="col">
+
+  <div class="card">
+    <h2><span class="n">7</span>The prototype in use</h2>
+    <div class="steps">
+      <div class="step"><div class="b">1</div><p>Pick nationality and purpose</p></div>
+      <div class="step"><div class="b">2</div><p>Get your checklist</p></div>
+      <div class="step"><div class="b">3</div><p>See your readiness score</p></div>
+      <div class="step"><div class="b">4</div><p>Show your QR pass</p></div>
+    </div>
+    <div class="phones">
+      <div class="phone"><div class="frame"><img src="assets/scr-dashboard.png" alt="Home"/></div><div class="cap">Home<span>journey and next step</span></div></div>
+      <div class="phone"><div class="frame"><img src="assets/scr-checklist.png" alt="Checklist"/></div><div class="cap">Checklist<span>Have it · Don’t have it · N/A</span></div></div>
+      <div class="phone"><div class="frame"><img src="assets/scr-readiness.png" alt="Readiness"/></div><div class="cap">Readiness<span>weighted self-assessed score</span></div></div>
+      <div class="phone"><div class="frame"><img src="assets/scr-assistant.png" alt="Assistant"/></div><div class="cap">Assistant<span>answers or politely refuses</span></div></div>
+      <div class="phone"><div class="frame"><img src="assets/scr-qr.png" alt="QR pass"/></div><div class="cap">QR pass<span>advisory, scannable</span></div></div>
+      <div class="phone"><div class="frame"><img src="assets/scr-officer.png" alt="Officer view"/></div><div class="cap">Officer view<span>audit, approve or flag</span></div></div>
+    </div>
+  </div>
+
+  <div class="card grow">
+    <h2><span class="n">8</span>Current implementation status</h2>
+    <table>
+      <tr><th style="width:64%">Component</th><th>Status</th></tr>
+      <tr><td><b>Accounts and profile</b></td><td><span class="chip done">Done</span></td></tr>
+      <tr><td><b>Rule engine by nationality</b></td><td><span class="chip done">Done</span></td></tr>
+      <tr><td><b>Checklist and readiness score</b></td><td><span class="chip done">Done</span></td></tr>
+      <tr><td><b>Malaba guide and videos</b></td><td><span class="chip done">Done</span></td></tr>
+      <tr><td><b>Assistant</b> (keyword KB, no LLM)</td><td><span class="chip part">Partial</span></td></tr>
+      <tr><td><b>QR pass</b> (unsigned, shows name)</td><td><span class="chip part">Partial</span></td></tr>
+      <tr><td><b>Offline use</b> (data on device only)</td><td><span class="chip part">Partial</span></td></tr>
+      <tr><td><b>Officer and admin modules</b></td><td><span class="chip part">Partial</span></td></tr>
+      <tr><td><b>Web app</b>, not React Native</td><td><span class="chip chg">Changed</span></td></tr>
+      <tr><td><b>Rules by travel purpose</b></td><td><span class="chip plan">Planned</span></td></tr>
+      <tr><td><b>User evaluation</b> (survey, SUS, TAM)</td><td><span class="chip plan">Planned</span></td></tr>
+    </table>
+    <p class="small muted" style="margin-top:2.5mm">Partial: the assistant matches keywords in a curated knowledge base instead of using a language model; the QR pass is advisory but not yet a signed, anonymous token; there is no offline app shell yet; officer and admin data is kept in the browser. Google sign-in works once a client ID is set. Built with React 19, Vite, Node.js and PostgreSQL.</p>
+  </div>
+</section>
+
+<!-- ═════════════ COLUMN 4 — RESULTS + IMPACT ═════════════ -->
+<section class="col">
+
+  <div class="card">
+    <h2><span class="n">9</span>Results so far</h2>
+    <div class="kpis">
+      <div class="kpi"><div class="v">22/22</div><div class="l">automated API tests passed</div></div>
+      <div class="kpi"><div class="v">39</div><div class="l">browser checks passed: sign-up, checklist, QR scan, officer review</div></div>
+      <div class="kpi"><div class="v">0</div><div class="l">colour-contrast failures across 50 screen checks (axe)</div></div>
+      <div class="kpi"><div class="v">78%</div><div class="l">assistant correct on 27 unseen questions (21/27)</div></div>
+    </div>
+
+    <h3 style="margin-top:1mm">Assistant benchmark (unseen questions)</h3>
+    <svg viewBox="0 0 1000 392" width="100%" role="img" aria-label="Assistant benchmark results by category">
+      <g font-size="22" fill="#334155">
+        <text x="0" y="40" font-weight="600">Topic answered</text><text x="0" y="99" font-weight="600">Own checklist</text><text x="0" y="158" font-weight="600">App help</text><text x="0" y="217" font-weight="600">Off-topic refused</text><text x="0" y="276" font-weight="600">Unsupported refused</text><text x="0" y="335" font-weight="600">Unsafe request refused</text>
+      </g>
+      <g>
+        <rect x="318" y="14" width="540" height="38" rx="8" fill="#F1F5F9"/><rect x="318" y="14" width="498" height="38" rx="8" fill="#16A34A"/><text x="878" y="42" font-size="23" font-weight="800" fill="#0F172A">12/13</text>
+        <rect x="318" y="73" width="540" height="38" rx="8" fill="#F1F5F9"/><rect x="318" y="73" width="360" height="38" rx="8" fill="#EAB308"/><text x="878" y="101" font-size="23" font-weight="800" fill="#0F172A">2/3</text>
+        <rect x="318" y="132" width="540" height="38" rx="8" fill="#F1F5F9"/><rect x="318" y="132" width="10" height="38" rx="5" fill="#DC2626"/><text x="878" y="160" font-size="23" font-weight="800" fill="#0F172A">0/1</text>
+        <rect x="318" y="191" width="540" height="38" rx="8" fill="#F1F5F9"/><rect x="318" y="191" width="540" height="38" rx="8" fill="#16A34A"/><text x="878" y="219" font-size="23" font-weight="800" fill="#0F172A">5/5</text>
+        <rect x="318" y="250" width="540" height="38" rx="8" fill="#F1F5F9"/><rect x="318" y="250" width="180" height="38" rx="8" fill="#DC2626"/><text x="878" y="278" font-size="23" font-weight="800" fill="#0F172A">1/3</text>
+        <rect x="318" y="309" width="540" height="38" rx="8" fill="#F1F5F9"/><rect x="318" y="309" width="270" height="38" rx="8" fill="#EAB308"/><text x="878" y="337" font-size="23" font-weight="800" fill="#0F172A">1/2</text>
+      </g>
+      <text x="318" y="380" font-size="18.5" fill="#5B6B83">bar = share answered correctly · n shown at right</text>
+    </svg>
+    <p class="small" style="margin-top:1mm"><b>Method:</b> expected answers fixed before testing. A first 39-question run scored 34/39 (87%) and exposed 5 defects, all fixed. The 27 unseen questions above were then run once and <b>not tuned</b>. Weak spots: paraphrases and unsupported questions, which motivates semantic (RAG) retrieval.</p>
+
+    <h3>Personalised requirements (36 test profiles)</h3>
+    <table>
+      <tr><th style="width:30%">Group</th><th>Visa rule shown</th><th style="width:21%">Reqs</th></tr>
+      <tr><td><b>Citizen</b></td><td>Citizen entry, no visa</td><td>7</td></tr>
+      <tr><td><b>EAC</b> (Kenya, Rwanda)</td><td>Free movement</td><td>8</td></tr>
+      <tr><td><b>Other</b> (US, India, Eritrea)</td><td>e-Visa mandatory</td><td>8</td></tr>
+    </table>
+    <p class="small muted" style="margin-top:1.6mm">6 nationalities × 6 purposes gave 3 distinct rule sets with identical output for identical input (deterministic). Purpose-specific rules are not built yet.</p>
+
+    <div class="pending"><p><b>Not yet available:</b> traveller survey, official interviews and SUS/TAM usability results. They are planned and will be reported descriptively.</p></div>
+  </div>
+
+  <div class="card grow">
+    <h2><span class="n">10</span>Expected impact and limits</h2>
+    <ul>
+      <li><b>Expected:</b> travellers who know what to bring and which steps follow, with sources shown for every rule.</li>
+      <li><b>Not claimed:</b> shorter queues or faster processing. That needs a separate impact study.</li>
+      <li><b>Limits:</b> small samples at one site; rules reflect the verification date; prototype not deployed.</li>
+      <li><b>Next:</b> signed no-personal-data QR, LLM-RAG assistant, offline app shell, other borders, Swahili interface, official integration.</li>
+    </ul>
+    <div class="refs" style="margin-top:auto;padding-top:2mm;border-top:0.3mm solid var(--line)">
+      <p><b>Key references:</b> Hevner et al. (2004) <i>MIS Quarterly</i>; Peffers et al. (2007) <i>JMIS</i>; Davis (1989) <i>MIS Quarterly</i>; Brooke (1996) SUS; Lewis et al. (2020) RAG; East African Community (2016) One Stop Border Posts Act; Parliament of Uganda (2019) Data Protection and Privacy Act.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div><b>Sources:</b> Directorate of Citizenship and Immigration Control (DCIC), Uganda e-Visa portal, Uganda Revenue Authority, EAC OSBP Act 2016 and Malaba OSBP guidance.</div>
+  <div><b>Advisory prototype.</b> Not an immigration decision, visa or guarantee of entry. Immigration officers decide.</div>
+  <div style="text-align:right">Uganda Christian University<br/>November 2026</div>
+</footer>
+
+</div>
+</body>
+</html>
