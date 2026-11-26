@@ -533,7 +533,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
                   cx="55"
                   cy="55"
                   r={radius}
-                  stroke="#1E293B"
+                  stroke="#161619"
                   strokeWidth="10"
                   fill="transparent"
                 />

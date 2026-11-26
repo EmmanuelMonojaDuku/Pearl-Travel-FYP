@@ -228,9 +228,21 @@ export const AIGuidanceCard: React.FC<AIGuidanceCardProps> = ({
               title="Listen to last assistant answer"
             >
               <Volume2 className="w-3.5 h-3.5 text-pearl-text-secondary" />
-              <span>Voice Interaction</span>
+              <span>Voice Response</span>
             </button>
           )}
+
+          <button
+            type="button"
+            onClick={() =>
+              handleAsk(
+                `What documents do I need for ${profile?.travelPurpose || journey?.travelPurpose || 'my'} travel to Uganda?`
+              )
+            }
+            className="px-3 py-1.5 rounded-lg bg-pearl-gold hover:bg-pearl-gold-light text-pearl-navy text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+          >
+            <span>Show Documents</span>
+          </button>
 
           <button
             type="button"

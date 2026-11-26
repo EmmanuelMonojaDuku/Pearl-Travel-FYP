@@ -53,7 +53,7 @@ export const QRSummaryCard: React.FC<QRSummaryCardProps> = ({ qrData, onClose })
             onClick={() => setOfficerMode(!officerMode)}
             className={`px-3.5 py-2 rounded-lg text-xs font-bold transition-colors cursor-pointer flex items-center gap-1.5 ${
               officerMode
-                ? 'bg-pearl-navy text-pearl-gold'
+                ? 'bg-pearl-gold text-pearl-navy font-bold'
                 : 'bg-pearl-surface border border-pearl-border text-pearl-text hover:bg-pearl-input'
             }`}
           >
@@ -126,12 +126,14 @@ export const QRSummaryCard: React.FC<QRSummaryCardProps> = ({ qrData, onClose })
                     {cell.label}
                   </span>
                   <span className="font-bold text-pearl-text capitalize flex items-center gap-1 mt-0.5">
-                    {cell.status === 'complete' ? (
+                    {cell.status === 'not_applicable' ? (
+                      <span className="w-3.5 h-3.5 text-pearl-placeholder text-center leading-none">–</span>
+                    ) : cell.status === 'complete' ? (
                       <CheckCircle2 className="w-3.5 h-3.5 text-pearl-success-light" />
                     ) : (
                       <XCircle className="w-3.5 h-3.5 text-pearl-danger-light" />
                     )}
-                    {cell.status}
+                    {cell.status === 'not_applicable' ? 'N/A' : cell.status}
                   </span>
                 </div>
               ))}

@@ -277,7 +277,7 @@ export const JourneySetupView: React.FC<JourneySetupViewProps> = ({
                             isSelected
                               ? 'bg-pearl-gold text-pearl-text'
                               : bp.featured
-                              ? 'bg-pearl-navy text-pearl-gold-light'
+                              ? 'bg-pearl-gold text-pearl-navy font-bold'
                               : 'bg-pearl-dark text-pearl-text-secondary border border-pearl-border'
                           }`}
                         >

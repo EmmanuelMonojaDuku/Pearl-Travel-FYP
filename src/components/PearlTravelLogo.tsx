@@ -4,45 +4,26 @@ interface PearlTravelLogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
   showText?: boolean;
+  /** kept for backwards compatibility; the logo always renders on a white tile for contrast */
   variant?: 'default' | 'dark-card' | 'transparent';
 }
 
-export const PearlTravelLogo: React.FC<PearlTravelLogoProps> = ({
-  size = 'md',
-  className = '',
-  variant = 'default',
-}) => {
-  const isDarkCard = variant === 'dark-card';
-  const useDarkLogo = variant !== 'default';
+const SIZE: Record<NonNullable<PearlTravelLogoProps['size']>, string> = {
+  sm: 'w-14 h-14',
+  md: 'w-20 h-20',
+  lg: 'w-28 h-28',
+  xl: 'w-44 h-44',
+};
 
-  const widthClass = {
-    sm: useDarkLogo ? 'w-28 sm:w-32' : 'w-32 sm:w-36',
-    md: useDarkLogo ? 'w-36 sm:w-40' : 'w-40 sm:w-44',
-    lg: useDarkLogo ? 'w-44 sm:w-48' : 'w-48 sm:w-52',
-    xl: useDarkLogo ? 'w-52 sm:w-60' : 'w-56 sm:w-64',
-  }[size];
-
-  if (isDarkCard) {
-    return (
-      <div className={`flex items-center justify-center select-none ${className}`}>
-        <div className="relative p-2.5 sm:p-3 rounded-2xl bg-[#1E293B]/40 border border-white/10 shadow-[0_4px_24px_rgba(2,6,23,0.35)] backdrop-blur-md flex items-center justify-center transition-all duration-300">
-          <img
-            src="/assets/aistudio/logo_dark.png"
-            alt="Pearl Travel — Plan, Prepare, Cross"
-            className={`${widthClass} h-auto block object-contain`}
-          />
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className={`flex items-center justify-center select-none ${className}`}>
+/** Pearl Travel brand mark on a white rounded tile (matches the splash wireframe). */
+export const PearlTravelLogo: React.FC<PearlTravelLogoProps> = ({ size = 'md', className = '' }) => (
+  <div className={`flex items-center justify-center select-none ${className}`}>
+    <div className={`${SIZE[size]} rounded-2xl bg-white p-1 flex items-center justify-center shadow-[0_8px_32px_rgba(0,0,0,0.5)]`}>
       <img
-        src={useDarkLogo ? '/assets/aistudio/logo_dark.png' : '/assets/aistudio/logo._222a6fe1.webp'}
+        src="/pearl-travel-logo.jpg"
         alt="Pearl Travel — Plan, Prepare, Cross"
-        className={`${widthClass} h-auto block object-contain`}
+        className="w-full h-full object-contain rounded-xl"
       />
     </div>
-  );
-};
+  </div>
+);

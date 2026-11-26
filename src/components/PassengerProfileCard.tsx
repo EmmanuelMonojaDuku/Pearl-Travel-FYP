@@ -614,7 +614,7 @@ export const PassengerProfileCard: React.FC<PassengerProfileCardProps> = ({
             <div
               className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors shrink-0 ${
                 profile.hasYellowFeverVax
-                  ? 'bg-pearl-navy text-pearl-gold-light'
+                  ? 'bg-pearl-gold text-pearl-navy font-bold'
                   : 'bg-pearl-input border border-pearl-border'
               }`}
             >
@@ -679,7 +679,7 @@ export const PassengerProfileCard: React.FC<PassengerProfileCardProps> = ({
               <div
                 className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
                   profile.hasAccommodationProof
-                    ? 'bg-pearl-navy text-pearl-gold-light'
+                    ? 'bg-pearl-gold text-pearl-navy font-bold'
                     : 'bg-pearl-dark text-pearl-text-secondary border border-pearl-border'
                 }`}
               >
@@ -693,7 +693,7 @@ export const PassengerProfileCard: React.FC<PassengerProfileCardProps> = ({
             <div
               className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors shrink-0 ${
                 profile.hasAccommodationProof
-                  ? 'bg-pearl-navy text-pearl-gold-light'
+                  ? 'bg-pearl-gold text-pearl-navy font-bold'
                   : 'bg-pearl-input border border-pearl-border'
               }`}
             >
@@ -720,7 +720,7 @@ export const PassengerProfileCard: React.FC<PassengerProfileCardProps> = ({
               <div
                 className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
                   profile.hasTravelInsurance
-                    ? 'bg-pearl-navy text-pearl-gold-light'
+                    ? 'bg-pearl-gold text-pearl-navy font-bold'
                     : 'bg-pearl-dark text-pearl-text-secondary border border-pearl-border'
                 }`}
               >
@@ -734,7 +734,7 @@ export const PassengerProfileCard: React.FC<PassengerProfileCardProps> = ({
             <div
               className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors shrink-0 ${
                 profile.hasTravelInsurance
-                  ? 'bg-pearl-navy text-pearl-gold-light'
+                  ? 'bg-pearl-gold text-pearl-navy font-bold'
                   : 'bg-pearl-input border border-pearl-border'
               }`}
             >

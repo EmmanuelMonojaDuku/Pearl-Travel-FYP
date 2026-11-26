@@ -1,4 +1,4 @@
-export type AuthMode = 'login' | 'signup';
+export type AuthMode = 'welcome' | 'login' | 'signup';
 export type UserRole = 'traveller' | 'admin_staff' | 'border_officer';
 
 export interface LoginFormState {
@@ -82,7 +82,7 @@ export type TravellerType =
   | 'resident'
   | 'student';
 
-export type DocumentStatus = 'complete' | 'missing' | 'expired';
+export type DocumentStatus = 'complete' | 'missing' | 'expired' | 'not_applicable';
 
 export type TravelDocumentType =
   | 'Biometric Passport'

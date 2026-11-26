@@ -123,6 +123,32 @@ export function isTravellerProfileComplete(
   );
 }
 
+const STORAGE_KEY_SIGNUP_PHONE = 'pearl_travel_signup_phone_v1';
+const KNOWN_DIAL_CODES = ['+254', '+256', '+255', '+250', '+251', '+291', '+211', '+257', '+243'];
+
+/** Remember the phone typed at registration so profile setup can pre-fill it. */
+export function rememberSignupPhone(email: string, phone: string): void {
+  try {
+    const map = JSON.parse(localStorage.getItem(STORAGE_KEY_SIGNUP_PHONE) || '{}');
+    map[email.trim().toLowerCase()] = phone.trim();
+    localStorage.setItem(STORAGE_KEY_SIGNUP_PHONE, JSON.stringify(map));
+  } catch {
+    /* storage unavailable — profile setup will simply ask for the number */
+  }
+}
+
+function recallSignupPhone(email?: string): { countryCode?: string; phoneNumber?: string } {
+  try {
+    const raw: string | undefined = JSON.parse(localStorage.getItem(STORAGE_KEY_SIGNUP_PHONE) || '{}')[(email || '').trim().toLowerCase()];
+    if (!raw) return {};
+    const compact = raw.replace(/\s+/g, '');
+    const code = KNOWN_DIAL_CODES.find((c) => compact.startsWith(c));
+    return code ? { countryCode: code, phoneNumber: compact.slice(code.length) } : { phoneNumber: compact };
+  } catch {
+    return {};
+  }
+}
+
 export function createInitialPassengerProfile(user: UserProfile): PassengerProfile {
   const nameParts = (user.name || '').trim().split(/\s+/);
   const firstName = (user.firstName || nameParts[0] || '').trim();
@@ -138,8 +164,8 @@ export function createInitialPassengerProfile(user: UserProfile): PassengerProfi
     travelPurpose: (user.travelPurpose || '') as TravelPurpose,
     destination: 'Malaba One-Stop Border Post (OSBP)',
     travellerType: 'solo',
-    phoneNumber: user.phoneNumber || '',
-    countryCode: user.countryCode || '+256',
+    phoneNumber: user.phoneNumber || recallSignupPhone(user.email).phoneNumber || '',
+    countryCode: user.countryCode || recallSignupPhone(user.email).countryCode || '+256',
     email: user.email || '',
     avatarUrl: user.avatarUrl,
     travelDocumentType: 'Biometric Passport',
@@ -325,4 +351,12 @@ export function clearPersistedSession(): void {
   } catch (e) {
     console.error('Failed to clear session', e);
   }
+}
+
+/** Accounts registered in this browser (offline mode). Used by the admin User Management screen. */
+export function listLocalAccounts(): { email: string; name: string }[] {
+  return Object.values(readAccountsMap()).map((a) => ({
+    email: a.email,
+    name: `${a.firstName} ${a.lastName}`.trim(),
+  }));
 }

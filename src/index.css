@@ -1,43 +1,24 @@
 @import "tailwindcss";
 
-/* ─── Pearl Travel Light Design System (authenticated pages) ─── */
-.light-shell {
-  --pt-bg: #F8FAFC;
-  --pt-sidebar: #0F172A;
-  --pt-card: #FFFFFF;
-  --pt-border: #E2E8F0;
-  --pt-accent: #FACC15;
-  --pt-accent-deep: #EAB308;
-  --pt-text: #0F172A;
-  --pt-text-secondary: #64748B;
-  --pt-success: #16A34A;
-  --pt-warning: #D97706;
-  --pt-error: #DC2626;
-  --pt-info: #2563EB;
-}
-
-.light-shell {
-  background-color: var(--pt-bg);
-  color: var(--pt-text);
-}
-
 :root {
   color-scheme: dark;
-  --pearl-navy: #0F172A;
-  --pearl-dark: #1E293B;
-  --pearl-slate: #334155;
-  --pearl-surface: #273449;
-  --pearl-input: #243247;
-  --pearl-gold: #EAB308;
-  --pearl-gold-light: #FACC15;
-  --pearl-text: #F1F5F9;
-  --pearl-text-secondary: #CBD5E1;
-  --pearl-placeholder: #94A3B8;
-  --pearl-border: #475569;
-  --pearl-danger: #DC2626;
+  /* Pearl Travel design tokens — single source of truth (wireframe: black + yellow) */
+  --pearl-navy: #000000;          /* deepest surface: nav bars, buttons text on yellow */
+  --pearl-slate: #0B0B0D;         /* app background */
+  --pearl-dark: #161619;          /* cards */
+  --pearl-surface: #1E1E22;       /* raised / chips */
+  --pearl-input: #1A1A1E;         /* inputs */
+  --pearl-border: #2E2E34;
+  --pearl-gold: #FACC15;          /* the one brand yellow */
+  --pearl-gold-light: #FDE047;    /* hover / highlighted text */
+  --pearl-text: #F8F8FA;
+  --pearl-text-secondary: #C7C7D0;
+  --pearl-placeholder: #8B8B96;
+  --pearl-danger: #EF4444;
   --pearl-danger-light: #FCA5A5;
-  --pearl-success: #15803D;
+  --pearl-success: #22C55E;
   --pearl-success-light: #86EFAC;
+  --pearl-info: #60A5FA;
 }
 
 @theme inline {
@@ -56,6 +37,7 @@
   --color-pearl-danger-light: var(--pearl-danger-light);
   --color-pearl-success: var(--pearl-success);
   --color-pearl-success-light: var(--pearl-success-light);
+  --color-pearl-info: var(--pearl-info);
 }
 
 @layer base {
@@ -191,30 +173,30 @@
 
 .neu-card {
   background: var(--pearl-dark);
-  box-shadow: 10px 10px 24px rgba(2, 6, 23, 0.32), -6px -6px 18px rgba(71, 85, 105, 0.12);
+  box-shadow: 10px 10px 24px rgba(0, 0, 0, 0.32), -6px -6px 18px rgba(255, 255, 255, 0.12);
 }
 
 .neu-card-sm {
   background: var(--pearl-surface);
-  box-shadow: 6px 6px 14px rgba(2, 6, 23, 0.3), -4px -4px 12px rgba(71, 85, 105, 0.1);
+  box-shadow: 6px 6px 14px rgba(0, 0, 0, 0.3), -4px -4px 12px rgba(255, 255, 255, 0.1);
 }
 
 .neu-inset {
   background: var(--pearl-input);
-  box-shadow: inset 3px 3px 6px rgba(2, 6, 23, 0.32), inset -3px -3px 6px rgba(71, 85, 105, 0.12);
+  box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.32), inset -3px -3px 6px rgba(255, 255, 255, 0.12);
 }
 
 .neu-inset-focus {
   box-shadow:
-    inset 2px 2px 4px rgba(2, 6, 23, 0.22),
-    inset -2px -2px 4px rgba(71, 85, 105, 0.12),
-    0 0 0 2px rgba(234, 179, 8, 0.6);
+    inset 2px 2px 4px rgba(0, 0, 0, 0.22),
+    inset -2px -2px 4px rgba(255, 255, 255, 0.12),
+    0 0 0 2px rgba(250, 204, 21, 0.6);
 }
 
 .neu-btn {
   background: var(--pearl-surface);
   color: var(--pearl-text);
-  box-shadow: 4px 4px 10px rgba(2, 6, 23, 0.32), -4px -4px 10px rgba(71, 85, 105, 0.1);
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.32), -4px -4px 10px rgba(255, 255, 255, 0.1);
   transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
@@ -223,13 +205,13 @@
 }
 
 .neu-btn:active, .neu-btn-pressed {
-  box-shadow: inset 3px 3px 6px rgba(2, 6, 23, 0.38), inset -3px -3px 6px rgba(71, 85, 105, 0.1);
+  box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.38), inset -3px -3px 6px rgba(255, 255, 255, 0.1);
 }
 
 .neu-btn-icon {
   background: var(--pearl-surface);
   color: var(--pearl-text-secondary);
-  box-shadow: 4px 4px 10px rgba(2, 6, 23, 0.3), -4px -4px 10px rgba(71, 85, 105, 0.1);
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3), -4px -4px 10px rgba(255, 255, 255, 0.1);
   transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
@@ -240,13 +222,13 @@
 
 .neu-btn-icon:active {
   transform: translateY(1px);
-  box-shadow: inset 2px 2px 5px rgba(2, 6, 23, 0.36), inset -2px -2px 5px rgba(71, 85, 105, 0.1);
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.36), inset -2px -2px 5px rgba(255, 255, 255, 0.1);
 }
 
 .pearl-gradient-btn {
   background: var(--pearl-gold);
   color: var(--pearl-navy);
-  box-shadow: 0 6px 18px rgba(234, 179, 8, 0.18);
+  box-shadow: 0 6px 18px rgba(250, 204, 21, 0.18);
   position: relative;
   overflow: hidden;
   transition: all 0.25s ease;
@@ -265,7 +247,7 @@
 .pearl-gradient-btn-active {
   color: var(--pearl-navy) !important;
   background: var(--pearl-gold-light) !important;
-  box-shadow: 0 6px 18px rgba(234, 179, 8, 0.2) !important;
+  box-shadow: 0 6px 18px rgba(250, 204, 21, 0.2) !important;
 }
 
 .perspective-1000 {

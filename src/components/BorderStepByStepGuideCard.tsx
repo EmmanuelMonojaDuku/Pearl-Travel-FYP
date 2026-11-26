@@ -180,7 +180,7 @@ export const BorderStepByStepGuideCard: React.FC<BorderStepByStepGuideCardProps>
                   <div
                     className={`w-7 h-7 rounded-lg flex items-center justify-center font-mono font-bold text-xs shrink-0 tabular-nums ${
                       isExpanded
-                        ? 'bg-pearl-navy text-pearl-gold'
+                        ? 'bg-pearl-gold text-pearl-navy font-bold'
                         : 'bg-pearl-dark text-pearl-text border border-pearl-border'
                     }`}
                   >

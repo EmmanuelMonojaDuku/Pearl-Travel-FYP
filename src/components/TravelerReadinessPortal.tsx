@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { OfflineStatusBanner } from './OfflineStatusBanner';
-import { ReadinessScoreCard } from './ReadinessScoreCard';
 import { RequirementGuidanceCard } from './RequirementGuidanceCard';
 import { DocumentChecklistCard } from './DocumentChecklistCard';
 import { QRSummaryCard } from './QRSummaryCard';
@@ -16,9 +15,14 @@ import { JourneySetupView } from './JourneySetupView';
 import { RequirementGenerationView } from './RequirementGenerationView';
 import { AIGuidanceCard } from './AIGuidanceCard';
 import { BorderStepByStepGuideCard } from './BorderStepByStepGuideCard';
+import { publishQr } from '../utils/opsStore';
 import { getPortalHash, getPortalTabFromHash, PortalTab } from './dashboard/navTypes';
 import { DashboardSidebar } from './dashboard/DashboardSidebar';
 import { DashboardHeader } from './dashboard/DashboardHeader';
+import { ReadinessAssessmentView } from './ReadinessAssessmentView';
+import { NotificationsTab } from './NotificationsTab';
+import { OfflineAccessTab } from './OfflineAccessTab';
+import { buildAlerts } from '../utils/alerts';
 import { MobileBottomNav } from './dashboard/MobileBottomNav';
 import { OverviewTab } from './dashboard/OverviewTab';
 import { SupportContactModal } from './dashboard/SupportContactModal';
@@ -409,6 +413,11 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
     };
   }, [profile, checklist, readiness, isOfflineMode]);
 
+  // Publish the latest summary so an officer on this device can look it up by reference or name.
+  useEffect(() => {
+    publishQr(qrData);
+  }, [qrData]);
+
   // ==========================================
   // FLOW VIEW 1: TRAVELLER PROFILE SETUP
   // ==========================================
@@ -621,6 +630,7 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
                 <RequirementGuidanceCard
                   requirements={requirements}
                   nationality={profile.nationality}
+                  purpose={profile.travelPurpose}
                 />
 
                 <div className="p-4 bg-pearl-dark border border-pearl-border rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3">
@@ -648,22 +658,13 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
                 transition={{ duration: 0.2 }}
                 className="space-y-5"
               >
-                <ReadinessScoreCard
-                  score={readiness.score}
-                  completedCount={readiness.completedCount}
-                  totalCount={readiness.totalCount}
-                  missingMandatoryCount={readiness.missingMandatoryCount}
-                  missingItems={readiness.missingItems}
-                  onFocusChecklist={() => {}}
-                  onOpenQR={() => setActiveTab('qr')}
-                />
-
                 <DocumentChecklistCard
                   checklist={checklist}
                   onUpdateItemStatus={handleUpdateChecklistItemStatus}
                   onUpdateItemDetails={handleUpdateChecklistItemDetails}
                   onOpenReviewAudit={() => setIsReviewModalOpen(true)}
                 />
+                <button type="button" onClick={() => setActiveTab('readiness')} className="w-full min-h-[44px] rounded-xl bg-pearl-gold hover:bg-pearl-gold-light text-pearl-navy text-sm font-bold cursor-pointer">View Details</button>
               </motion.div>
             )}
 
@@ -676,13 +677,16 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
                 transition={{ duration: 0.2 }}
                 className="space-y-5"
               >
-                <ReadinessScoreCard
+                <ReadinessAssessmentView
                   score={readiness.score}
-                  completedCount={readiness.completedCount}
-                  totalCount={readiness.totalCount}
+                  statusLabel={readiness.statusLabel}
+                  readyCount={readiness.completedCount}
+                  missingCount={readiness.missingItems.length}
+                  notApplicableCount={readiness.notApplicableCount}
                   missingMandatoryCount={readiness.missingMandatoryCount}
-                  missingItems={readiness.missingItems}
-                  onFocusChecklist={() => setActiveTab('checklist')}
+                  lastSavedTime={lastSyncedTime}
+                  onViewMissing={() => setActiveTab('checklist')}
+                  onBack={() => setActiveTab('overview')}
                   onOpenQR={() => setActiveTab('qr')}
                 />
               </motion.div>
@@ -746,6 +750,31 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
                 <QRSummaryCard qrData={qrData} />
               </motion.div>
             )}
+
+            {activeTab === 'alerts' && (
+              <motion.div key="tab-alerts" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.2 }}>
+                <NotificationsTab
+                  isProfileComplete={profileComplete}
+                  missingItems={readiness.missingItems}
+                  missingMandatoryCount={readiness.missingMandatoryCount}
+                  isOfflineMode={isOfflineMode}
+                  onSelectTab={(tab) => setActiveTab(tab)}
+                />
+              </motion.div>
+            )}
+
+            {activeTab === 'offline' && (
+              <motion.div key="tab-offline" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.2 }}>
+                <OfflineAccessTab
+                  isOfflineMode={isOfflineMode}
+                  isSyncing={isSyncing}
+                  lastSyncedTime={lastSyncedTime}
+                  onRetry={handleSyncNow}
+                  onToggleOffline={handleToggleOfflineMode}
+                  onBack={() => setActiveTab('checklist')}
+                />
+              </motion.div>
+            )}
           </AnimatePresence>
         </div>
       </div>
@@ -754,7 +783,7 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
       <MobileBottomNav
         activeTab={activeTab}
         onSelectTab={(tab) => setActiveTab(tab)}
-        onOpenMenu={() => setIsMobileDrawerOpen(true)}
+        alertCount={buildAlerts({ isProfileComplete: profileComplete, missingItems: readiness.missingItems, missingMandatoryCount: readiness.missingMandatoryCount, isOfflineMode }).length}
       />
 
       {/* Profile Settings Modal */}

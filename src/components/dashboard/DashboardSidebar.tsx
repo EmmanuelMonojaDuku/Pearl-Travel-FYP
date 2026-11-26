@@ -16,6 +16,8 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
+  Bell,
+  WifiOff,
 } from 'lucide-react';
 import { PortalTab } from './navTypes';
 
@@ -71,6 +73,8 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
     { id: 'border-guide', label: 'Border Guide', icon: MapPinned, tab: 'border-guide' },
     { id: 'qr', label: 'QR Summary', icon: QrCode, tab: 'qr' },
     { id: 'multimedia', label: 'Multimedia', icon: Video, tab: 'multimedia' },
+    { id: 'alerts', label: 'Notifications', icon: Bell, tab: 'alerts' },
+    { id: 'offline', label: 'Offline Access', icon: WifiOff, tab: 'offline' },
     { id: 'profile', label: 'My Profile', icon: User, tab: 'profile' },
     { id: 'settings', label: 'Settings', icon: Settings, action: 'settings' },
   ];
@@ -92,7 +96,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
     >
       {!logoError ? (
         <img
-          src="/assets/aistudio/logo_dark.png"
+          src="/pearl-travel-logo-dark.png"
           alt="Pearl Travel — Plan, Prepare, Cross"
           referrerPolicy="no-referrer"
           onError={() => setLogoError(true)}
@@ -177,7 +181,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                 <span
                   className={`ml-2 px-1.5 py-0.5 rounded-md text-[10px] font-bold tabular-nums shrink-0 ${
                     isActive
-                      ? 'bg-pearl-navy text-pearl-gold-light'
+                      ? 'bg-pearl-gold text-pearl-navy font-bold'
                       : 'bg-pearl-danger text-pearl-text'
                   }`}
                 >

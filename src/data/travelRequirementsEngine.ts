@@ -395,6 +395,7 @@ export function calculateReadinessScore(checklist: ChecklistItem[]): {
   score: number;
   totalCount: number;
   completedCount: number;
+  notApplicableCount: number;
   missingMandatoryCount: number;
   missingItems: ChecklistItem[];
   statusLabel: 'Ready' | 'Action Needed' | 'Critical Requirements Missing';
@@ -404,6 +405,7 @@ export function calculateReadinessScore(checklist: ChecklistItem[]): {
       score: 0,
       totalCount: 0,
       completedCount: 0,
+      notApplicableCount: 0,
       missingMandatoryCount: 0,
       missingItems: [],
       statusLabel: 'Critical Requirements Missing',
@@ -415,8 +417,13 @@ export function calculateReadinessScore(checklist: ChecklistItem[]): {
   const missingItems: ChecklistItem[] = [];
   let missingMandatoryCount = 0;
   let completedCount = 0;
+  let notApplicableCount = 0;
 
   checklist.forEach((item) => {
+    if (item.status === 'not_applicable') {
+      notApplicableCount++;
+      return;
+    }
     const weight = item.mandatory ? 2 : 1;
     totalWeight += weight;
 
@@ -443,8 +450,9 @@ export function calculateReadinessScore(checklist: ChecklistItem[]): {
 
   return {
     score,
-    totalCount: checklist.length,
+    totalCount: checklist.length - notApplicableCount,
     completedCount,
+    notApplicableCount,
     missingMandatoryCount,
     missingItems,
     statusLabel,

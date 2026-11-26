@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   CheckCircle2,
   XCircle,
+  MinusCircle,
   Clock,
   FileCheck,
   AlertTriangle,
@@ -14,6 +15,7 @@ import {
   X,
 } from 'lucide-react';
 import { ChecklistItem, DocumentStatus } from '../types';
+import { Pill, Ring } from './ui';
 
 interface DocumentChecklistCardProps {
   checklist: ChecklistItem[];
@@ -52,34 +54,31 @@ export const DocumentChecklistCard: React.FC<DocumentChecklistCardProps> = ({
     }
   };
 
+  const applicable = checklist.filter((i) => i.status !== 'not_applicable').length;
+  const done = checklist.filter((i) => i.status === 'complete').length;
+
   return (
     <div className="w-full bg-pearl-dark rounded-2xl p-5 sm:p-7 border border-pearl-border">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-4 border-b border-pearl-border gap-3">
-        <div>
-          <span className="text-[11px] font-bold uppercase tracking-wider text-pearl-gold-light">
-            Pre-Departure Verification
-          </span>
-          <h2 className="text-xl font-bold text-pearl-text font-heading">
-            Document Checklist
-          </h2>
-          <p className="text-xs text-pearl-text-secondary mt-0.5">
-            Track status of Passport, Visa, Health, and Travel vouchers. Select a status to update.
-          </p>
+      <div className="pb-4 mb-4 border-b border-pearl-border">
+        <div className="flex items-center gap-4">
+          <Ring value={applicable ? (done / applicable) * 100 : 0} label={`${done}/${applicable}`} sub="done" size={84} tone={done === applicable && applicable > 0 ? 'success' : 'gold'} />
+          <div className="min-w-0">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-pearl-gold">Smart Checklist</span>
+            <h2 className="text-lg font-bold text-pearl-text font-heading">{done} of {applicable} items completed</h2>
+            <p className="text-xs text-pearl-text-secondary mt-0.5">Mark each document as Have It, Don&apos;t Have It, or N/A.</p>
+            <div className="flex flex-wrap gap-1.5 mt-2">
+              <Pill tone="success">Ready {done}</Pill>
+              <Pill tone="danger">Missing {checklist.filter((i) => i.status === 'missing' || i.status === 'expired').length}</Pill>
+              <Pill>N/A {checklist.length - applicable}</Pill>
+            </div>
+          </div>
         </div>
-
-        <div className="flex items-center gap-2 flex-wrap">
-          {onOpenReviewAudit && (
-            <button
-              type="button"
-              onClick={onOpenReviewAudit}
-              className="text-xs font-semibold text-pearl-text hover:bg-pearl-input py-1.5 px-3 rounded-lg cursor-pointer flex items-center gap-1.5 transition-colors bg-pearl-surface border border-pearl-border"
-              title="Audit and remove unwanted entries"
-            >
-              <Eye className="w-3.5 h-3.5 text-pearl-text-secondary" />
-              <span>Review & Audit Details</span>
-            </button>
-          )}
-        </div>
+        {onOpenReviewAudit && (
+          <button type="button" onClick={onOpenReviewAudit} className="mt-3 text-xs font-semibold text-pearl-text hover:bg-pearl-input py-1.5 px-3 rounded-lg cursor-pointer flex items-center gap-1.5 bg-pearl-surface border border-pearl-border" title="Audit and remove unwanted entries">
+            <Eye className="w-3.5 h-3.5 text-pearl-text-secondary" />
+            <span>Review &amp; Audit Details</span>
+          </button>
+        )}
       </div>
 
       <div className="space-y-3">
@@ -87,13 +86,14 @@ export const DocumentChecklistCard: React.FC<DocumentChecklistCardProps> = ({
           const isComplete = item.status === 'complete';
           const isMissing = item.status === 'missing';
           const isExpired = item.status === 'expired';
+          const isNA = item.status === 'not_applicable';
           const isEditing = editingId === item.id;
 
           return (
             <div
               key={item.id}
               className={`rounded-xl p-4 transition-colors border ${
-                isComplete
+                isComplete || isNA
                   ? 'border-pearl-border bg-pearl-surface'
                   : isExpired
                   ? 'border-pearl-gold/50 bg-pearl-gold/10'
@@ -104,14 +104,18 @@ export const DocumentChecklistCard: React.FC<DocumentChecklistCardProps> = ({
                 <div className="flex items-start gap-3">
                   <div
                     className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${
-                      isComplete
+                      isNA
+                        ? 'bg-pearl-surface text-pearl-placeholder'
+                        : isComplete
                         ? 'bg-pearl-success/15 text-pearl-success-light'
                         : isExpired
                         ? 'bg-pearl-gold/15 text-pearl-gold-light'
                         : 'bg-pearl-danger/15 text-pearl-danger-light'
                     }`}
                   >
-                    {isComplete ? (
+                    {isNA ? (
+                      <MinusCircle className="w-4 h-4" />
+                    ) : isComplete ? (
                       <CheckCircle2 className="w-4 h-4" />
                     ) : isExpired ? (
                       <Clock className="w-4 h-4" />
@@ -142,18 +146,18 @@ export const DocumentChecklistCard: React.FC<DocumentChecklistCardProps> = ({
                 </div>
 
                 {/* Status Toggle Buttons */}
-                <div className="flex items-center gap-1.5 self-start md:self-center shrink-0">
+                <div className="flex flex-wrap items-center gap-1.5 self-start md:self-center shrink-0">
                   <button
                     type="button"
                     onClick={() => onUpdateItemStatus(item.id, 'complete')}
                     className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer flex items-center gap-1 ${
                       isComplete
-                        ? 'bg-pearl-success text-pearl-text'
+                        ? 'bg-pearl-success text-pearl-navy'
                         : 'bg-pearl-dark border border-pearl-border text-pearl-text-secondary hover:text-pearl-success-light'
                     }`}
                   >
                     <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>Complete</span>
+                    <span>Have It</span>
                   </button>
 
                   <button
@@ -161,12 +165,12 @@ export const DocumentChecklistCard: React.FC<DocumentChecklistCardProps> = ({
                     onClick={() => onUpdateItemStatus(item.id, 'missing')}
                     className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer flex items-center gap-1 ${
                       isMissing
-                        ? 'bg-pearl-danger text-pearl-text'
+                        ? 'bg-pearl-danger text-pearl-navy'
                         : 'bg-pearl-dark border border-pearl-border text-pearl-text-secondary hover:text-pearl-danger-light'
                     }`}
                   >
                     <XCircle className="w-3.5 h-3.5" />
-                    <span>Missing</span>
+                    <span>Don&apos;t Have It</span>
                   </button>
 
                   <button
@@ -180,6 +184,19 @@ export const DocumentChecklistCard: React.FC<DocumentChecklistCardProps> = ({
                   >
                     <Clock className="w-3.5 h-3.5" />
                     <span>Expired</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => onUpdateItemStatus(item.id, 'not_applicable')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer flex items-center gap-1 ${
+                      isNA
+                        ? 'bg-pearl-text-secondary text-pearl-navy'
+                        : 'bg-pearl-dark border border-pearl-border text-pearl-text-secondary hover:text-pearl-text'
+                    }`}
+                  >
+                    <MinusCircle className="w-3.5 h-3.5" />
+                    <span>N/A</span>
                   </button>
                 </div>
               </div>
@@ -204,7 +221,7 @@ export const DocumentChecklistCard: React.FC<DocumentChecklistCardProps> = ({
                     <button
                       type="button"
                       onClick={() => handleSaveEdit(item.id)}
-                      className="px-3.5 py-1.5 bg-pearl-navy text-pearl-text text-xs font-bold rounded-lg cursor-pointer hover:bg-pearl-dark transition-colors"
+                      className="px-3.5 py-1.5 bg-pearl-gold text-pearl-navy text-xs font-bold rounded-lg cursor-pointer hover:bg-pearl-gold-light transition-colors"
                     >
                       Save
                     </button>
