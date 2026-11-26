@@ -151,6 +151,8 @@ export interface AIChatMessage {
   groundedSource?: string;
   category?: string;
   verifiedBadge?: boolean;
+  followUps?: string[];
+  scope?: 'in' | 'out';
 }
 
 export interface ChecklistItem {

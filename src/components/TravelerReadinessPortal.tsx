@@ -704,6 +704,7 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
                 <AIGuidanceCard
                   profile={profile}
                   journey={profile.journey}
+                  checklist={checklist}
                   onShowToast={onShowToast}
                 />
               </motion.div>

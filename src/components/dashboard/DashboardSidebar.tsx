@@ -89,22 +89,21 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
   };
 
   const renderLogo = (compact: boolean) => (
-    <div
-      className={`flex items-center justify-center transition-all ${
-        compact ? 'w-11 h-11 p-1.5 mx-auto' : 'w-full px-3 py-2'
-      }`}
-    >
+    <div className={`flex items-center transition-all ${compact ? 'justify-center py-2' : 'gap-3 px-3 py-3'}`}>
       {!logoError ? (
         <img
-          src="/pearl-travel-logo-dark.png"
+          src="/pearl-travel-logo.png"
           alt="Pearl Travel — Plan, Prepare, Cross"
-          referrerPolicy="no-referrer"
           onError={() => setLogoError(true)}
-          className={compact ? 'h-8 w-auto object-contain' : 'h-12 w-auto object-contain'}
+          className={`${compact ? 'w-11 h-11' : 'w-14 h-14'} rounded-xl bg-white p-0.5 object-contain shrink-0`}
         />
       ) : (
-        <span className="font-heading font-extrabold text-sm text-pearl-text tracking-tight">
-          {compact ? 'PT' : 'Pearl Travel'}
+        <span className="font-heading font-extrabold text-sm text-pearl-text tracking-tight">PT</span>
+      )}
+      {!compact && (
+        <span className="min-w-0">
+          <span className="block font-heading font-extrabold text-sm text-pearl-text leading-tight">Pearl Travel</span>
+          <span className="block text-[10px] text-pearl-placeholder">Plan · Prepare · Cross</span>
         </span>
       )}
     </div>

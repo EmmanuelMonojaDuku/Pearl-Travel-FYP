@@ -12,7 +12,7 @@ const SIZE: Record<NonNullable<PearlTravelLogoProps['size']>, string> = {
   sm: 'w-14 h-14',
   md: 'w-20 h-20',
   lg: 'w-28 h-28',
-  xl: 'w-44 h-44',
+  xl: 'w-60 h-60',
 };
 
 /** Pearl Travel brand mark on a white rounded tile (matches the splash wireframe). */
@@ -20,7 +20,7 @@ export const PearlTravelLogo: React.FC<PearlTravelLogoProps> = ({ size = 'md', c
   <div className={`flex items-center justify-center select-none ${className}`}>
     <div className={`${SIZE[size]} rounded-2xl bg-white p-1 flex items-center justify-center shadow-[0_8px_32px_rgba(0,0,0,0.5)]`}>
       <img
-        src="/pearl-travel-logo.jpg"
+        src="/pearl-travel-logo.png"
         alt="Pearl Travel — Plan, Prepare, Cross"
         className="w-full h-full object-contain rounded-xl"
       />

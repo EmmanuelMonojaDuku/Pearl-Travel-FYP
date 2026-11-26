@@ -16,21 +16,23 @@ import {
   CornerDownRight,
 } from 'lucide-react';
 import {
-  queryVerifiedKnowledge,
   SUGGESTED_QUESTIONS,
   VERIFIED_KNOWLEDGE_ARTICLES,
 } from '../data/verifiedKnowledgeBase';
-import { PassengerProfile, JourneyDetails, AIChatMessage } from '../types';
+import { PassengerProfile, JourneyDetails, AIChatMessage, ChecklistItem } from '../types';
+import { answerQuestion } from '../data/assistantEngine';
 
 interface AIGuidanceCardProps {
   profile?: PassengerProfile | null;
   journey?: JourneyDetails | null;
+  checklist?: ChecklistItem[];
   onShowToast: (msg: string) => void;
 }
 
 export const AIGuidanceCard: React.FC<AIGuidanceCardProps> = ({
   profile,
   journey,
+  checklist = [],
   onShowToast,
 }) => {
   const [messages, setMessages] = useState<AIChatMessage[]>([
@@ -50,6 +52,7 @@ export const AIGuidanceCard: React.FC<AIGuidanceCardProps> = ({
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const lastArticleRef = useRef<string | null>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -78,15 +81,18 @@ export const AIGuidanceCard: React.FC<AIGuidanceCardProps> = ({
 
     // Simulate grounded RAG retrieval
     setTimeout(() => {
-      const result = queryVerifiedKnowledge(trimmed, profile, journey);
+      const result = answerQuestion(trimmed, { profile, journey, checklist, lastArticleId: lastArticleRef.current });
+      if (result.articleId) lastArticleRef.current = result.articleId;
 
       const assistantMsg: AIChatMessage = {
         id: `ai-${Date.now()}`,
         sender: 'assistant',
-        text: result.answer,
+        text: result.text,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        groundedSource: result.citations.join(' • '),
-        verifiedBadge: true,
+        groundedSource: result.citations.join(' • ') || undefined,
+        verifiedBadge: result.kind !== 'out-of-scope',
+        followUps: result.followUps,
+        scope: result.kind === 'out-of-scope' ? 'out' : 'in',
       };
 
       setMessages((prev) => [...prev, assistantMsg]);
@@ -94,9 +100,9 @@ export const AIGuidanceCard: React.FC<AIGuidanceCardProps> = ({
 
       // Auto-read snippet if user enabled speech
       if (isSpeaking && 'speechSynthesis' in window) {
-        speakText(result.answer);
+        speakText(result.text);
       }
-    }, 450);
+    }, 500);
   };
 
   // Text to Speech
@@ -304,6 +310,21 @@ export const AIGuidanceCard: React.FC<AIGuidanceCardProps> = ({
                 )}
                 <p className="whitespace-pre-line">{msg.text}</p>
 
+                {isAssistant && msg.followUps && msg.followUps.length > 0 && msg === messages[messages.length - 1] && (
+                  <div className="mt-2.5 flex flex-wrap gap-1.5">
+                    {msg.followUps.map((f) => (
+                      <button
+                        key={f}
+                        type="button"
+                        onClick={() => handleAsk(f)}
+                        className="px-2.5 py-1 rounded-full text-[10px] font-semibold bg-pearl-surface border border-pearl-border text-pearl-gold hover:border-pearl-gold cursor-pointer"
+                      >
+                        {f}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
                 {isAssistant && msg.groundedSource && (
                   <div className="mt-2.5 pt-2 border-t border-pearl-border/70 text-[10px] text-pearl-text-secondary flex items-start gap-1.5 font-medium">
                     <BookOpen className="w-3 h-3 text-pearl-gold-light shrink-0 mt-0.5" />
@@ -318,7 +339,7 @@ export const AIGuidanceCard: React.FC<AIGuidanceCardProps> = ({
         {isThinking && (
           <div className="flex items-center gap-2 text-xs text-pearl-text-secondary italic p-2">
             <div className="w-3 h-3 rounded-full border-2 border-pearl-border border-t-transparent animate-spin" />
-            <span>Retrieving grounded answer from verified knowledge base...</span>
+            <span>Checking verified sources...</span>
           </div>
         )}
         <div ref={messagesEndRef} />
@@ -338,7 +359,7 @@ export const AIGuidanceCard: React.FC<AIGuidanceCardProps> = ({
             id="input-ai-guidance-query"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            placeholder="Ask about Malaba OSBP, Yellow Fever, customs, or visas..."
+            placeholder="Ask about visas, Yellow Fever, customs, your checklist..."
             className="w-full pl-4 pr-4 py-2.5 rounded-xl bg-pearl-input border border-pearl-border text-xs font-semibold text-pearl-text focus:outline-none focus:ring-2 focus:ring-pearl-gold transition"
           />
         </div>
@@ -347,7 +368,7 @@ export const AIGuidanceCard: React.FC<AIGuidanceCardProps> = ({
           type="submit"
           disabled={!inputText.trim() || isThinking}
           id="btn-ai-guidance-send"
-          className="px-4 py-2.5 rounded-xl bg-pearl-gold hover:bg-pearl-gold-light text-pearl-text text-xs font-bold flex items-center gap-1.5 disabled:opacity-50 transition-colors cursor-pointer shrink-0"
+          className="px-4 py-2.5 rounded-xl bg-pearl-gold hover:bg-pearl-gold-light text-pearl-navy text-xs font-bold flex items-center gap-1.5 disabled:opacity-50 transition-colors cursor-pointer shrink-0"
         >
           <span>Ask</span>
           <Send className="w-3.5 h-3.5" />

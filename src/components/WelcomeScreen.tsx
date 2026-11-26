@@ -13,9 +13,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onGetStarted, onLo
     <main className="w-full max-w-md px-6 py-10 flex flex-col items-center justify-between min-h-screen">
       <div className="flex-1 flex flex-col items-center justify-center text-center">
         <PearlTravelLogo size="xl" />
-        <h1 className="mt-8 text-3xl font-bold font-heading">Pearl Travel</h1>
-        <p className="mt-2 text-sm text-pearl-text-secondary">Plan · Prepare · Cross</p>
-        <p className="mt-1 text-xs text-pearl-placeholder">Your smart border companion</p>
+        <h1 className="sr-only">Pearl Travel — Plan, Prepare, Cross</h1>
       </div>
       <div className="w-full space-y-3">
         <Button onClick={onGetStarted}>Get Started</Button>
