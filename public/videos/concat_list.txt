@@ -1,0 +1,15 @@
+file '/app/applet/src/assets/images/malaba_border_intro_1789375133477.jpg'
+duration 6
+file '/app/applet/src/assets/images/malaba_passport_clearance_1789375152233.jpg'
+duration 6
+file '/app/applet/src/assets/images/malaba_interstate_pass_1789375165908.jpg'
+duration 6
+file '/app/applet/src/assets/images/malaba_tmp_office_1789375177805.jpg'
+duration 6
+file '/app/applet/src/assets/images/malaba_customs_health_1789375190085.jpg'
+duration 6
+file '/app/applet/src/assets/images/malaba_final_exit_1789375203378.jpg'
+duration 6
+file '/app/applet/src/assets/images/malaba_pearl_app_1789375216363.jpg'
+duration 6
+file '/app/applet/src/assets/images/malaba_pearl_app_1789375216363.jpg'

@@ -1,0 +1,6 @@
+{
+  "name": "Pearl Travel Login & Signup",
+  "description": "Pearl Travel portal with Passenger Profile, dynamic Requirement Guidance, Document Checklist, Readiness Score, border officer QR summary, offline access, and 4K Malaba One-Stop Border Post clearance instructional video.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
