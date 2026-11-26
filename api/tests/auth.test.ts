@@ -49,6 +49,30 @@ describe('Independent Authentication & RBAC API', () => {
     await app.close();
   });
 
+  it('skips the verification email and marks travellers verified when verification is disabled', async () => {
+    const { app } = await buildTestInstance({ REQUIRE_EMAIL_VERIFICATION: 'false' });
+
+    const res = await app.inject({
+      method: 'POST',
+      url: '/api/v1/auth/register',
+      payload: { email: 'no.mail@example.com', password: 'PearlBorder2026!', firstName: 'No', lastName: 'Mail' },
+    });
+
+    expect(res.statusCode).toBe(201);
+    expect(res.json().data.emailVerification.required).toBe(false);
+    expect(emailSpy.verificationEmails).toHaveLength(0);
+    expect((await repo.findUserByEmail('no.mail@example.com'))!.emailVerified).toBe(true);
+
+    const login = await app.inject({
+      method: 'POST',
+      url: '/api/v1/auth/login',
+      payload: { email: 'no.mail@example.com', password: 'PearlBorder2026!' },
+    });
+    expect(login.statusCode).toBe(200);
+
+    await app.close();
+  });
+
   it('registers a traveller with Argon2id password hash, rejects duplicates, and never leaks secrets', async () => {
     const { app } = await buildTestInstance();
 

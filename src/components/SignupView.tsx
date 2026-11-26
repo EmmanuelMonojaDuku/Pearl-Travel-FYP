@@ -2,19 +2,21 @@ import React, { useState } from 'react';
 import { User, Mail, Lock, Phone, Eye, EyeOff, AlertCircle, Loader2, ChevronLeft } from 'lucide-react';
 import { PearlTravelLogo } from './PearlTravelLogo';
 import { Button, Field } from './ui';
-import { SocialButtons } from './SocialAuthButtons';
+import { GoogleSignIn } from './SocialAuthButtons';
 import { FormErrors } from '../types';
-import { ApiUnavailableError, isBootstrapAdminEmail, registerWithApi } from '../utils/apiClient';
-import { registerLocalAccount, rememberSignupPhone } from '../utils/authStorage';
+import { ApiUnavailableError, isBootstrapAdminEmail, loginWithApi, registerWithApi } from '../utils/apiClient';
+import { registerLocalAccount, rememberSignupPhone, signInWithGoogleIdentity } from '../utils/authStorage';
+import type { UserProfile } from '../types';
 
 interface SignupViewProps {
   onSwitchToLogin: (email?: string) => void;
   onBack?: () => void;
   onSuccessToast?: (message: string) => void;
+  onAuthenticated: (user: UserProfile, rememberMe: boolean) => void;
 }
 
 /** Screen 2 — Create Account: full name, email, phone, password. */
-export const SignupView: React.FC<SignupViewProps> = ({ onSwitchToLogin, onBack, onSuccessToast }) => {
+export const SignupView: React.FC<SignupViewProps> = ({ onSwitchToLogin, onBack, onSuccessToast, onAuthenticated }) => {
   const [form, setForm] = useState({ fullName: '', email: '', phone: '', password: '' });
   const [errors, setErrors] = useState<FormErrors & { fullName?: string; phone?: string }>({});
   const [showPassword, setShowPassword] = useState(false);
@@ -47,9 +49,21 @@ export const SignupView: React.FC<SignupViewProps> = ({ onSwitchToLogin, onBack,
     const input = { firstName, lastName: rest.join(' '), email: form.email, password: form.password };
     try {
       rememberSignupPhone(form.email, form.phone);
-      let delivered = false;
       try {
-        delivered = (await registerWithApi(input)).verificationDelivered;
+        const result = await registerWithApi(input);
+        if (result.verificationRequired) {
+          onSuccessToast?.(
+            result.verificationDelivered
+              ? 'Administrator account created. Verify your email, then sign in.'
+              : 'Administrator account created, but verification email delivery is not configured.'
+          );
+          onSwitchToLogin(form.email.trim());
+          return;
+        }
+        const session = await loginWithApi({ email: form.email, password: form.password });
+        onSuccessToast?.('Account created. Let\u2019s set up your profile.');
+        onAuthenticated({ ...session.user, accessToken: session.accessToken, refreshToken: session.refreshToken }, true);
+        return;
       } catch (error) {
         if (!(error instanceof ApiUnavailableError)) throw error;
         if (isBootstrapAdminEmail(form.email)) {
@@ -57,16 +71,10 @@ export const SignupView: React.FC<SignupViewProps> = ({ onSwitchToLogin, onBack,
         }
         const local = await registerLocalAccount(input);
         if ('error' in local) throw new Error(local.error);
-        onSuccessToast?.('Account created in offline mode. Sign in when the API is available to use server features.');
-        onSwitchToLogin(form.email.trim());
+        onSuccessToast?.('Account created. Let\u2019s set up your profile.');
+        onAuthenticated(local.user, true);
         return;
       }
-      onSuccessToast?.(
-        delivered
-          ? 'Account created. Verify your email before signing in.'
-          : 'Account created, but verification email delivery is not configured.'
-      );
-      onSwitchToLogin(form.email.trim());
     } catch (error) {
       setErrors({ general: error instanceof Error ? error.message : 'Unable to create your account right now.' });
       setIsSubmitting(false);
@@ -118,7 +126,10 @@ export const SignupView: React.FC<SignupViewProps> = ({ onSwitchToLogin, onBack,
           </Button>
         </form>
 
-        <SocialButtons onUnavailable={(m) => setErrors({ general: m })} />
+        <GoogleSignIn
+          onIdentity={(id) => onAuthenticated(signInWithGoogleIdentity(id), true)}
+          onError={(m) => setErrors({ general: m })}
+        />
 
         <p className="mt-6 text-center text-sm text-pearl-text-secondary">
           Already have an account?{' '}

@@ -37,4 +37,18 @@ One design system drives every screen: near-black surfaces with a single Pearl y
 | Border officer (`border_officer`) | Home dashboard, QR scanner + manual search, Passenger Verification (Approve / Flag), History, Profile |
 | Admin (`admin_staff`) | Dashboard, Requirements / FAQs / Guidance / Knowledge Base management, User Management, Analytics, AI Change Review |
 
-Limitations: Google/Apple sign-in are not wired to an OAuth provider. Officer scan history, admin content and AI suggestions are stored in the browser (`src/utils/opsStore.ts`) until matching API routes exist; officer lookup only finds QR summaries generated on the same device unless the QR payload is pasted.
+Limitations: Officer scan history, admin content and AI suggestions are stored in the browser (`src/utils/opsStore.ts`) until matching API routes exist; officer lookup only finds QR summaries generated on the same device unless the QR payload is pasted.
+
+
+## Presentation guide
+
+**Run the demo:** `npm install` (use `npm install --force` on Linux/macOS because of a Windows-only dev dependency) then `npm run demo`. Open http://localhost:3000.
+
+- The login screen shows a **Demo access** panel with one-click Traveller, Officer and Admin sessions (enabled by `.env.demo`; it never appears in a normal build).
+- **Register** no longer sends a verification email: the account is created and the user goes straight to profile setup. (Administrator addresses listed in `ADMIN_EMAILS` still verify by email, so nobody can claim an admin address. Set `REQUIRE_EMAIL_VERIFICATION=true` in `api/.env` to turn verification back on for everyone.)
+- **Continue with Google**
+  1. In Google Cloud Console create an OAuth 2.0 **Web application** client, and add `http://localhost:3000` under *Authorized JavaScript origins*.
+  2. Put the client ID in `.env.local` as `VITE_GOOGLE_CLIENT_ID="...apps.googleusercontent.com"` and restart.
+  3. Without a client ID, demo mode shows a clearly labelled demo account chooser instead; a normal build shows a "not set up" message.
+  Google accounts are stored as browser-local travellers (the API has no Google endpoint yet).
+- Without the API running, registration and login work from browser storage. Start the API (`api/`) to use server accounts and the admin live totals.

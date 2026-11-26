@@ -67,7 +67,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ currentUser, onL
 
   const loadOverview = useCallback(async () => {
     if (!currentUser.accessToken) {
-      setError('This session has no server access token. Sign in again to load live totals.');
+      setError('Live API totals are unavailable because this session has no server connection (demo / offline mode). Content tools below still work.');
       setLoading(false);
       return;
     }
@@ -213,7 +213,7 @@ const Home: React.FC<{
     </ul>
 
     <SectionLabel>Live operations</SectionLabel>
-    {error && <p role="alert" className="mb-3 text-xs text-pearl-danger-light">{error}</p>}
+    {error && <p role="status" className="mb-3 text-xs text-pearl-placeholder">{error}</p>}
     <div className="grid grid-cols-2 gap-3">
       {[
         ['Registered travellers', overview?.kpis.totalTravellers],

@@ -168,7 +168,7 @@ export async function registerWithApi(input: {
   lastName: string;
   email: string;
   password: string;
-}): Promise<{ verificationDelivered: boolean }> {
+}): Promise<{ verificationRequired: boolean; verificationDelivered: boolean }> {
   const result = await request<{
     emailVerification: {
       required: boolean;
@@ -183,6 +183,7 @@ export async function registerWithApi(input: {
   });
 
   return {
+    verificationRequired: result.data.emailVerification.required,
     verificationDelivered: result.data.emailVerification.delivery.delivered,
   };
 }

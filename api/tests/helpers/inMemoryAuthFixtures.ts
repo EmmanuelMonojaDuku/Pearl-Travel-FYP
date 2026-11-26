@@ -29,6 +29,7 @@ import { USER_ROLES, type UserRole } from '../../src/shared/roles.js';
 export function createTestConfig(overrides: Partial<NodeJS.ProcessEnv> = {}): AppConfig {
   return loadConfig({
     NODE_ENV: 'test',
+    REQUIRE_EMAIL_VERIFICATION: 'true',
     PORT: '4000',
     HOST: '127.0.0.1',
     CORS_ORIGINS: 'http://localhost:3000',
@@ -332,6 +333,14 @@ export class InMemoryAuthRepository implements AuthRepository {
       }
     }
     return null;
+  }
+
+  public async markUserEmailVerified(userId: string): Promise<void> {
+    const user = this.users.get(userId);
+    if (user) {
+      user.emailVerified = true;
+      user.emailVerifiedAt = new Date();
+    }
   }
 
   public async markEmailVerified(params: { tokenId: string; userId: string }): Promise<void> {

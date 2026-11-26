@@ -164,6 +164,7 @@ export default function App() {
       <SignupView
         onBack={() => setAuthMode('welcome')}
         onSuccessToast={showToast}
+        onAuthenticated={handleLoginSuccess}
         onSwitchToLogin={(email) => {
           if (email) setPrefillEmail(email);
           setAuthMode('login');

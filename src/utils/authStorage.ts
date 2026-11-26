@@ -360,3 +360,96 @@ export function listLocalAccounts(): { email: string; name: string }[] {
     name: `${a.firstName} ${a.lastName}`.trim(),
   }));
 }
+
+/* ───────────── Google sign-in (browser-local account) ───────────── */
+
+export interface GoogleIdentity {
+  email: string;
+  name: string;
+  givenName?: string;
+  familyName?: string;
+  picture?: string;
+}
+
+/** Find or create the browser-local account for a Google identity and return a session user. */
+export function signInWithGoogleIdentity(identity: GoogleIdentity): UserProfile {
+  const emailKey = normalizeEmail(identity.email);
+  const parts = identity.name.trim().split(/\s+/);
+  const firstName = identity.givenName || parts[0] || 'Traveller';
+  const lastName = identity.familyName || parts.slice(1).join(' ');
+  const fullName = identity.name.trim() || `${firstName} ${lastName}`.trim();
+
+  const accounts = readAccountsMap();
+  if (!accounts[emailKey]) {
+    // No password hash: this account can only be entered through Google.
+    accounts[emailKey] = { email: emailKey, firstName, lastName, name: fullName, passwordHash: '', createdAt: new Date().toISOString() };
+    writeAccountsMap(accounts);
+  }
+
+  const base: UserProfile = {
+    name: fullName,
+    firstName,
+    lastName,
+    email: emailKey,
+    avatarUrl: identity.picture,
+    roles: ['traveller'],
+  };
+  const saved = readProfilesMap()[emailKey];
+  if (!saved) {
+    savePassengerProfileForUser(emailKey, createInitialPassengerProfile(base));
+  }
+  const profile = readProfilesMap()[emailKey];
+  return {
+    ...base,
+    nationality: profile?.nationality,
+    gender: profile?.gender,
+    countryCode: profile?.countryCode,
+    phoneNumber: profile?.phoneNumber,
+    travelPurpose: profile?.travelPurpose,
+    avatarUrl: profile?.avatarUrl || identity.picture,
+    emergencyContactName: profile?.emergencyContactName,
+    emergencyContactPhone: profile?.emergencyContactPhone,
+    emergencyContactRelation: profile?.emergencyContactRelation,
+    profileCompleted: isTravellerProfileComplete(profile),
+  };
+}
+
+/* ───────────── Demo access (presentations only; enabled by VITE_DEMO_MODE) ───────────── */
+
+export type DemoRole = 'traveller' | 'border_officer' | 'admin_staff';
+
+export function getDemoUser(role: DemoRole): UserProfile {
+  if (role === 'border_officer') {
+    return { name: 'Officer Okello', firstName: 'Officer', lastName: 'Okello', email: 'officer.demo@pearltravel.ug', roles: ['border_officer'], profileCompleted: true };
+  }
+  if (role === 'admin_staff') {
+    return { name: 'Admin Demo', firstName: 'Admin', lastName: 'Demo', email: 'admin.demo@pearltravel.ug', roles: ['admin_staff'], profileCompleted: true };
+  }
+  const user: UserProfile = {
+    name: 'Amina Kato',
+    firstName: 'Amina',
+    lastName: 'Kato',
+    email: 'traveller.demo@pearltravel.ug',
+    nationality: 'Kenya',
+    gender: 'Female',
+    countryCode: '+254',
+    phoneNumber: '712345678',
+    travelPurpose: 'business',
+    emergencyContactName: 'Peter Kato',
+    emergencyContactPhone: '+254700123456',
+    emergencyContactRelation: 'Spouse',
+    roles: ['traveller'],
+    profileCompleted: true,
+  };
+  if (!readProfilesMap()[user.email]) {
+    savePassengerProfileForUser(user.email, {
+      ...createInitialPassengerProfile(user),
+      passportNumber: 'AK1234567',
+      passportExpiryDate: '2030-06-30',
+      hasYellowFeverVax: true,
+      hasReturnTicket: true,
+      hasAccommodationProof: false,
+    });
+  }
+  return user;
+}

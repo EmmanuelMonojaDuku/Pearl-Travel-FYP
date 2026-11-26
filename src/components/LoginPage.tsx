@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff, AlertCircle, Loader2, ChevronLeft } from 'lucide-react';
 import { PearlTravelLogo } from './PearlTravelLogo';
 import { Button, Field } from './ui';
-import { SocialButtons } from './SocialAuthButtons';
+import { DemoAccess, GoogleSignIn } from './SocialAuthButtons';
 import { FormErrors, LoginFormState, UserProfile } from '../types';
 import {
   ApiRequestError,
   ApiUnavailableError,
   loginWithApi,
 } from '../utils/apiClient';
-import { authenticateLocalAccount } from '../utils/authStorage';
+import { authenticateLocalAccount, getDemoUser, signInWithGoogleIdentity } from '../utils/authStorage';
 
 interface LoginPageProps {
   onSwitchToSignup: () => void;
@@ -193,7 +193,11 @@ export const LoginPage: React.FC<LoginPageProps> = ({
           </Button>
         </form>
 
-        <SocialButtons onUnavailable={(m) => setErrors({ general: m })} />
+        <GoogleSignIn
+          onIdentity={(id) => onSuccess(signInWithGoogleIdentity(id), formData.rememberMe)}
+          onError={(m) => setErrors({ general: m })}
+        />
+        <DemoAccess onPick={(role) => onSuccess(getDemoUser(role), false)} />
 
         <p className="mt-6 text-center text-sm text-pearl-text-secondary">
           Don&apos;t have an account?{' '}

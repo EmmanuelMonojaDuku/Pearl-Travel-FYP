@@ -61,6 +61,10 @@ const envSchema = z.object({
   AUTH_RATE_LIMIT_MAX: z.coerce.number().int().min(1).default(10),
   AUTH_RATE_LIMIT_WINDOW_MS: z.coerce.number().int().min(1000).default(60000),
 
+  REQUIRE_EMAIL_VERIFICATION: z
+    .enum(['true', 'false'])
+    .default('false')
+    .transform((v) => v === 'true'),
   EMAIL_PROVIDER: z.enum(['disabled', 'resend']).default('disabled'),
   EMAIL_FROM: z.string().email().default('noreply@example.com'),
   RESEND_API_KEY: z.string().optional().default(''),
@@ -74,6 +78,7 @@ export type AppConfig = Readonly<{
   corsOrigins: string[];
   appBaseUrl: string;
   adminEmails: string[];
+  requireEmailVerification: boolean;
   database: {
     url: string;
     migrationUrl: string;
@@ -145,6 +150,7 @@ export function loadConfig(source: NodeJS.ProcessEnv = process.env): AppConfig {
       .filter(Boolean),
     appBaseUrl: data.APP_BASE_URL.replace(/\/+$/, ''),
     adminEmails: data.ADMIN_EMAILS,
+    requireEmailVerification: data.REQUIRE_EMAIL_VERIFICATION,
     database: {
       url: data.DATABASE_URL.trim(),
       migrationUrl: (data.MIGRATION_DATABASE_URL || data.DATABASE_URL).trim(),
