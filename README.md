@@ -42,7 +42,7 @@ Limitations: Officer scan history, admin content and AI suggestions are stored i
 
 ## Presentation guide
 
-**Run the demo:** `npm install` (use `npm install --force` on Linux/macOS because of a Windows-only dev dependency) then `npm run demo`. Open http://localhost:3000.
+**Run the demo:** `npm install` then `npm run demo`. Open http://localhost:3000.
 
 - The login screen shows a **Demo access** panel with one-click Traveller, Officer and Admin sessions (enabled by `.env.demo`; it never appears in a normal build).
 - **Register** no longer sends a verification email: the account is created and the user goes straight to profile setup. (Administrator addresses listed in `ADMIN_EMAILS` still verify by email, so nobody can claim an admin address. Set `REQUIRE_EMAIL_VERIFICATION=true` in `api/.env` to turn verification back on for everyone.)
