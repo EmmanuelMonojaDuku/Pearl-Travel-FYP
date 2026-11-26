@@ -63,9 +63,7 @@ export const DocumentChecklistCard: React.FC<DocumentChecklistCardProps> = ({
         <div className="flex items-center gap-4">
           <Ring value={applicable ? (done / applicable) * 100 : 0} label={`${done}/${applicable}`} sub="done" size={84} tone={done === applicable && applicable > 0 ? 'success' : 'gold'} />
           <div className="min-w-0">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-pearl-accent">Smart Checklist</span>
-            <h2 className="text-lg font-bold text-pearl-text font-heading">{done} of {applicable} items completed</h2>
-            <p className="text-xs text-pearl-text-secondary mt-0.5">Mark each document as Have It, Don&apos;t Have It, or N/A.</p>
+            <h2 className="text-lg font-bold text-pearl-text font-heading">{done} of {applicable} done</h2>
             <div className="flex flex-wrap gap-1.5 mt-2">
               <Pill tone="success">Ready {done}</Pill>
               <Pill tone="danger">Missing {checklist.filter((i) => i.status === 'missing' || i.status === 'expired').length}</Pill>
@@ -76,7 +74,7 @@ export const DocumentChecklistCard: React.FC<DocumentChecklistCardProps> = ({
         {onOpenReviewAudit && (
           <button type="button" onClick={onOpenReviewAudit} className="mt-3 text-xs font-semibold text-pearl-text hover:bg-pearl-input py-1.5 px-3 rounded-lg cursor-pointer flex items-center gap-1.5 bg-pearl-surface border border-pearl-border" title="Audit and remove unwanted entries">
             <Eye className="w-3.5 h-3.5 text-pearl-text-secondary" />
-            <span>Review &amp; Audit Details</span>
+            <span>Review</span>
           </button>
         )}
       </div>
@@ -136,12 +134,6 @@ export const DocumentChecklistCard: React.FC<DocumentChecklistCardProps> = ({
                       </span>
                     </div>
                     <p className="text-xs text-pearl-text-secondary mt-0.5">{item.description}</p>
-                    {item.guidanceNote && (
-                      <p className="text-[11px] text-pearl-text-secondary mt-1 italic flex items-center gap-1">
-                        <Info className="w-3 h-3 text-pearl-placeholder shrink-0" />
-                        <span>{item.guidanceNote}</span>
-                      </p>
-                    )}
                   </div>
                 </div>
 

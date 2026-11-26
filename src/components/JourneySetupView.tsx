@@ -30,70 +30,70 @@ const TRAVEL_PURPOSES: { value: TravelPurpose; label: string; description: strin
   {
     value: 'tourism',
     label: 'Tourism / Safari',
-    description: 'Wildlife, Mountain Gorillas, River Nile & holiday exploration',
+    description: 'Holiday and wildlife',
   },
   {
     value: 'business',
     label: 'Business / Trade',
-    description: 'Commercial meetings, East Africa cross-border commerce & conferences',
+    description: 'Meetings and trade',
   },
   {
     value: 'family',
     label: 'Visiting Family',
-    description: 'Visiting relatives, community engagements & personal events',
+    description: 'Relatives and events',
   },
   {
     value: 'transit',
     label: 'Overland Transit',
-    description: 'Transiting through Uganda to Rwanda, DR Congo, or South Sudan',
+    description: 'Passing through Uganda',
   },
   {
     value: 'studies',
     label: 'Education / Research',
-    description: 'Academic enrollment, university semester & scientific field research',
+    description: 'Study or research',
   },
   {
     value: 'employment',
     label: 'Official / Work Permit',
-    description: 'Expatriate employment, NGO assignment & diplomatic mission',
+    description: 'Work or NGO assignment',
   },
 ];
 
 const BORDER_POINTS = [
   {
     name: 'Malaba One-Stop Border Post (OSBP)',
-    tag: 'Primary Case Study',
-    description: 'Major Eastern overland corridor connecting Kenya and Uganda. 24/7 joint clearance terminal.',
+    tag: 'Kenya',
+    description: 'Kenya – Uganda, joint clearance, 24/7',
     featured: true,
   },
   {
     name: 'Busia One-Stop Border Post (OSBP)',
-    tag: 'Southern Highway',
-    description: 'Bilateral OSBP connecting Western Kenya with Eastern Uganda.',
+    tag: 'Kenya',
+    description: 'Kenya – Uganda',
     featured: false,
   },
   {
     name: 'Entebbe International Airport (EBB)',
-    tag: 'Air Port of Entry',
-    description: 'Uganda’s primary international airport on Lake Victoria.',
+    tag: 'Airport',
+    description: 'International airport',
     featured: false,
   },
   {
     name: 'Katuna One-Stop Border Post (OSBP)',
-    tag: 'Rwanda Corridor',
-    description: 'Southwestern border post connecting Kigali and Kabale/Kampala.',
+    tag: 'Rwanda',
+    description: 'Rwanda – Uganda',
     featured: false,
   },
   {
     name: 'Mutukula One-Stop Border Post (OSBP)',
-    tag: 'Tanzania Corridor',
-    description: 'Southern border post between Tanzania and Masaka/Kampala.',
+    tag: 'Tanzania',
+    description: 'Tanzania – Uganda',
     featured: false,
   },
   {
     name: 'Elegu One-Stop Border Post (OSBP)',
-    tag: 'South Sudan Corridor',
-    description: 'Northern border post connecting Gulu and Juba.',
+    tag: 'South Sudan',
+    description: 'South Sudan – Uganda',
     featured: false,
   },
 ];
@@ -160,22 +160,15 @@ export const JourneySetupView: React.FC<JourneySetupViewProps> = ({
           </div>
 
           <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-pearl-navy text-pearl-text">
-            <span className="text-xs font-bold tracking-wide">Journey Planner</span>
+            <span className="text-xs font-bold tracking-wide">Journey</span>
           </div>
         </div>
 
         {/* Title & Subtitle */}
         <div className="mt-6 mb-7 text-center sm:text-left">
-          <div className="inline-flex items-center gap-1.5 text-pearl-accent text-xs font-bold mb-2 uppercase tracking-wider">
-            <Compass className="w-3.5 h-3.5" />
-            <span>Itinerary & Border Configuration</span>
-          </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-pearl-text font-heading tracking-tight">
-            Tell us about your trip
+            Plan your trip
           </h1>
-          <p className="text-sm text-pearl-text-secondary mt-2 max-w-2xl leading-relaxed">
-            Provide your journey details so we can determine the requirements that apply to you.
-          </p>
         </div>
 
         {/* Form */}
@@ -232,10 +225,10 @@ export const JourneySetupView: React.FC<JourneySetupViewProps> = ({
                   destinationCountry ? 'text-pearl-text' : 'text-pearl-placeholder'
                 }`}
               >
-                <option value="">Select a destination country</option>
+                <option value="">Select destination</option>
                 <option value="Uganda (The Pearl of Africa)">Uganda (The Pearl of Africa)</option>
                 <option value="Uganda & East Africa Multi-Country (Uganda + Kenya + Rwanda)">
-                  Uganda &amp; East Africa Multi-Country (Uganda + Kenya + Rwanda - East Africa Tourist Visa)
+                  Uganda, Kenya and Rwanda (East Africa Tourist Visa)
                 </option>
               </select>
             </div>
@@ -248,7 +241,7 @@ export const JourneySetupView: React.FC<JourneySetupViewProps> = ({
                 Intended Border Crossing Point <span className="text-pearl-danger-light">*</span>
               </span>
               <span className="text-[11px] font-medium text-pearl-placeholder">
-                Choose the border point for this journey
+                Choose your border
               </span>
             </div>
 
@@ -322,7 +315,7 @@ export const JourneySetupView: React.FC<JourneySetupViewProps> = ({
                   className="w-full pl-10 pr-4 py-3 rounded-xl bg-pearl-input border border-pearl-border text-sm font-semibold text-pearl-text focus:outline-none focus:border-pearl-gold focus:ring-2 focus:ring-pearl-gold/35 transition-colors cursor-pointer"
                 />
               </div>
-              <p className="text-[11px] text-pearl-text-secondary mt-1">Yellow Fever vaccine must be 10+ days before this date.</p>
+              <p className="text-[11px] text-pearl-text-secondary mt-1">Yellow Fever shot: at least 10 days before.</p>
             </div>
 
             {/* Field 5: Travel Mode */}
@@ -360,20 +353,9 @@ export const JourneySetupView: React.FC<JourneySetupViewProps> = ({
               <p className="text-[11px] text-pearl-text-secondary mt-1">
                 {travelMode === 'road'
                   ? 'Road travel may require vehicle and COMESA documentation.'
-                  : 'Choose a travel mode to tailor applicable requirements.'}
+                  : 'Pick how you will travel.'}
               </p>
             </div>
-          </div>
-
-          {/* System Logic Explanation Card */}
-          <div className="p-4 rounded-xl bg-pearl-surface text-pearl-text space-y-2 border border-pearl-border">
-            <div className="flex items-center gap-2 text-xs font-bold text-pearl-accent uppercase tracking-wider">
-              <Sparkles className="w-4 h-4" />
-              <span>How Pearl Travel Computes Your Requirements</span>
-            </div>
-            <p className="text-xs text-pearl-text-secondary leading-relaxed">
-              Pearl Travel uses your profile and journey details to determine applicable requirements. The deterministic rule engine computes statutory DCIC immigration directives, port health rules, and URA customs thresholds.
-            </p>
           </div>
 
           {/* Action Buttons */}
@@ -385,7 +367,7 @@ export const JourneySetupView: React.FC<JourneySetupViewProps> = ({
               className="w-full sm:w-auto min-h-[42px] px-5 py-2.5 rounded-xl text-xs font-semibold text-pearl-text bg-pearl-surface hover:bg-pearl-input border border-pearl-border transition-colors cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap shrink-0"
             >
               <ArrowLeft className="w-4 h-4 text-pearl-text-secondary" />
-              <span>Back to Passenger Profile</span>
+              <span>Back</span>
             </button>
 
             <button
@@ -394,7 +376,7 @@ export const JourneySetupView: React.FC<JourneySetupViewProps> = ({
               className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-xl bg-pearl-gold hover:bg-pearl-gold-light text-pearl-text text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
               <Sparkles className="w-4 h-4 text-pearl-text" />
-              <span>Generate My Requirements</span>
+              <span>Get my requirements</span>
               <ArrowRight className="w-4 h-4 text-pearl-text" />
             </button>
           </div>

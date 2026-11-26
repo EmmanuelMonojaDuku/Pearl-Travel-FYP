@@ -128,7 +128,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
         <PearlTravelLogo size="md" className="mb-6" />
         <h1 className="text-2xl font-bold font-heading text-center">Welcome Back</h1>
         <p className="text-sm text-pearl-text-secondary text-center mt-1 mb-6">
-          Sign in to continue with your travel journey
+          Sign in to continue
         </p>
 
         {errors.general && (

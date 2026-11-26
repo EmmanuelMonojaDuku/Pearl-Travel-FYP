@@ -43,20 +43,20 @@ export const OfflineStatusBanner: React.FC<OfflineStatusBannerProps> = ({
         <div>
           <div className="flex items-center gap-2">
             <span className="font-bold text-pearl-text">
-              {isOffline ? 'Offline Border Mode Active' : 'Live Connected Mode'}
+              {isOffline ? 'Offline' : 'Online'}
             </span>
             <span
               className={`text-[10px] font-bold uppercase tracking-wider ${
                 isOffline ? 'text-pearl-accent' : 'text-pearl-success-light'
               }`}
             >
-              • {isOffline ? 'Cached Locally' : 'Synchronized'}
+              {isOffline ? 'Saved on device' : 'Synced'}
             </span>
           </div>
           <p className="text-pearl-text-secondary text-[11px] mt-0.5 tabular-nums">
             {isOffline
-              ? 'All requirements, checklist, and QR pass remain 100% accessible offline.'
-              : `Automatic backup active • Last synchronized: ${lastSyncedTime}`}
+              ? 'Your requirements, checklist and QR pass still work.'
+              : `Last synced: ${lastSyncedTime}`}
           </p>
         </div>
       </div>

@@ -39,11 +39,9 @@ export const AIGuidanceCard: React.FC<AIGuidanceCardProps> = ({
     {
       id: 'msg-welcome',
       sender: 'assistant',
-      text: `Hello ${profile?.fullName ? profile.fullName.split(' ')[0] : 'traveller'}! I am Pearl Travel's AI Guidance Assistant. I provide answers strictly grounded in our Administrator-Verified Knowledge Base (DCIC Immigration & URA Customs). How can I guide your journey via ${
-        journey?.intendedBorderPoint || 'Malaba One-Stop Border Post (OSBP)'
-      }?`,
+      text: `Hello ${profile?.fullName ? profile.fullName.split(' ')[0] : 'traveller'}! Ask me about visas, Yellow Fever, customs, border crossings or your checklist.`,
       timestamp: 'Just now',
-      groundedSource: 'DCIC Border Regulations & Verified Knowledge Base',
+      groundedSource: undefined,
       verifiedBadge: true,
     },
   ]);
@@ -198,16 +196,13 @@ export const AIGuidanceCard: React.FC<AIGuidanceCardProps> = ({
           <div>
             <div className="flex items-center gap-2 flex-wrap">
               <h3 className="text-sm font-bold text-pearl-text uppercase tracking-wide font-heading">
-                Ask Pearl Travel (AI Guidance)
+                Assistant
               </h3>
               <span className="text-[10px] font-bold uppercase text-pearl-success-light flex items-center gap-1">
                 <ShieldCheck className="w-3 h-3" />
-                Verified RAG
+                Reviewed sources
               </span>
             </div>
-            <p className="text-[11px] text-pearl-text-secondary font-medium">
-              Grounded in official DCIC immigration, Port Health & URA customs knowledge base
-            </p>
           </div>
         </div>
 
@@ -268,7 +263,7 @@ export const AIGuidanceCard: React.FC<AIGuidanceCardProps> = ({
       {/* Suggested Questions */}
       <div>
         <span className="text-[10px] font-bold uppercase text-pearl-placeholder block mb-1.5 tracking-wider">
-          Suggested Official Q&A
+          Try asking
         </span>
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1.5 scrollbar-none">
           {SUGGESTED_QUESTIONS.map((q) => (
@@ -378,7 +373,7 @@ export const AIGuidanceCard: React.FC<AIGuidanceCardProps> = ({
       {/* Governance Footer */}
       <div className="text-[10px] text-pearl-placeholder text-center flex items-center justify-center gap-1">
         <ShieldCheck className="w-3 h-3 text-pearl-success-light" />
-        <span>Content managed and approved by Uganda Immigration Administration.</span>
+        <span>Guidance only. Confirm with official sources.</span>
       </div>
     </div>
   );

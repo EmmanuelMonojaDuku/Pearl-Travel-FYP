@@ -38,15 +38,9 @@ export const QRSummaryCard: React.FC<QRSummaryCardProps> = ({ qrData, onClose })
     <div className="w-full bg-pearl-dark rounded-2xl p-5 sm:p-7 border border-pearl-border">
       <div className="flex flex-wrap items-center justify-between pb-4 mb-4 border-b border-pearl-border gap-3">
         <div>
-          <span className="text-[11px] font-bold uppercase tracking-wider text-pearl-accent">
-            QR Summary
-          </span>
           <h2 className="text-xl font-bold text-pearl-text font-heading">
-            Readiness QR Code
+            QR Pass
           </h2>
-          <p className="text-[11px] text-pearl-text-secondary mt-0.5">
-            Scan this code to share your travel readiness status.
-          </p>
         </div>
 
         <div className="flex items-center gap-2">
@@ -217,7 +211,7 @@ export const QRSummaryCard: React.FC<QRSummaryCardProps> = ({ qrData, onClose })
       <div className="mt-5 p-3.5 rounded-xl bg-pearl-surface border border-pearl-gold/50 flex items-start gap-2.5">
         <ShieldAlert className="w-4 h-4 text-pearl-accent shrink-0 mt-0.5" />
         <p className="text-[11px] text-pearl-text leading-relaxed font-medium">
-          <strong>Notice:</strong> {qrData.disclaimer}
+          {qrData.disclaimer}
         </p>
       </div>
     </div>

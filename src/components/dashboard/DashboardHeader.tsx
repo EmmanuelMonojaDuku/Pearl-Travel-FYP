@@ -33,20 +33,20 @@ interface DashboardHeaderProps {
 }
 
 const TAB_TITLES: Record<PortalTab, string> = {
-  overview: 'Traveller Overview',
-  profile: 'My Profile',
-  journey: 'My Journey',
-  guidance: 'Travel Requirements',
-  checklist: 'Document Checklist',
-  readiness: 'Readiness Assessment',
-  'ai-guidance': 'Travel Assistant',
-  'border-guide': 'Malaba OSBP Border Guide',
-  multimedia: 'Multimedia Guidance (4K)',
-  qr: 'QR Readiness Summary',
-  audit: 'Review & Audit',
-  'download-pdf': 'Export Readiness Report',
-  alerts: 'Notifications',
-  offline: 'Offline Access',
+  overview: 'Home',
+  profile: 'Profile',
+  journey: 'Journey',
+  guidance: 'Requirements',
+  checklist: 'Checklist',
+  readiness: 'Readiness',
+  'ai-guidance': 'Assistant',
+  'border-guide': 'Border Guide',
+  multimedia: 'Videos',
+  qr: 'QR Pass',
+  audit: 'Review',
+  'download-pdf': 'Report',
+  alerts: 'Alerts',
+  offline: 'Offline',
 };
 
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
@@ -106,9 +106,6 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
         </button>
 
         <div className="min-w-0">
-          <p className="hidden sm:block text-[10px] font-semibold uppercase tracking-wider text-pearl-placeholder">
-            Malaba OSBP Readiness Portal
-          </p>
           <h1 className="font-heading text-sm sm:text-base font-bold text-pearl-text truncate">
             {TAB_TITLES[activeTab]}
           </h1>
@@ -153,7 +150,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
         >
           <RefreshCw className={`w-3.5 h-3.5 text-pearl-accent ${isSyncing ? 'animate-spin' : ''}`} />
           <span className="tabular-nums text-[11px]">
-            {isSyncing ? 'Syncing...' : `Synced ${lastSyncedTime}`}
+            {isSyncing ? 'Syncing…' : 'Synced'}
           </span>
         </button>
 

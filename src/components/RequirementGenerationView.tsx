@@ -27,36 +27,36 @@ interface RequirementGenerationViewProps {
 const STEPS = [
   {
     number: 1,
-    title: 'Validate Profile',
-    summary: 'Verifying travel document type and nationality.',
-    detail: 'Verifying travel document type, visa reciprocity, and residency exemptions.',
+    title: 'Profile',
+    summary: 'Checking nationality and documents.',
+    detail: 'Checking nationality, visa and exemptions.',
     eta: '15 s',
     authority: 'System',
     requiredDocs: ['Passport', 'Yellow Fever Certificate', 'Travel Insurance Certificate'],
   },
   {
     number: 2,
-    title: 'Check Itinerary',
-    summary: 'Loading clearance rules for the selected border point.',
-    detail: 'Loading specific clearance rules for Malaba One-Stop Border Post (OSBP).',
+    title: 'Journey',
+    summary: 'Loading rules for your border.',
+    detail: 'Loading rules for your border post.',
     eta: '30 s',
     authority: 'System',
     requiredDocs: ['Passport', 'Yellow Fever Certificate', 'Travel Insurance Certificate'],
   },
   {
     number: 3,
-    title: 'Run Requirement Engine',
-    summary: 'Evaluating immigration statutes and health mandates.',
-    detail: 'Evaluating Uganda DCIC immigration statutes, Yellow Fever mandates & URA customs.',
+    title: 'Rules',
+    summary: 'Immigration, health and customs.',
+    detail: 'Immigration, Yellow Fever and customs rules.',
     eta: '45 s',
     authority: 'System',
     requiredDocs: ['Passport', 'Yellow Fever Certificate', 'Travel Insurance Certificate'],
   },
   {
     number: 4,
-    title: 'Generate Checklist',
-    summary: 'Creating personalised document checklist and QR summary.',
-    detail: 'Generating readiness score, QR summary payload, and grounded guidance.',
+    title: 'Checklist',
+    summary: 'Building your checklist and QR pass.',
+    detail: 'Building checklist, score and QR pass.',
     eta: '60 s',
     authority: 'System',
     requiredDocs: ['Passport', 'Yellow Fever Certificate', 'Travel Insurance Certificate'],
@@ -112,11 +112,11 @@ export const RequirementGenerationView: React.FC<RequirementGenerationViewProps>
         {/* Header Text */}
         <div>
           <h2 className="text-xl sm:text-2xl font-bold text-pearl-text font-heading tracking-tight">
-            Preparing your personalised travel requirements...
+            Preparing your requirements…
           </h2>
           <p className="text-xs sm:text-sm text-pearl-text-secondary mt-1.5 max-w-md mx-auto">
-            Checking your profile and journey information for{' '}
-            <span className="font-bold text-pearl-text">{profile.fullName}</span> ({profile.nationality}) via{' '}
+            Setting up{' '}
+            <span className="font-bold text-pearl-text">{profile.fullName}</span> via{' '}
             <span className="font-bold text-pearl-text">{journey.intendedBorderPoint}</span>.
           </p>
         </div>
@@ -231,9 +231,6 @@ export const RequirementGenerationView: React.FC<RequirementGenerationViewProps>
           </div>
 
           {/* Clarification Note */}
-          <div className="pt-2 border-t border-pearl-border text-[11px] text-pearl-text-secondary leading-relaxed">
-            <strong className="text-pearl-text font-semibold">System Notice:</strong> The rule-based requirement engine deterministically evaluates applicable statutory requirements. The AI guidance assistant retrieves grounded explanations from the verified knowledge base.
-          </div>
         </div>
 
         {/* Immediate Continue Button */}

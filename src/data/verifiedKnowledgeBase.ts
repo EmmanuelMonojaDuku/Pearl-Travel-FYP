@@ -429,15 +429,10 @@ export function queryVerifiedKnowledge(
 }
 
 export const SUGGESTED_QUESTIONS = [
-  'Do I need a visa at Malaba OSBP?',
-  'What are the Yellow Fever card rules?',
-  'What vehicle documents are required for driving across Malaba?',
-  'Can EAC citizens enter with their National ID card?',
-  'What are the customs allowances for cash and personal luggage?',
-  'How does joint clearance work at Malaba One-Stop Border Post?',
-  'How do I cross any Uganda land border?',
-  'Which border crossings can I use?',
-  'What happens at Busia border?',
-  'Arriving at Entebbe airport',
-  'Can I travel with my child?',
+  'Do I need a visa?',
+  'Yellow Fever rules?',
+  'What am I still missing?',
+  'How do I cross any border?',
+  'Customs allowances?',
+  'Can I bring my child?',
 ];

@@ -41,6 +41,7 @@ interface NavItem {
   tab?: PortalTab;
   action?: 'settings';
   badge?: number;
+  group?: string;
 }
 
 export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
@@ -58,24 +59,25 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
   const [logoError, setLogoError] = useState(false);
 
   const primaryNav: NavItem[] = [
-    { id: 'overview', label: 'Overview', icon: LayoutDashboard, tab: 'overview' },
-    { id: 'journey', label: 'My Journey', icon: Compass, tab: 'journey' },
+    { id: 'overview', label: 'Home', icon: LayoutDashboard, tab: 'overview', group: 'Plan' },
+    { id: 'journey', label: 'Journey', icon: Compass, tab: 'journey' },
     { id: 'guidance', label: 'Requirements', icon: Globe, tab: 'guidance' },
     {
       id: 'checklist',
-      label: 'Document Checklist',
+      label: 'Checklist',
       icon: FileCheck,
       tab: 'checklist',
+      group: 'Prepare',
       badge: missingMandatoryCount > 0 ? missingMandatoryCount : undefined,
     },
     { id: 'readiness', label: 'Readiness', icon: ShieldCheck, tab: 'readiness' },
-    { id: 'ai-guidance', label: 'Travel Assistant', icon: Bot, tab: 'ai-guidance' },
+    { id: 'qr', label: 'QR Pass', icon: QrCode, tab: 'qr' },
+    { id: 'ai-guidance', label: 'Assistant', icon: Bot, tab: 'ai-guidance', group: 'Guides' },
     { id: 'border-guide', label: 'Border Guide', icon: MapPinned, tab: 'border-guide' },
-    { id: 'qr', label: 'QR Summary', icon: QrCode, tab: 'qr' },
-    { id: 'multimedia', label: 'Multimedia', icon: Video, tab: 'multimedia' },
-    { id: 'alerts', label: 'Notifications', icon: Bell, tab: 'alerts' },
-    { id: 'offline', label: 'Offline Access', icon: WifiOff, tab: 'offline' },
-    { id: 'profile', label: 'My Profile', icon: User, tab: 'profile' },
+    { id: 'multimedia', label: 'Videos', icon: Video, tab: 'multimedia' },
+    { id: 'alerts', label: 'Alerts', icon: Bell, tab: 'alerts', group: 'Account' },
+    { id: 'offline', label: 'Offline', icon: WifiOff, tab: 'offline' },
+    { id: 'profile', label: 'Profile', icon: User, tab: 'profile' },
     { id: 'settings', label: 'Settings', icon: Settings, action: 'settings' },
   ];
 
@@ -139,7 +141,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
           ) : (
             <>
               <ChevronLeft className="w-3.5 h-3.5" />
-              <span>Collapse Menu</span>
+              <span>Collapse</span>
             </>
           )}
         </button>
@@ -152,8 +154,14 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
           const isActive = item.tab ? activeTab === item.tab : false;
 
           return (
+            <React.Fragment key={item.id}>
+            {item.group &&
+              (compact ? (
+                <div className="my-2 border-t border-pearl-border" aria-hidden="true" />
+              ) : (
+                <p className="px-3 pt-3 pb-1 text-[10px] font-bold uppercase tracking-wider text-pearl-placeholder">{item.group}</p>
+              ))}
             <button
-              key={item.id}
               type="button"
               id={`tab-nav-${item.id}`}
               title={compact ? item.label : undefined}
@@ -188,6 +196,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                 </span>
               )}
             </button>
+            </React.Fragment>
           );
         })}
       </nav>
@@ -197,7 +206,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
         <button
           type="button"
           id="btn-sidebar-support"
-          title={compact ? 'Contact Support' : undefined}
+          title={compact ? 'Support' : undefined}
           onClick={() => {
             onOpenSupport();
             onCloseMobileDrawer();
@@ -207,7 +216,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
           } min-h-[40px] py-2 rounded-xl text-[13px] font-medium text-pearl-text-secondary hover:bg-pearl-dark hover:text-pearl-accent transition-colors cursor-pointer whitespace-nowrap`}
         >
           <HelpCircle className="w-4 h-4 shrink-0 text-pearl-accent" />
-          {!compact && <span>Contact Support</span>}
+          {!compact && <span>Support</span>}
         </button>
 
         {onLogout && (

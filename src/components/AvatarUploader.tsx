@@ -148,7 +148,7 @@ export const AvatarUploader: React.FC<AvatarUploaderProps> = ({
         </div>
 
         <p className="text-xs text-pearl-text-secondary text-center sm:text-left">
-          PNG, JPG, or WebP up to 5 MB. You can skip this or add a photo anytime.
+          PNG, JPG or WebP, up to 5 MB.
         </p>
 
         {errorMsg && (

@@ -5,7 +5,7 @@ import { Button, Field } from './ui';
 import { Footer } from './Footer';
 import { GoogleSignIn } from './SocialAuthButtons';
 import { FormErrors } from '../types';
-import { ApiUnavailableError, isBootstrapAdminEmail, loginWithApi, registerWithApi } from '../utils/apiClient';
+import { ApiUnavailableError, loginWithApi, registerWithApi } from '../utils/apiClient';
 import { registerLocalAccount, rememberSignupPhone, signInWithGoogleIdentity } from '../utils/authStorage';
 import type { UserProfile } from '../types';
 
@@ -51,28 +51,16 @@ export const SignupView: React.FC<SignupViewProps> = ({ onSwitchToLogin, onBack,
     try {
       rememberSignupPhone(form.email, form.phone);
       try {
-        const result = await registerWithApi(input);
-        if (result.verificationRequired) {
-          onSuccessToast?.(
-            result.verificationDelivered
-              ? 'Administrator account created. Verify your email, then sign in.'
-              : 'Administrator account created, but verification email delivery is not configured.'
-          );
-          onSwitchToLogin(form.email.trim());
-          return;
-        }
+        await registerWithApi(input);
         const session = await loginWithApi({ email: form.email, password: form.password });
-        onSuccessToast?.('Account created. Let\u2019s set up your profile.');
+        onSuccessToast?.('Account created.');
         onAuthenticated({ ...session.user, accessToken: session.accessToken, refreshToken: session.refreshToken }, true);
         return;
       } catch (error) {
         if (!(error instanceof ApiUnavailableError)) throw error;
-        if (isBootstrapAdminEmail(form.email)) {
-          throw new Error('Administrator accounts must be created while the Pearl Travel API is running.');
-        }
         const local = await registerLocalAccount(input);
         if ('error' in local) throw new Error(local.error);
-        onSuccessToast?.('Account created. Let\u2019s set up your profile.');
+        onSuccessToast?.('Account created.');
         onAuthenticated(local.user, true);
         return;
       }
@@ -93,7 +81,7 @@ export const SignupView: React.FC<SignupViewProps> = ({ onSwitchToLogin, onBack,
         )}
         <PearlTravelLogo size="sm" className="mb-5" />
         <h1 className="text-2xl font-bold font-heading">Create Account</h1>
-        <p className="text-sm text-pearl-text-secondary mt-1 mb-6">Get started with Pearl Travel</p>
+        <p className="text-sm text-pearl-text-secondary mt-1 mb-6">Create your account</p>
 
         {errors.general && (
           <div role="alert" className="mb-4 px-3.5 py-3 rounded-xl bg-pearl-danger/15 border border-pearl-danger/50 text-xs font-medium text-pearl-danger-light flex items-start gap-2.5">

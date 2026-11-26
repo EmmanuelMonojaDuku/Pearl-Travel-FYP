@@ -6,9 +6,9 @@ export const SITE = {
   name: 'Pearl Travel',
   tagline: 'Plan · Prepare · Cross',
   strapline: 'Your smart border companion',
-  blurb: 'Preparation guidance for travellers crossing into Uganda.',
+  blurb: 'Border preparation for travellers to Uganda.',
   supportEmail: 'support@pearltravel.ug',
-  region: 'Malaba One-Stop Border Post corridor, Uganda – Kenya',
+  region: 'Malaba, Uganda – Kenya border',
   /** Only add profiles that really exist. Empty = the Social section is not rendered. */
   social: [] as { label: string; href: string }[],
   /** Official public sources. */

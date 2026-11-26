@@ -333,7 +333,7 @@ export const PassengerProfileSetupView: React.FC<PassengerProfileSetupViewProps>
                 if (errors.nationality) setErrors({ ...errors, nationality: undefined });
               }}
               error={errors.nationality}
-              helperText="Requested to determine Uganda visa requirements, EAC exemptions, and entry rules."
+              helperText="Used for visa and entry rules."
               required
               disabled={isSaving}
             />
@@ -382,7 +382,7 @@ export const PassengerProfileSetupView: React.FC<PassengerProfileSetupViewProps>
                 </p>
               ) : (
                 <p className="mt-1.5 text-xs text-pearl-text-secondary">
-                  Requested to align your profile with passport and immigration arrival records.
+                  Match your passport.
                 </p>
               )}
             </div>
@@ -535,7 +535,7 @@ export const PassengerProfileSetupView: React.FC<PassengerProfileSetupViewProps>
                 </p>
               ) : (
                 <p className="mt-1.5 text-xs text-pearl-text-secondary">
-                  Helps tailor your visa category, permit guidance, and border document checklist.
+                  Tailors your checklist.
                 </p>
               )}
             </div>
@@ -557,7 +557,7 @@ export const PassengerProfileSetupView: React.FC<PassengerProfileSetupViewProps>
             </div>
 
             <p className="text-xs text-pearl-text-secondary leading-relaxed">
-              Requested so border authorities or Pearl Travel support can notify a trusted contact if an urgent travel or health situation arises.
+              Someone we can contact in an emergency.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

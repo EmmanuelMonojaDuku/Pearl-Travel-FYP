@@ -105,7 +105,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
   let nextActionSummary =
     'Confirm your travel documents so your readiness status stays accurate.';
   let nextActionItems: string[] = [];
-  let nextActionButtonLabel = 'Review Document Checklist';
+  let nextActionButtonLabel = 'Open checklist';
   let nextActionHandler = () => onSelectTab('checklist');
   let nextActionTone: 'warning' | 'critical' | 'success' = 'warning';
 
@@ -117,39 +117,35 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
       'Verify passport nationality & document type',
       'Add primary phone and emergency contact details',
     ];
-    nextActionButtonLabel = 'Complete Profile Setup';
+    nextActionButtonLabel = 'Finish profile';
     nextActionHandler = onEditProfile;
     nextActionTone = 'warning';
   } else if (!hasJourney) {
-    nextActionTitle = 'Set Up Your Upcoming Journey';
+    nextActionTitle = 'Set up your journey';
     nextActionSummary =
       'Select your Uganda border crossing post, planned date, and transport mode to compute requirements.';
-    nextActionButtonLabel = 'Configure Journey';
+    nextActionButtonLabel = 'Set up journey';
     nextActionHandler = onEditJourney;
     nextActionTone = 'warning';
   } else if (mandatoryMissing.length > 0) {
-    nextActionTitle = `Resolve ${mandatoryMissing.length} Mandatory Requirement${
-      mandatoryMissing.length > 1 ? 's' : ''
-    }`;
+    nextActionTitle = `Complete ${mandatoryMissing.length} required document${mandatoryMissing.length > 1 ? 's' : ''}`;
     nextActionSummary = `Required before border presentation at ${currentBorderPoint.split('(')[0].trim()}:`;
     nextActionItems = mandatoryMissing.slice(0, 3).map((item) => item.title);
-    nextActionButtonLabel = 'Review Document Checklist';
+    nextActionButtonLabel = 'Open checklist';
     nextActionHandler = () => onSelectTab('checklist');
     nextActionTone = 'critical';
   } else if (optionalMissing.length > 0) {
-    nextActionTitle = `Review ${optionalMissing.length} Recommended Item${
-      optionalMissing.length > 1 ? 's' : ''
-    }`;
+    nextActionTitle = `Review ${optionalMissing.length} optional item${optionalMissing.length > 1 ? 's' : ''}`;
     nextActionSummary =
       'All mandatory documents are verified. Confirm remaining recommended items for smooth crossing:';
     nextActionItems = optionalMissing.slice(0, 3).map((item) => item.title);
-    nextActionButtonLabel = 'Open Document Checklist';
+    nextActionButtonLabel = 'Open checklist';
     nextActionHandler = () => onSelectTab('checklist');
     nextActionTone = 'warning';
   } else {
-    nextActionTitle = 'Ready for Border Verification';
+    nextActionTitle = 'You are ready to cross';
     nextActionSummary = `All ${readiness.totalCount} checklist items for ${currentBorderPoint.split('(')[0].trim()} are complete. Keep your QR Readiness Summary handy for officer inspection.`;
-    nextActionButtonLabel = 'View QR Summary';
+    nextActionButtonLabel = 'Show QR pass';
     nextActionHandler = () => onSelectTab('qr');
     nextActionTone = 'success';
   }
@@ -169,56 +165,56 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
       id: 'btn-view-requirements-card',
       tab: 'guidance',
       title: 'Requirements',
-      description: `Statutory DCIC immigration, Port Health, and URA rules tailored for ${profile.nationality || 'your profile'}.`,
-      metric: `${requirements.length} rules evaluated`,
+      description: '',
+      metric: `${requirements.length} rules`,
       icon: Globe,
     },
     {
       id: 'btn-check-documents-card',
       tab: 'checklist',
-      title: 'Document Checklist',
-      description: 'Track physical passport validity, Yellow Fever card, tickets, and border permits.',
-      metric: `${readiness.completedCount}/${readiness.totalCount} verified`,
+      title: 'Checklist',
+      description: '',
+      metric: `${readiness.completedCount}/${readiness.totalCount} done`,
       icon: FileCheck,
     },
     {
       id: 'btn-view-readiness-card',
       tab: 'readiness',
       title: 'Readiness',
-      description: 'Deterministic readiness assessment highlighting gaps and expired documents.',
+      description: '',
       metric: hasAssessment ? `${readiness.score}% score` : 'Pending setup',
       icon: ShieldCheck,
     },
     {
       id: 'btn-ask-ai-guidance-card',
       tab: 'ai-guidance',
-      title: 'AI Travel Assistant',
-      description: 'Grounded Q&A from verified Uganda DCIC and URA customs documentation.',
-      metric: 'Verified knowledge base',
+      title: 'Assistant',
+      description: '',
+      metric: 'Ask anything',
       icon: Bot,
     },
     {
       id: 'btn-view-border-guide-card',
       tab: 'border-guide',
       title: 'Border Guide',
-      description: '6-step physical terminal flow through Malaba One-Stop Border Post.',
-      metric: '6 clearance desks',
+      description: '',
+      metric: '6 steps',
       icon: MapPinned,
     },
     {
       id: 'btn-view-qr-card',
       tab: 'qr',
-      title: 'QR Summary',
-      description: 'Local informational QR snapshot of your checklist, not an official entry permit.',
-      metric: 'Local preview',
+      title: 'QR Pass',
+      description: '',
+      metric: 'Show at border',
       icon: QrCode,
     },
     {
       id: 'btn-watch-video-card',
       tab: 'multimedia',
-      title: 'Multimedia',
-      description: '4K Malaba OSBP border clearance walkthrough in Swahili and English.',
-      metric: '4K video guide',
+      title: 'Videos',
+      description: '',
+      metric: 'Swahili · English',
       icon: Video,
     },
   ];
@@ -234,24 +230,11 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
           {/* Left Copy */}
           <div className="md:col-span-7 p-5 sm:p-7 flex flex-col justify-between gap-4 relative z-10">
             <div className="space-y-1.5">
-              <p className="text-[11px] font-bold uppercase tracking-wider text-pearl-accent">
-                Pre-Arrival Readiness
-              </p>
               <h2 className="font-heading text-2xl sm:text-3xl font-bold text-pearl-text tracking-tight leading-tight">
                 Welcome back, {firstName}
               </h2>
-              <p className="text-xs sm:text-sm text-pearl-text-secondary max-w-xl leading-relaxed">
-                {hasJourney ? (
-                  <>
-                    Track your entry documents, review requirements for{' '}
-                    <span className="text-pearl-text font-semibold">
-                      {currentBorderPoint.split('(')[0].trim()}
-                    </span>
-                    , and prepare for your journey.
-                  </>
-                ) : (
-                  'Review requirements based on your profile, track your documents, and add your journey details when you are ready.'
-                )}
+              <p className="text-sm text-pearl-text-secondary max-w-xl">
+                {nextActionTone === 'success' ? nextActionTitle : `Next: ${nextActionTitle}`}
               </p>
             </div>
 
@@ -265,13 +248,6 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
 
-              <button
-                type="button"
-                onClick={() => onSelectTab('border-guide')}
-                className="min-h-[40px] px-4 py-2 rounded-xl bg-pearl-dark hover:bg-pearl-surface border border-pearl-border text-pearl-text text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap"
-              >
-                Malaba Border Guide
-              </button>
             </div>
           </div>
 
@@ -393,9 +369,9 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
             </div>
           ) : (
             <div className="rounded-xl bg-pearl-surface border border-pearl-border/80 p-4">
-              <p className="text-sm font-semibold text-pearl-text">Your journey is not set up yet.</p>
+              <p className="text-sm font-semibold text-pearl-text">No journey yet.</p>
               <p className="mt-1 text-xs text-pearl-text-secondary">
-                Add your destination, border point, travel date and transport mode to view tailored travel requirements.
+                Choose your border, date and transport.
               </p>
             </div>
           )}
@@ -486,12 +462,9 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
         className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch"
       >
         {/* Dark Navy Travel Readiness Panel */}
-        <div className="lg:col-span-7 rounded-2xl bg-pearl-navy border border-pearl-border p-5 sm:p-6 text-pearl-text flex flex-col justify-between gap-5">
+        <div className="lg:col-span-12 rounded-2xl bg-pearl-navy border border-pearl-border p-5 sm:p-6 text-pearl-text flex flex-col justify-between gap-5">
           <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-pearl-border">
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-pearl-accent block">
-                Deterministic Assessment
-              </span>
               <h3 className="font-heading text-lg font-bold text-pearl-text">
                 Travel Readiness
               </h3>
@@ -570,7 +543,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
                   <span className="text-lg font-bold text-pearl-text tabular-nums mt-0.5 block">
                     {readiness.completedCount} / {readiness.totalCount}
                   </span>
-                  <span className="text-[11px] text-pearl-text-secondary">Documents verified</span>
+                  <span className="text-[11px] text-pearl-text-secondary">Verified</span>
                 </div>
 
                 <div className="p-3 rounded-xl bg-pearl-dark border border-pearl-border">
@@ -617,7 +590,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
               onClick={() => onSelectTab('checklist')}
               className="min-h-[40px] px-4 py-2 rounded-xl bg-pearl-gold hover:bg-pearl-gold-light text-pearl-text text-xs font-bold flex items-center gap-2 transition-colors cursor-pointer whitespace-nowrap"
             >
-              <span>Review Document Checklist</span>
+              <span>Open Checklist</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
 
@@ -628,79 +601,11 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
               className="min-h-[40px] px-4 py-2 rounded-xl bg-pearl-dark hover:bg-pearl-surface border border-pearl-border text-pearl-text text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
             >
               <QrCode className="w-3.5 h-3.5 text-pearl-accent" />
-              <span>Open QR Summary</span>
+              <span>QR Pass</span>
             </button>
           </div>
         </div>
 
-        {/* What You Need To Do Next Panel (Subtle Warm Gold Accent Surface) */}
-        <div className="lg:col-span-5 rounded-2xl bg-pearl-surface border border-pearl-gold/50 p-5 sm:p-6 text-pearl-text flex flex-col justify-between gap-4">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between gap-2 pb-3 border-b border-pearl-border/10">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-pearl-text/75">
-                Next Priority Step
-              </span>
-              <span
-                className={`text-[11px] font-bold ${
-                  nextActionTone === 'critical'
-                    ? 'text-pearl-danger-light'
-                    : nextActionTone === 'success'
-                    ? 'text-pearl-success-light'
-                    : 'text-pearl-accent'
-                }`}
-              >
-                {nextActionTone === 'critical'
-                  ? 'Critical Action'
-                  : nextActionTone === 'success'
-                  ? 'Verified'
-                  : 'Recommended'}
-              </span>
-            </div>
-
-            <div>
-              <h3 className="font-heading text-base sm:text-lg font-bold text-pearl-text">
-                What You Need To Do Next
-              </h3>
-              <p className="text-sm font-bold text-pearl-text mt-2">{nextActionTitle}</p>
-              <p className="text-xs text-pearl-text-secondary mt-1 leading-relaxed">
-                {nextActionSummary}
-              </p>
-            </div>
-
-            {nextActionItems.length > 0 && (
-              <ul className="space-y-1.5 pt-1">
-                {nextActionItems.map((itemText) => (
-                  <li
-                    key={itemText}
-                    className="flex items-start gap-2 text-xs font-semibold text-pearl-text bg-pearl-surface/65 border border-pearl-border/10 rounded-xl px-3 py-2"
-                  >
-                    <span
-                      className={`w-2 h-2 rounded-full mt-1 shrink-0 ${
-                        nextActionTone === 'critical' ? 'bg-pearl-danger' : 'bg-pearl-gold'
-                      }`}
-                    />
-                    <span>{itemText}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-
-          <div className="pt-2 space-y-2.5">
-            <button
-              type="button"
-              onClick={nextActionHandler}
-              className="w-full min-h-[42px] px-4 py-2.5 rounded-xl bg-pearl-navy hover:bg-pearl-dark text-pearl-text text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer"
-            >
-              <span>{nextActionButtonLabel}</span>
-              <ArrowRight className="w-3.5 h-3.5 text-pearl-accent" />
-            </button>
-
-            <p className="text-[11px] text-pearl-text-secondary text-center">
-              Based on your active {profile.nationality} profile & checklist state.
-            </p>
-          </div>
-        </div>
       </section>
 
       {/* 4. Travel Services Grid */}
@@ -708,11 +613,8 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
         <div className="flex items-center justify-between gap-2">
           <div>
             <h3 className="font-heading text-base sm:text-lg font-bold text-pearl-text">
-              Travel Services
+              Shortcuts
             </h3>
-            <p className="text-xs text-pearl-text-secondary">
-              Pre-arrival tools, verified guidance, and Malaba OSBP border preparation modules
-            </p>
           </div>
         </div>
 
@@ -739,9 +641,6 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
                     <h4 className="font-heading text-sm font-bold text-pearl-text">
                       {service.title}
                     </h4>
-                    <p className="text-xs text-pearl-text-secondary mt-1 leading-relaxed line-clamp-2">
-                      {service.description}
-                    </p>
                   </div>
                 </div>
 
@@ -786,11 +685,8 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
           </div>
           <div>
             <h4 className="font-heading text-sm font-bold text-pearl-text">
-              Review Details & Export Readiness Summary
+              Review & export
             </h4>
-            <p className="text-xs text-pearl-text-secondary">
-              Inspect recorded traveller fields or download a printable pre-arrival checklist.
-            </p>
           </div>
         </div>
 

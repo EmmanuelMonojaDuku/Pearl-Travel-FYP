@@ -410,7 +410,7 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
       timestamp: new Date().toISOString(),
       cachedOffline: isOfflineMode,
       disclaimer:
-        'This QR code is generated locally in the browser as an informational checklist snapshot. It is not server-issued or verified, does not grant entry, and does not replace official travel documents or immigration decisions.',
+        'Informational only. Not an entry approval or an official document.',
     };
   }, [profile, checklist, readiness, isOfflineMode]);
 
@@ -636,7 +636,7 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
 
                 <div className="p-4 bg-pearl-dark border border-pearl-border rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3">
                   <span className="text-xs text-pearl-text-secondary font-medium text-center sm:text-left">
-                    Verify your physical documents against these computed Uganda border requirements:
+                    Check your documents against these rules.
                   </span>
                   <button
                     type="button"
@@ -644,7 +644,7 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
                     onClick={() => setActiveTab('checklist')}
                     className="w-full sm:w-auto px-5 py-2.5 bg-pearl-gold hover:bg-pearl-gold-light text-pearl-text text-xs font-bold rounded-xl cursor-pointer transition-colors whitespace-nowrap"
                   >
-                    Open Document Checklist &rarr;
+                    Open checklist →
                   </button>
                 </div>
               </motion.div>
@@ -783,8 +783,8 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
         <Footer
           className="pb-20 md:pb-0"
           quickLinks={[
-            { label: 'Dashboard', href: '#/traveller/dashboard' },
-            { label: 'Document Checklist', href: '#/traveller/checklist' },
+            { label: 'Home', href: '#/traveller/dashboard' },
+            { label: 'Checklist', href: '#/traveller/checklist' },
             { label: 'Requirements', href: '#/traveller/requirements' },
             { label: 'Readiness', href: '#/traveller/readiness' },
             { label: 'QR Pass', href: '#/traveller/qr' },

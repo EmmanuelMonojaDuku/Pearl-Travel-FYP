@@ -113,8 +113,9 @@ describe('Administrator dashboard API', () => {
         password: 'StrongAdmin2026!',
       },
     });
-    expect(unverifiedAdminLogin.statusCode).toBe(403);
-    expect(unverifiedAdminLogin.json().error.code).toBe('EMAIL_VERIFICATION_REQUIRED');
+    // Signs in, but only as a traveller: no administrator role until the email is verified.
+    expect(unverifiedAdminLogin.statusCode).toBe(200);
+    expect(unverifiedAdminLogin.json().data.user.roles).not.toContain('admin_staff');
 
     const travellerRegistration = await app.app.inject({
       method: 'POST',

@@ -23,10 +23,10 @@ export const ReadinessAssessmentView: React.FC<Props> = ({
   const tone = score >= 80 && missingMandatoryCount === 0 ? 'success' : score >= 50 ? 'gold' : 'danger';
   const message =
     missingMandatoryCount === 0 && missingCount === 0
-      ? 'All documents are in place. You are prepared for border clearance.'
+      ? 'All documents ready.'
       : missingMandatoryCount > 0
-        ? `Good progress. Complete the ${missingMandatoryCount} missing mandatory item${missingMandatoryCount > 1 ? 's' : ''} to be fully ready.`
-        : 'Mandatory documents are complete. A few recommended items are still pending.';
+        ? `${missingMandatoryCount} required item${missingMandatoryCount > 1 ? 's' : ''} missing.`
+        : 'Required documents done. Optional items pending.';
   const rows: [string, number, string][] = [
     ['Ready', readyCount, 'bg-pearl-success'],
     ['Missing', missingCount, 'bg-pearl-danger'],
@@ -36,10 +36,9 @@ export const ReadinessAssessmentView: React.FC<Props> = ({
   return (
     <div className="max-w-md mx-auto space-y-5">
       <div className="text-center">
-        <p className="text-[11px] font-bold uppercase tracking-wider text-pearl-accent">Malaba clearance score</p>
         <div className="flex justify-center mt-4"><Ring value={score} label={`${score}%`} sub="Ready" size={150} tone={tone} /></div>
         <h2 className="mt-4 text-lg font-bold font-heading">Your Readiness Score</h2>
-        <p className="text-xs text-pearl-text-secondary mt-1">{statusLabel} · {message}</p>
+        <p className="text-xs text-pearl-text-secondary mt-1">{message}</p>
       </div>
 
       <Card className="divide-y divide-pearl-border p-0">
@@ -53,14 +52,14 @@ export const ReadinessAssessmentView: React.FC<Props> = ({
 
       <div className="space-y-3">
         <Button onClick={onViewMissing}>View Missing Items</Button>
-        {score >= 1 && <Button variant="outline" onClick={onOpenQR}>Generate Border QR Summary</Button>}
+        {score >= 1 && <Button variant="outline" onClick={onOpenQR}>Show QR Pass</Button>}
         <Button variant="outline" onClick={onBack}>Back</Button>
       </div>
 
       <div>
-        <p className="text-[11px] font-bold text-pearl-text-secondary">Last saved assessment</p>
+        <p className="text-[11px] font-bold text-pearl-text-secondary">Last saved</p>
         <p className="text-[11px] text-pearl-placeholder mt-1">
-          {lastSavedTime}. This is a traveller preparation/readiness indicator. It is not an immigration approval or clearance decision.
+          {lastSavedTime}. Not an immigration decision.
         </p>
       </div>
 
@@ -71,14 +70,14 @@ export const ReadinessAssessmentView: React.FC<Props> = ({
           onClick={() => setExplain((v) => !v)}
           className="w-full h-11 rounded-xl border border-pearl-border bg-pearl-surface text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer hover:bg-pearl-input"
         >
-          <Info className="w-4 h-4 text-pearl-accent" /> How does my score work?
+          <Info className="w-4 h-4 text-pearl-accent" /> How is it scored?
           <ChevronDown className={`w-4 h-4 transition-transform ${explain ? 'rotate-180' : ''}`} />
         </button>
         {explain && (
           <Card className="mt-2 text-xs text-pearl-text-secondary space-y-2">
-            <p>Each checklist item counts toward your score. <strong className="text-pearl-text">Mandatory</strong> documents count double; optional ones count once.</p>
-            <p>Items marked <strong className="text-pearl-text">Have It</strong> earn their points. Missing or expired items earn none. Items marked <strong className="text-pearl-text">N/A</strong> are removed from the calculation entirely.</p>
-            <p>You are &ldquo;Ready&rdquo; only at 100% with no mandatory item missing.</p>
+            <p><strong className="text-pearl-text">Required</strong> documents count double, optional ones once.</p>
+            <p><strong className="text-pearl-text">Have It</strong> earns points. Missing or expired earns none. <strong className="text-pearl-text">N/A</strong> is ignored.</p>
+            <p>100% with nothing required missing means Ready.</p>
           </Card>
         )}
       </div>
