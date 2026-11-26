@@ -95,7 +95,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
           src="/pearl-travel-logo.png"
           alt="Pearl Travel — Plan, Prepare, Cross"
           onError={() => setLogoError(true)}
-          className={`${compact ? 'w-11 h-11' : 'w-14 h-14'} rounded-xl bg-white p-0.5 object-contain shrink-0`}
+          className={`${compact ? 'w-12 h-12' : 'w-[72px] h-[72px]'} rounded-xl bg-white p-0.5 object-contain shrink-0`}
         />
       ) : (
         <span className="font-heading font-extrabold text-sm text-pearl-text tracking-tight">PT</span>

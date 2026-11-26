@@ -50,7 +50,7 @@ export const Footer: React.FC<FooterProps> = ({ quickLinks, variant = 'full', cl
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-[1.4fr_1fr_1.2fr_1fr_1.2fr] gap-x-6 gap-y-4">
           <div className="col-span-2 md:col-span-4 lg:col-span-1">
             <div className="flex items-center gap-3">
-              <img src="/pearl-travel-logo.png" alt="" width={44} height={44} className="w-11 h-11 rounded-xl bg-white p-0.5 object-contain" />
+              <img src="/pearl-travel-logo.png" alt="" width={56} height={56} className="w-14 h-14 rounded-xl bg-white p-0.5 object-contain" />
               <div>
                 <p className="font-heading font-extrabold text-base leading-tight">{SITE.name}</p>
                 <p className="text-[11px] font-semibold text-pearl-accent">{SITE.tagline}</p>

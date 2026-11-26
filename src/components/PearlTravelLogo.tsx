@@ -9,10 +9,10 @@ interface PearlTravelLogoProps {
 }
 
 const SIZE: Record<NonNullable<PearlTravelLogoProps['size']>, string> = {
-  sm: 'w-14 h-14',
-  md: 'w-20 h-20',
-  lg: 'w-28 h-28',
-  xl: 'w-60 h-60',
+  sm: 'w-24 h-24',
+  md: 'w-32 h-32',
+  lg: 'w-40 h-40',
+  xl: 'w-64 h-64',
 };
 
 /** Pearl Travel brand mark on a white rounded tile (matches the splash wireframe). */

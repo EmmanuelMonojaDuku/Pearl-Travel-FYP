@@ -143,8 +143,8 @@ export const AppBar: React.FC<{ role: string; name: string }> = ({ role, name })
   const initials = name.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]?.toUpperCase()).join('') || 'PT';
   return (
     <header className="sticky top-0 z-30 w-full bg-pearl-navy border-b border-pearl-border">
-      <div className="mx-auto w-full max-w-2xl px-5 h-14 flex items-center gap-3">
-        <img src="/pearl-travel-logo.png" alt="" width={36} height={36} className="w-9 h-9 rounded-lg bg-white p-0.5 object-contain" />
+      <div className="mx-auto w-full max-w-2xl px-5 h-16 flex items-center gap-3">
+        <img src="/pearl-travel-logo.png" alt="" width={44} height={44} className="w-11 h-11 rounded-lg bg-white p-0.5 object-contain" />
         <div className="min-w-0 flex-1">
           <p className="font-heading font-extrabold text-sm leading-tight text-pearl-text">Pearl Travel</p>
           <p className="text-[10px] font-semibold uppercase tracking-wider text-pearl-accent">{role}</p>
