@@ -16,6 +16,7 @@ import {
   loadPersistedSession,
   persistSession,
 } from './utils/authStorage';
+import { ConnectionBanner } from './components/ConnectionBanner';
 import { ApiRequestError, fetchServerRoles, logoutFromApi, refreshWithApi, verifyEmailWithApi } from './utils/apiClient';
 
 export default function App() {
@@ -243,6 +244,7 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen w-full overflow-x-hidden bg-pearl-slate text-pearl-text selection:bg-pearl-gold selection:text-pearl-navy">
+      <ConnectionBanner />
       {toast}
       {legalSlug ? <LegalPage slug={legalSlug} onBack={closeLegal} /> : screen}
     </div>

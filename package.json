@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
     "demo": "vite --port=3000 --host=0.0.0.0 --mode demo",
+    "dev:full": "node scripts/dev-full.mjs",
+    "test:e2e": "node scripts/e2e.mjs",
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",

@@ -1,4 +1,5 @@
 import type { UserProfile } from '../types';
+import { isTravellerProfileComplete } from './authStorage';
 
 const API_BASE_URL = (
   import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000/api/v1'
@@ -121,7 +122,7 @@ function mapApiUser(user: ApiUser): UserProfile {
     'Prefer not to say',
   ];
   const gender = genderOptions.find((option) => option === user.gender);
-  return {
+  const mapped: UserProfile = {
     id: user.id,
     name: user.fullName,
     firstName: user.firstName ?? undefined,
@@ -138,6 +139,7 @@ function mapApiUser(user: ApiUser): UserProfile {
     roles: user.roles,
     profileCompleted: false,
   };
+  return { ...mapped, profileCompleted: isTravellerProfileComplete(null, mapped) };
 }
 
 export async function refreshWithApi(refreshToken: string): Promise<{ accessToken: string; refreshToken: string; roles: NonNullable<UserProfile['roles']> }> {
