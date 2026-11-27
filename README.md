@@ -67,7 +67,7 @@ npm run build -- --mode demo && (npx vite preview --port 4173 &) && npm run test
 ## Presentation guide
 
 - `npm run dev:full`, then open http://localhost:3000 and use the Demo access buttons.
-- **Register** creates the account and goes straight to profile setup (no verification email). Set `REQUIRE_EMAIL_VERIFICATION=true` to turn it back on. Administrator addresses in `ADMIN_EMAILS` still verify by email.
+- **Register** creates the account and returns to Sign in with the email filled (no verification email). Set `REQUIRE_EMAIL_VERIFICATION=true` to turn it back on. Administrator addresses in `ADMIN_EMAILS` still verify by email.
 - **Continue with Google:** create an OAuth 2.0 Web client, add `http://localhost:3000` as an authorised JavaScript origin, and set `VITE_GOOGLE_CLIENT_ID` in `.env.local`. Google accounts are browser-local travellers (the API has no Google endpoint yet).
 - Without the API, travellers can still register and use the app from browser storage; officer, admin, QR creation and the assistant need the server.
 - Camera scanning works in browsers on `https://` or `http://localhost`, with image upload and pasted-code fallbacks.

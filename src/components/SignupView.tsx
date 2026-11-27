@@ -5,7 +5,7 @@ import { Button, Field } from './ui';
 import { Footer } from './Footer';
 import { GoogleSignIn } from './SocialAuthButtons';
 import { FormErrors } from '../types';
-import { ApiUnavailableError, loginWithApi, registerWithApi } from '../utils/apiClient';
+import { ApiUnavailableError, registerWithApi } from '../utils/apiClient';
 import { registerLocalAccount, rememberSignupPhone, signInWithGoogleIdentity } from '../utils/authStorage';
 import type { UserProfile } from '../types';
 
@@ -52,16 +52,15 @@ export const SignupView: React.FC<SignupViewProps> = ({ onSwitchToLogin, onBack,
       rememberSignupPhone(form.email, form.phone);
       try {
         await registerWithApi(input);
-        const session = await loginWithApi({ email: form.email, password: form.password });
-        onSuccessToast?.('Account created.');
-        onAuthenticated({ ...session.user, accessToken: session.accessToken, refreshToken: session.refreshToken }, true);
+        onSuccessToast?.('Account created. Please sign in.');
+        onSwitchToLogin(form.email);
         return;
       } catch (error) {
         if (!(error instanceof ApiUnavailableError)) throw error;
         const local = await registerLocalAccount(input);
         if ('error' in local) throw new Error(local.error);
-        onSuccessToast?.('Account created.');
-        onAuthenticated(local.user, true);
+        onSuccessToast?.('Account created. Please sign in.');
+        onSwitchToLogin(form.email);
         return;
       }
     } catch (error) {
