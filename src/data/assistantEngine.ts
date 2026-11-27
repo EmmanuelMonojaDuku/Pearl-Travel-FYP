@@ -236,8 +236,8 @@ export function answerQuestion(rawQuestion: string, ctx: AssistantContext): Assi
 
   // 3. App help
   const appTopics: [RegExp, string, string[]][] = [
-    [/\bqr\b/, 'Open the QR Pass tab to see your readiness QR code. An officer can scan it or look you up by name. It is an informational summary, not an entry approval, and it also works offline once loaded.', ['How does clearance work at Malaba?']],
-    [/offline|no internet|no network|no signal/, 'Open Offline Access from the menu to see what is saved on your device: requirements, checklist, profile, border guide and QR summary. Live AI answers and the newest updates need a connection.', ['What am I still missing?']],
+    [/\bqr\b/, 'Open the QR Pass tab to see your readiness QR code. An officer scans it and the server checks it is genuine. It holds only a random reference, your score and six document statuses, never your name or passport number. It is not an entry approval. A saved pass can be shown offline.', ['How does clearance work at Malaba?']],
+    [/offline|no internet|no network|no signal|without (the )?(internet|network|signal|connection|data)|internet connection|no connection/, 'Yes, mostly. Your requirements, checklist, readiness score, border guide and a saved QR pass work offline. Signing in, creating a new QR pass and the AI assistant need a connection, and changes sync when you are back online.', ['What am I still missing?']],
     [/notification|alert/, 'The Alerts tab lists what needs attention, such as missing mandatory documents and new requirement updates. Tap an alert to jump to the right screen, or use Clear All.', []],
     [/(set ?up|configure|add|change).*(journey|trip)|journey (set ?up|details)/, 'Open Home and tap Configure Journey. Choose your purpose, border post, travel date and travel mode, then generate your requirements.', ['What am I still missing?']],
     [/profile|passport number|emergency contact/, 'Open Profile to edit your personal details, passport information and emergency contact. A complete profile improves your requirement list.', []],

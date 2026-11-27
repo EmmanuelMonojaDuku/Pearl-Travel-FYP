@@ -2,13 +2,13 @@ import type { UserProfile } from '../types';
 import { isTravellerProfileComplete } from './authStorage';
 
 const API_BASE_URL = (
-  import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000/api/v1'
+  import.meta.env?.VITE_API_BASE_URL || 'http://localhost:4000/api/v1'
 ).replace(/\/+$/, '');
 
 // Admin emails can be supplied via VITE_ADMIN_EMAILS.
 // The fallback list includes the original admin address.
 const BOOTSTRAP_ADMIN_EMAILS = new Set(
-  (import.meta.env.VITE_ADMIN_EMAILS || 'emmanuelmonojaduku@gmail.com')
+  (import.meta.env?.VITE_ADMIN_EMAILS || 'emmanuelmonojaduku@gmail.com')
     .split(',')
     .map((email) => email.trim().toLowerCase())
     .filter(Boolean)
