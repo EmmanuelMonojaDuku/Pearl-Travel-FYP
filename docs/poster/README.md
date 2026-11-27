@@ -1,5 +1,7 @@
 # Research poster (DSC3114, Milestone One)
 
+Redesigned 27 Nov 2026: larger type, shorter text, new architecture diagram, status table checked against the running system, screenshots from the current app (`assets/scr-*.png`, captured at 390x844).
+
 - `Pearl-Travel-Poster-A1.pdf` – print file, A1 landscape (841 × 594 mm), vector text. Same ratio as A0, so it can be enlarged without changes.
 - `poster-preview.png` – screen preview.
 - `poster.html` – editable source (open in Chrome). `assets/` holds the screenshots and logo.
