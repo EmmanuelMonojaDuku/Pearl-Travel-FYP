@@ -10,9 +10,11 @@
   - run from the project root: `npx tsx docs/poster/evidence/assistant-benchmark-heldout.mts`
 
 Numbers on the poster and where they come from
-- 22/22 API tests: `cd api && npx vitest run`
-- 39 browser checks and 0 contrast failures across 50 screen checks: scripted Playwright and axe runs against `npm run demo`
-- 36 test profiles → 3 distinct rule sets: profile matrix over 6 nationalities × 6 purposes using `src/data/travelRequirementsEngine.ts`
+- 65/65 API tests: `cd api && TEST_DATABASE_URL=... npx vitest run` (real PostgreSQL, see root README)
+- 15/15 end-to-end checks: `npm run test:e2e` (real API + built web app)
+- 4/4 mobile tests: `cd mobile && npm test`
+- 36 profiles -> 7 distinct checklists: `npx tsx docs/poster/evidence/profile-matrix.mts`
+- Assistant benchmark (21/27) measures the on-device keyword fallback only. The live RAG assistant has not been benchmarked (no API key in the build environment).
 
 Update the "Not yet available" box (Results panel) when survey, interview and SUS/TAM data exist.
 The UCU logo in `assets/ucu-logo.png` is low resolution (copied from the proposal cover); replace it with the official high-resolution file before printing.

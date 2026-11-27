@@ -63,7 +63,8 @@ describe.skipIf(!hasDatabase)('signed QR pass (real PostgreSQL)', () => {
     claims.sc = 100;
     const forgedPayload = `${h}.${Buffer.from(JSON.stringify(claims)).toString('base64url')}.${s}`;
     expect((await verify(officer, forgedPayload)).json().data).toMatchObject({ outcome: 'invalid', reason: 'bad_signature' });
-    const flipped = `${h}.${p}.${s!.slice(0, -2)}AA`;
+    const mid = Math.floor(s!.length / 2);
+    const flipped = `${h}.${p}.${s!.slice(0, mid)}${s![mid] === 'A' ? 'B' : 'A'}${s!.slice(mid + 1)}`;
     expect((await verify(officer, flipped)).json().data.outcome).toBe('invalid');
     expect((await verify(officer, `PT1.${'a'.repeat(30)}.${'b'.repeat(30)}`)).json().data.outcome).toBe('invalid');
     expect((await verify(officer, 'PT1.garbage.garbage')).statusCode).toBe(400);

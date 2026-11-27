@@ -211,18 +211,18 @@
       <text x="500" y="246" text-anchor="middle" font-size="20" font-weight="700" fill="#92560A">design feedback</text>
     </svg>
 
-    <h3>System architecture (designed) and what is built</h3>
+    <h3>System architecture and what is built</h3>
     <svg viewBox="0 0 1000 438" width="100%" role="img" aria-label="Layered system architecture">
       <style>
         .ly{fill:#fff;stroke:#CBD5E1;stroke-width:2.5}.lt{font-size:19px;font-weight:800;fill:#92560A;letter-spacing:.8px;text-transform:uppercase}
         .bx{fill:#F1F5F9;stroke:#CBD5E1;stroke-width:2}.bt{font-size:19.5px;font-weight:700;fill:#0F172A;text-anchor:middle}
       </style>
       <!-- Presentation -->
-      <rect class="ly" x="2" y="2" width="996" height="108" rx="14"/><text class="lt" x="18" y="30">Presentation (React web app, mobile-first)</text>
+      <rect class="ly" x="2" y="2" width="996" height="108" rx="14"/><text class="lt" x="18" y="30">Presentation (installable web app, React Native app)</text>
       <g><rect class="bx" x="18" y="42" width="226" height="56" rx="10"/><text class="bt" x="131" y="77">Traveller app</text>
       <rect class="bx" x="258" y="42" width="226" height="56" rx="10"/><text class="bt" x="371" y="77">Officer module</text>
       <rect class="bx" x="498" y="42" width="226" height="56" rx="10"/><text class="bt" x="611" y="77">Admin module</text>
-      <rect class="bx" x="738" y="42" width="244" height="56" rx="10"/><text class="bt" x="860" y="77">Offline cache</text></g>
+      <rect class="bx" x="738" y="42" width="244" height="56" rx="10"/><text class="bt" x="860" y="77">Offline PWA cache</text></g>
       <!-- API -->
       <rect class="ly" x="2" y="122" width="996" height="86" rx="14"/><text class="lt" x="18" y="150">API and security (Node.js)</text>
       <g><rect class="bx" x="18" y="160" width="226" height="40" rx="10"/><text class="bt" x="131" y="187" font-size="18">REST API</text>
@@ -235,20 +235,20 @@
       <rect class="bx" x="200" y="260" width="190" height="58" rx="10"/><text class="bt" x="295" y="296" font-size="17">Rule engine</text>
       <rect class="bx" x="402" y="260" width="196" height="58" rx="10"/><text class="bt" x="500" y="287" font-size="16">Checklist &amp;</text><text class="bt" x="500" y="307" font-size="16">readiness</text>
       <rect class="bx" x="610" y="260" width="120" height="58" rx="10"/><text class="bt" x="670" y="296" font-size="17">QR</text>
-      <rect class="bx" x="742" y="260" width="240" height="58" rx="10"/><text class="bt" x="862" y="287" font-size="16">Assistant</text><text class="bt" x="862" y="307" font-size="14.5" font-weight="500">keyword retrieval</text></g>
+      <rect class="bx" x="742" y="260" width="240" height="58" rx="10"/><text class="bt" x="862" y="287" font-size="16">Assistant</text><text class="bt" x="862" y="307" font-size="14.5" font-weight="500">RAG + citations</text></g>
       <!-- Data -->
       <rect class="ly" x="2" y="340" width="996" height="96" rx="14"/><text class="lt" x="18" y="368">Data</text>
       <g><rect class="bx" x="18" y="378" width="226" height="48" rx="10"/><text class="bt" x="131" y="409" font-size="17.5">PostgreSQL</text>
       <rect class="bx" x="258" y="378" width="226" height="48" rx="10"/><text class="bt" x="371" y="409" font-size="17.5">Knowledge base</text>
-      <rect class="bx" x="498" y="378" width="226" height="48" rx="10"/><text class="bt" x="611" y="409" font-size="17.5">Browser storage</text>
-      <rect x="738" y="378" width="244" height="48" rx="10" fill="#fff" stroke="#94A3B8" stroke-width="2.5" stroke-dasharray="9 7"/><text class="bt" x="860" y="409" font-size="16.5" fill="#5B6B83">Vector store + LLM</text></g>
+      <rect class="bx" x="498" y="378" width="226" height="48" rx="10"/><text class="bt" x="611" y="409" font-size="17.5">Device cache</text>
+      <rect class="bx" x="738" y="378" width="244" height="48" rx="10"/><text class="bt" x="860" y="409" font-size="16.5">Embeddings + LLM</text></g>
       <!-- status dots -->
       <g stroke="#fff" stroke-width="2.5">
         <!-- built = green -->
-        <circle cx="232" cy="52" r="9" fill="#16A34A"/><circle cx="472" cy="52" r="9" fill="#EAB308"/><circle cx="712" cy="52" r="9" fill="#EAB308"/><circle cx="970" cy="52" r="9" fill="#EAB308"/>
+        <circle cx="232" cy="52" r="9" fill="#16A34A"/><circle cx="472" cy="52" r="9" fill="#16A34A"/><circle cx="712" cy="52" r="9" fill="#16A34A"/><circle cx="970" cy="52" r="9" fill="#16A34A"/>
         <circle cx="232" cy="170" r="9" fill="#16A34A"/><circle cx="472" cy="170" r="9" fill="#16A34A"/><circle cx="712" cy="170" r="9" fill="#16A34A"/><circle cx="970" cy="170" r="9" fill="#16A34A"/>
-        <circle cx="176" cy="270" r="9" fill="#16A34A"/><circle cx="378" cy="270" r="9" fill="#16A34A"/><circle cx="586" cy="270" r="9" fill="#16A34A"/><circle cx="718" cy="270" r="9" fill="#EAB308"/><circle cx="970" cy="270" r="9" fill="#EAB308"/>
-        <circle cx="232" cy="388" r="9" fill="#16A34A"/><circle cx="472" cy="388" r="9" fill="#16A34A"/><circle cx="712" cy="388" r="9" fill="#16A34A"/><circle cx="970" cy="388" r="9" fill="#CBD5E1"/>
+        <circle cx="176" cy="270" r="9" fill="#16A34A"/><circle cx="378" cy="270" r="9" fill="#16A34A"/><circle cx="586" cy="270" r="9" fill="#16A34A"/><circle cx="718" cy="270" r="9" fill="#16A34A"/><circle cx="970" cy="270" r="9" fill="#EAB308"/>
+        <circle cx="232" cy="388" r="9" fill="#16A34A"/><circle cx="472" cy="388" r="9" fill="#16A34A"/><circle cx="712" cy="388" r="9" fill="#16A34A"/><circle cx="970" cy="388" r="9" fill="#EAB308"/>
       </g>
     </svg>
     <div class="legend"><span><svg width="14" height="14" viewBox="0 0 14 14" style="vertical-align:-2px"><circle cx="7" cy="7" r="6" fill="#16A34A"/></svg> built</span><span><svg width="14" height="14" viewBox="0 0 14 14" style="vertical-align:-2px"><circle cx="7" cy="7" r="6" fill="#EAB308"/></svg> partly built</span><span><svg width="14" height="14" viewBox="0 0 14 14" style="vertical-align:-2px"><circle cx="7" cy="7" r="6" fill="#CBD5E1"/></svg> planned</span></div>
@@ -285,15 +285,15 @@
       <tr><td><b>Rule engine by nationality</b></td><td><span class="chip done">Done</span></td></tr>
       <tr><td><b>Checklist and readiness score</b></td><td><span class="chip done">Done</span></td></tr>
       <tr><td><b>Malaba guide and videos</b></td><td><span class="chip done">Done</span></td></tr>
-      <tr><td><b>Assistant</b> (keyword KB, no LLM)</td><td><span class="chip part">Partial</span></td></tr>
-      <tr><td><b>QR pass</b> (unsigned, shows name)</td><td><span class="chip part">Partial</span></td></tr>
-      <tr><td><b>Offline use</b> (data on device only)</td><td><span class="chip part">Partial</span></td></tr>
-      <tr><td><b>Officer and admin modules</b></td><td><span class="chip part">Partial</span></td></tr>
-      <tr><td><b>Web app</b>, not React Native</td><td><span class="chip chg">Changed</span></td></tr>
-      <tr><td><b>Rules by travel purpose</b></td><td><span class="chip plan">Planned</span></td></tr>
+      <tr><td><b>Rules by nationality and purpose</b></td><td><span class="chip done">Done</span></td></tr>
+      <tr><td><b>Signed QR pass</b> (no personal data)</td><td><span class="chip done">Done</span></td></tr>
+      <tr><td><b>Offline PWA</b> (cache and sync)</td><td><span class="chip done">Done</span></td></tr>
+      <tr><td><b>Officer and admin</b> (database, audit)</td><td><span class="chip done">Done</span></td></tr>
+      <tr><td><b>RAG assistant</b> (needs LLM key)</td><td><span class="chip part">Live LLM untested</span></td></tr>
+      <tr><td><b>React Native app</b></td><td><span class="chip part">Device untested</span></td></tr>
       <tr><td><b>User evaluation</b> (survey, SUS, TAM)</td><td><span class="chip plan">Planned</span></td></tr>
     </table>
-    <p class="small muted" style="margin-top:2.5mm">Partial: the assistant matches keywords in a curated knowledge base instead of using a language model; the QR pass is advisory but not yet a signed, anonymous token; there is no offline app shell yet; officer and admin data is kept in the browser. Google sign-in works once a client ID is set. Built with React 19, Vite, Node.js and PostgreSQL.</p>
+    <p class="small muted" style="margin-top:2.5mm">RAG is tested with stand-in model providers; a live model needs a server API key and is not yet benchmarked. The mobile app bundles and passes logic tests but has not run on a phone.</p>
   </div>
 </section>
 
@@ -303,10 +303,10 @@
   <div class="card">
     <h2><span class="n">9</span>Results so far</h2>
     <div class="kpis">
-      <div class="kpi"><div class="v">22/22</div><div class="l">automated API tests passed</div></div>
-      <div class="kpi"><div class="v">39</div><div class="l">browser checks passed: sign-up, checklist, QR scan, officer review</div></div>
-      <div class="kpi"><div class="v">0</div><div class="l">colour-contrast failures across 50 screen checks (axe)</div></div>
-      <div class="kpi"><div class="v">78%</div><div class="l">assistant correct on 27 unseen questions (21/27)</div></div>
+      <div class="kpi"><div class="v">65/65</div><div class="l">API tests passed on real PostgreSQL (QR, rules, roles, RAG)</div></div>
+      <div class="kpi"><div class="v">15/15</div><div class="l">end-to-end checks: offline use, signed QR, tamper rejection, admin review</div></div>
+      <div class="kpi"><div class="v">4/4</div><div class="l">mobile checklist tests: nationality, purpose, missing input</div></div>
+      <div class="kpi"><div class="v">78%</div><div class="l">keyword fallback correct on 27 unseen questions (21/27)</div></div>
     </div>
 
     <h3 style="margin-top:1mm">Assistant benchmark (unseen questions)</h3>
@@ -326,14 +326,15 @@
     </svg>
     <p class="small" style="margin-top:1mm"><b>Method:</b> expected answers fixed before testing. A first 39-question run scored 34/39 (87%) and exposed 5 defects, all fixed. The 27 unseen questions above were then run once and <b>not tuned</b>. Weak spots: paraphrases and unsupported questions, which motivates semantic (RAG) retrieval.</p>
 
-    <h3>Personalised requirements (36 test profiles)</h3>
+    <h3>Personalised checklists (36 test profiles)</h3>
     <table>
-      <tr><th style="width:30%">Group</th><th>Visa rule shown</th><th style="width:21%">Reqs</th></tr>
-      <tr><td><b>Citizen</b></td><td>Citizen entry, no visa</td><td>7</td></tr>
-      <tr><td><b>EAC</b> (Kenya, Rwanda)</td><td>Free movement</td><td>8</td></tr>
-      <tr><td><b>Other</b> (US, India, Eritrea)</td><td>e-Visa mandatory</td><td>8</td></tr>
+      <tr><th style="width:30%">Group</th><th>Visa rule shown</th><th style="width:21%">Tourism items</th></tr>
+      <tr><td><b>Citizen</b> (Uganda)</td><td>Citizen entry, no visa</td><td>5</td></tr>
+      <tr><td><b>EAC</b> (Kenya, Rwanda)</td><td>Free movement</td><td>6</td></tr>
+      <tr><td><b>Visa-exempt</b> (Zambia)</td><td>No visa, entry rules apply</td><td>6</td></tr>
+      <tr><td><b>Other</b> (US, India)</td><td>e-Visa mandatory</td><td>6</td></tr>
     </table>
-    <p class="small muted" style="margin-top:1.6mm">6 nationalities × 6 purposes gave 3 distinct rule sets with identical output for identical input (deterministic). Purpose-specific rules are not built yet.</p>
+    <p class="small muted" style="margin-top:1.6mm">6 nationalities × 6 purposes gave 7 distinct checklists; purpose adds documents (invitation, admission letter, work permit, transit proof). Identical input always gives identical output. Rules are data that administrators edit and approve.</p>
 
     <div class="pending"><p><b>Not yet available:</b> traveller survey, official interviews and SUS/TAM usability results. They are planned and will be reported descriptively.</p></div>
   </div>
@@ -343,8 +344,8 @@
     <ul>
       <li><b>Expected:</b> travellers who know what to bring and which steps follow, with sources shown for every rule.</li>
       <li><b>Not claimed:</b> shorter queues or faster processing. That needs a separate impact study.</li>
-      <li><b>Limits:</b> small samples at one site; rules reflect the verification date; prototype not deployed.</li>
-      <li><b>Next:</b> signed no-personal-data QR, LLM-RAG assistant, offline app shell, other borders, Swahili interface, official integration.</li>
+      <li><b>Limits:</b> small samples, one site; rules await official verification; not deployed.</li>
+      <li><b>Next:</b> benchmark live RAG, test mobile on devices, user evaluation, other borders, Swahili.</li>
     </ul>
     <div class="refs" style="margin-top:auto;padding-top:2mm;border-top:0.3mm solid var(--line)">
       <p><b>Key references:</b> Hevner et al. (2004) <i>MIS Quarterly</i>; Peffers et al. (2007) <i>JMIS</i>; Davis (1989) <i>MIS Quarterly</i>; Brooke (1996) SUS; Lewis et al. (2020) RAG; East African Community (2016) One Stop Border Posts Act; Parliament of Uganda (2019) Data Protection and Privacy Act.</p>
