@@ -28,7 +28,7 @@ npm run dev:full
 ```
 Open http://localhost:3000 and use **Demo access** on the login screen. These are real server accounts (password `PearlDemo#2026`, change with `DEMO_PASSWORD`): `traveller.demo@`, `officer.demo@`, `admin.demo@` and `reviewer.demo@pearltravel.ug`. Two administrators exist because an author cannot approve their own content.
 
-Windows PowerShell: set variables with `$env:NAME="value"`; the commands above are otherwise identical.
+**Windows PowerShell 5** does not accept `&&` or `(cd api && ...)`. Run each command on its own line: `cd api`, `npm install`, `npm run migrate`, `npm run seed:demo`, `cd ..`, `npm install`, `npm run dev:full`. Create `api\.env` with `copy api\.env.example api\.env` and create an empty `pearl_travel` database first.
 
 ### Configuration (api/.env, never in the web app)
 
