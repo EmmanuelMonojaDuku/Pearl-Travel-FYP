@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "name": "Pearl Travel",
+    "slug": "pearl-travel",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "icon": "./assets/icon.png",
+    "splash": { "image": "./assets/icon.png", "resizeMode": "contain", "backgroundColor": "#0F172A" },
+    "android": { "package": "ug.pearltravel.app", "adaptiveIcon": { "foregroundImage": "./assets/icon.png", "backgroundColor": "#0F172A" }, "permissions": ["CAMERA"] },
+    "ios": { "bundleIdentifier": "ug.pearltravel.app", "infoPlist": { "NSCameraUsageDescription": "Pearl Travel uses the camera so officers can scan a traveller's QR pass." } },
+    "plugins": ["expo-secure-store", ["expo-camera", { "cameraPermission": "Pearl Travel uses the camera so officers can scan a traveller's QR pass." }]],
+    "extra": { "apiUrl": "http://10.0.2.2:4000" }
+  }
+}
