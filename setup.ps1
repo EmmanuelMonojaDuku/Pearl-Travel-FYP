@@ -5,6 +5,10 @@ function Secret { -join ((48..57) + (65..90) + (97..122) | Get-Random -Count 48 
 
 Write-Host "1/5 Checking PostgreSQL..." -ForegroundColor Yellow
 if (-not (Get-Command psql -ErrorAction SilentlyContinue)) {
+  $found = Get-ChildItem "C:\Program Files\PostgreSQL\*\bin\psql.exe" -ErrorAction SilentlyContinue | Sort-Object FullName -Descending | Select-Object -First 1
+  if ($found) { $env:Path = $found.DirectoryName + ";" + $env:Path; Write-Host "Found PostgreSQL at $($found.DirectoryName)" }
+}
+if (-not (Get-Command psql -ErrorAction SilentlyContinue)) {
   Write-Host "PostgreSQL (psql) was not found. Install it, then open a NEW PowerShell window and run this script again:" -ForegroundColor Red
   Write-Host "  winget install PostgreSQL.PostgreSQL.16"
   Write-Host "During the install, remember the password you choose for the 'postgres' user."
