@@ -1,0 +1,622 @@
+{
+ "version": 1,
+ "groups": {
+  "citizen": [
+   "Uganda"
+  ],
+  "eac": [
+   "Kenya",
+   "Tanzania",
+   "Rwanda",
+   "Burundi",
+   "South Sudan",
+   "Democratic Republic of the Congo",
+   "Somalia"
+  ],
+  "visaExempt": [
+   "Antigua",
+   "Bahamas",
+   "Barbados",
+   "Belize",
+   "Fiji",
+   "Gambia",
+   "Grenada",
+   "Jamaica",
+   "Malawi",
+   "Malta",
+   "Mauritius",
+   "Seychelles",
+   "Sierra Leone",
+   "Singapore",
+   "Solomon Islands",
+   "St. Vincent & Grenadines",
+   "Tonga",
+   "Vanuatu",
+   "Zambia",
+   "Zimbabwe"
+  ]
+ },
+ "rules": [
+  {
+   "code": "req-passport",
+   "category": "entry",
+   "title": "Valid Passport (6-Month Minimum Validity)",
+   "summary": "Passport must be valid for at least 6 months past your entry date.",
+   "simpleExplanation": "Immigration officers inspect your passport to check it has at least 6 months left before it expires and at least 2 full blank visa pages.",
+   "applicableCondition": "Mandatory for all international travelers entering Uganda.",
+   "officialSource": "Uganda Directorate of Citizenship & Immigration Control (DCIC)",
+   "mandatory": true,
+   "order": 10,
+   "version": 1,
+   "when": {},
+   "checklist": {
+    "id": "doc-passport",
+    "title": "Biometric / Regular Passport",
+    "description": "Minimum 6-month validity with at least 2 consecutive blank stamp pages.",
+    "category": "passport",
+    "guidanceNote": "Carry the physical document. Digital scans on phones are not accepted for entry.",
+    "issuingAuthority": "Your national passport authority"
+   },
+   "verification": {
+    "status": "pending",
+    "verifiedAt": null,
+    "note": "Awaiting official verification"
+   }
+  },
+  {
+   "code": "req-visa-citizen",
+   "category": "visa",
+   "title": "Ugandan Citizen Entry (National ID or Passport)",
+   "summary": "No visa required. Present Ugandan passport or National ID card.",
+   "simpleExplanation": "As a returning citizen of the Republic of Uganda you have the right of entry. Present your valid Ugandan passport or National ID card.",
+   "applicableCondition": "Applies to Ugandan citizens.",
+   "officialSource": "Ministry of Internal Affairs Uganda",
+   "mandatory": true,
+   "order": 20,
+   "version": 1,
+   "when": {
+    "nationalityGroups": [
+     "citizen"
+    ]
+   },
+   "checklist": {
+    "id": "doc-visa",
+    "title": "Citizen Identification (Passport / NIN)",
+    "description": "Valid Ugandan ID or Passport",
+    "category": "visa",
+    "guidanceNote": "No advance visa fee required."
+   },
+   "verification": {
+    "status": "pending",
+    "verifiedAt": null,
+    "note": "Awaiting official verification"
+   }
+  },
+  {
+   "code": "req-visa-eac",
+   "category": "visa",
+   "title": "East African Community (EAC) Free Movement",
+   "summary": "Visa-free entry under EAC Common Market Protocol.",
+   "simpleExplanation": "Citizens of {nationality} can enter Uganda without a visa under EAC arrangements. Present a valid passport or a recognised EAC identity document.",
+   "applicableCondition": "Applicable to citizens of {nationality}.",
+   "officialSource": "EAC Secretariat & Uganda Immigration",
+   "mandatory": true,
+   "order": 20,
+   "version": 1,
+   "when": {
+    "nationalityGroups": [
+     "eac"
+    ]
+   },
+   "checklist": {
+    "id": "doc-visa",
+    "title": "EAC Travel Entry / Free Pass",
+    "description": "EAC Treaty Visa Exemption Entry",
+    "category": "visa",
+    "guidanceNote": "No advance visa fee required."
+   },
+   "verification": {
+    "status": "pending",
+    "verifiedAt": null,
+    "note": "Awaiting official verification"
+   }
+  },
+  {
+   "code": "req-visa-exempt",
+   "category": "visa",
+   "title": "Bilateral Visa Exemption (Up to 90 Days)",
+   "summary": "Nationals of {nationality} are exempt from tourist/business visas.",
+   "simpleExplanation": "Under reciprocal agreements, visitors from {nationality} can enter without a visa for short visits. An entry endorsement stamp is issued at immigration.",
+   "applicableCondition": "Short-term leisure/business visits.",
+   "officialSource": "Uganda Ministry of Foreign Affairs",
+   "mandatory": true,
+   "order": 20,
+   "version": 1,
+   "when": {
+    "nationalityGroups": [
+     "visa_exempt"
+    ]
+   },
+   "checklist": {
+    "id": "doc-visa",
+    "title": "Visa-Exempt Country Status",
+    "description": "Reciprocal 90-Day Entry Stamp",
+    "category": "visa",
+    "guidanceNote": "No advance visa fee required."
+   },
+   "verification": {
+    "status": "pending",
+    "verifiedAt": null,
+    "note": "Awaiting official verification"
+   }
+  },
+  {
+   "code": "req-visa-evisa",
+   "category": "visa",
+   "title": "Mandatory Uganda Electronic Visa (e-Visa)",
+   "summary": "Must be applied for and approved online before departure.",
+   "simpleExplanation": "Uganda no longer issues visas on arrival. Apply online at visas.immigration.go.ug and carry the printed approval letter.",
+   "applicableCondition": "Mandatory for citizens of {nationality} traveling for {purpose}.",
+   "officialSource": "Directorate of Citizenship and Immigration Control (DCIC)",
+   "mandatory": true,
+   "order": 20,
+   "version": 1,
+   "when": {
+    "nationalityGroups": [
+     "visa_required"
+    ],
+    "excludePurposes": [
+     "transit"
+    ],
+    "excludeDestinationKeywords": [
+     "multi-country"
+    ]
+   },
+   "checklist": {
+    "id": "doc-visa",
+    "title": "Uganda Electronic Visa (Approval Letter)",
+    "description": "Printed official e-Visa approval letter from visas.immigration.go.ug",
+    "category": "visa",
+    "guidanceNote": "Do not use third-party visa sites. Only visas.immigration.go.ug is official."
+   },
+   "verification": {
+    "status": "pending",
+    "verifiedAt": null,
+    "note": "Awaiting official verification"
+   }
+  },
+  {
+   "code": "req-visa-eatv",
+   "category": "visa",
+   "title": "East Africa Tourist Visa (Uganda, Rwanda, Kenya)",
+   "summary": "Joint multi-entry visa across 3 East African partner states.",
+   "simpleExplanation": "Because you plan to travel across Uganda and neighbouring countries, apply for the East Africa Tourist Visa through the immigration authority of the first country you enter.",
+   "applicableCondition": "Multi-destination East Africa travel.",
+   "officialSource": "Uganda Immigration e-Visa Portal (visas.immigration.go.ug)",
+   "mandatory": true,
+   "order": 20,
+   "version": 1,
+   "when": {
+    "nationalityGroups": [
+     "visa_required"
+    ],
+    "excludePurposes": [
+     "transit"
+    ],
+    "destinationKeywords": [
+     "multi-country"
+    ]
+   },
+   "checklist": {
+    "id": "doc-visa",
+    "title": "East Africa Tourist Visa",
+    "description": "Approved joint visa for Uganda, Kenya and Rwanda",
+    "category": "visa",
+    "guidanceNote": "Apply through the first country you enter."
+   },
+   "verification": {
+    "status": "pending",
+    "verifiedAt": null,
+    "note": "Awaiting official verification"
+   }
+  },
+  {
+   "code": "req-visa-transit",
+   "category": "visa",
+   "title": "Transit Visa for Passing Through Uganda",
+   "summary": "A short transit visa applies when you pass through Uganda to another country.",
+   "simpleExplanation": "If you only pass through Uganda on a direct overland route you need a transit visa, and proof that you can enter your next country.",
+   "applicableCondition": "Visa-required nationals travelling in transit.",
+   "officialSource": "DCIC Border Management Directorate",
+   "mandatory": true,
+   "order": 20,
+   "version": 1,
+   "when": {
+    "nationalityGroups": [
+     "visa_required"
+    ],
+    "purposes": [
+     "transit"
+    ]
+   },
+   "checklist": {
+    "id": "doc-visa",
+    "title": "Uganda Transit Visa",
+    "description": "Transit visa for a direct overland route",
+    "category": "visa",
+    "guidanceNote": "Confirm the current fee and allowed days on the official portal."
+   },
+   "verification": {
+    "status": "pending",
+    "verifiedAt": null,
+    "note": "Awaiting official verification"
+   }
+  },
+  {
+   "code": "req-yellow-fever",
+   "category": "health",
+   "title": "Yellow Fever Vaccination Certificate (Strictly Mandatory)",
+   "summary": "Mandatory for all arrivals aged 1 year and above.",
+   "simpleExplanation": "Port Health officers inspect the yellow card before you reach immigration. The vaccine must have been given at least 10 days before arrival.",
+   "applicableCondition": "Strict requirement for all travelers entering Uganda.",
+   "officialSource": "Ministry of Health Uganda & WHO Guidelines",
+   "mandatory": true,
+   "order": 30,
+   "version": 1,
+   "when": {},
+   "checklist": {
+    "id": "doc-yellow-fever",
+    "title": "Yellow Fever Vaccination Yellow Card",
+    "description": "Official WHO International Certificate of Vaccination or Prophylaxis.",
+    "category": "health",
+    "guidanceNote": "Must be given at least 10 days before arrival. Checked by Port Health before immigration."
+   },
+   "verification": {
+    "status": "pending",
+    "verifiedAt": null,
+    "note": "Awaiting official verification"
+   }
+  },
+  {
+   "code": "req-return-ticket",
+   "category": "entry",
+   "title": "Confirmed Return or Onward Ticket",
+   "summary": "Proof of departure within the authorised stay.",
+   "simpleExplanation": "Border officers may ask for proof that you will leave Uganda within your permitted stay.",
+   "applicableCondition": "Mandatory for non-residents and visitors.",
+   "officialSource": "Port Immigration",
+   "mandatory": true,
+   "order": 40,
+   "version": 1,
+   "when": {
+    "excludeNationalityGroups": [
+     "citizen"
+    ],
+    "excludeTravellerTypes": [
+     "resident"
+    ],
+    "excludePurposes": [
+     "transit"
+    ]
+   },
+   "checklist": {
+    "id": "doc-return-ticket",
+    "title": "Confirmed Return / Onward Itinerary",
+    "description": "Proof of travel leaving Uganda within your authorised stay.",
+    "category": "travel",
+    "guidanceNote": "A phone e-ticket or a printout is accepted."
+   },
+   "verification": {
+    "status": "pending",
+    "verifiedAt": null,
+    "note": "Awaiting official verification"
+   }
+  },
+  {
+   "code": "req-accommodation",
+   "category": "entry",
+   "title": "Accommodation Booking or Local Host Details",
+   "summary": "Hotel confirmation, lodge reservation, or host address.",
+   "simpleExplanation": "You will be asked for the address and phone number of where you will stay in Uganda.",
+   "applicableCondition": "Required on the arrival card.",
+   "officialSource": "Uganda Tourism Board & DCIC",
+   "mandatory": true,
+   "order": 50,
+   "version": 1,
+   "when": {
+    "excludePurposes": [
+     "transit"
+    ]
+   },
+   "checklist": {
+    "id": "doc-accommodation",
+    "title": "Proof of Accommodation / Booking",
+    "description": "Hotel voucher, booking confirmation, or signed host invitation with a phone number.",
+    "category": "supporting",
+    "guidanceNote": "Needed to complete the entry card."
+   },
+   "verification": {
+    "status": "pending",
+    "verifiedAt": null,
+    "note": "Awaiting official verification"
+   }
+  },
+  {
+   "code": "req-wildlife-permit",
+   "category": "entry",
+   "title": "Uganda Wildlife Authority (UWA) Tracking Permit",
+   "summary": "Required for gorilla trekking in Bwindi / chimpanzees in Kibale.",
+   "simpleExplanation": "Permits are booked in advance through UWA or a licensed tour operator. Rangers check the voucher at the park gate.",
+   "applicableCondition": "Visiting Bwindi, Mgahinga or Kibale National Parks.",
+   "officialSource": "Uganda Wildlife Authority (UWA)",
+   "mandatory": true,
+   "order": 60,
+   "version": 1,
+   "when": {
+    "destinationKeywords": [
+     "Bwindi",
+     "Kibale"
+    ]
+   },
+   "checklist": {
+    "id": "doc-wildlife-permit",
+    "title": "UWA Gorilla / Chimpanzee Trekking Permit",
+    "description": "Official Uganda Wildlife Authority tracking voucher.",
+    "category": "travel",
+    "guidanceNote": "Show it at the park briefing centre."
+   },
+   "verification": {
+    "status": "pending",
+    "verifiedAt": null,
+    "note": "Awaiting official verification"
+   }
+  },
+  {
+   "code": "req-travel-insurance",
+   "category": "health",
+   "title": "Travel Medical & Emergency Evacuation Cover",
+   "summary": "Strongly recommended, especially for safaris.",
+   "simpleExplanation": "Not checked at immigration, but cover that includes medical evacuation is strongly advised for remote areas.",
+   "applicableCondition": "Recommended for all travelers.",
+   "officialSource": "Pearl Travel Traveller Advisory",
+   "mandatory": false,
+   "order": 70,
+   "version": 1,
+   "when": {},
+   "checklist": {
+    "id": "doc-travel-insurance",
+    "title": "Travel & Medical Insurance",
+    "description": "Includes emergency treatment and evacuation.",
+    "category": "travel",
+    "guidanceNote": "Recommended for safaris and remote parks."
+   },
+   "verification": {
+    "status": "pending",
+    "verifiedAt": null,
+    "note": "Awaiting official verification"
+   }
+  },
+  {
+   "code": "req-malaba-osbp",
+   "category": "entry",
+   "title": "Joint Immigration Clearance at Malaba One-Stop Border Post (OSBP)",
+   "summary": "Kenya-Uganda joint clearance in one terminal.",
+   "simpleExplanation": "Under the EAC OSBP arrangement you stop once on the Ugandan side. Paired immigration and health officers process your exit and entry together.",
+   "applicableCondition": "Crossing at Malaba OSBP.",
+   "officialSource": "EAC OSBP Secretariat & DCIC",
+   "mandatory": true,
+   "order": 80,
+   "version": 1,
+   "when": {
+    "borderPoints": [
+     "Malaba"
+    ]
+   },
+   "checklist": null,
+   "verification": {
+    "status": "pending",
+    "verifiedAt": null,
+    "note": "Awaiting official verification"
+   }
+  },
+  {
+   "code": "req-road-vehicle-clearance",
+   "category": "customs",
+   "title": "Cross-Border Vehicle Clearance & COMESA Insurance",
+   "summary": "Required for cars, tour vehicles and trucks crossing by road.",
+   "simpleExplanation": "Drivers carry the original logbook and COMESA Yellow Card insurance and obtain a URA Temporary Movement Permit (Form C32).",
+   "applicableCondition": "Overland road travel.",
+   "officialSource": "Uganda Revenue Authority (URA) Customs",
+   "mandatory": true,
+   "order": 90,
+   "version": 1,
+   "when": {
+    "travelModes": [
+     "road"
+    ]
+   },
+   "checklist": null,
+   "verification": {
+    "status": "pending",
+    "verifiedAt": null,
+    "note": "Awaiting official verification"
+   }
+  },
+  {
+   "code": "req-exit-customs",
+   "category": "exit",
+   "title": "Exit Inspection & Souvenir Customs Clearance",
+   "summary": "Security screening and wildlife-product clearance on departure.",
+   "simpleExplanation": "Allow time for clearance when leaving. Exporting protected wildlife products, untreated seeds or minerals without permits is prohibited.",
+   "applicableCondition": "Departure from Uganda.",
+   "officialSource": "Uganda Revenue Authority (URA Customs)",
+   "mandatory": true,
+   "order": 100,
+   "version": 1,
+   "when": {},
+   "checklist": null,
+   "verification": {
+    "status": "pending",
+    "verifiedAt": null,
+    "note": "Awaiting official verification"
+   }
+  },
+  {
+   "code": "req-purpose-business",
+   "category": "entry",
+   "title": "Business Visit: Invitation or Host Company Letter",
+   "summary": "Often requested for business visits.",
+   "simpleExplanation": "Carry a letter from the company or organisation you are visiting, with contact details, in case officers ask about the purpose of your trip.",
+   "applicableCondition": "Travelling for business.",
+   "officialSource": "Seeded from prototype guidance; to be verified with DCIC",
+   "mandatory": false,
+   "order": 110,
+   "version": 1,
+   "when": {
+    "purposes": [
+     "business"
+    ],
+    "excludeNationalityGroups": [
+     "citizen"
+    ]
+   },
+   "checklist": {
+    "id": "doc-purpose-business",
+    "title": "Business Invitation / Host Company Letter",
+    "description": "Letter from the host company or organisation with contact details.",
+    "category": "supporting",
+    "guidanceNote": "Keep a printed copy."
+   },
+   "verification": {
+    "status": "pending",
+    "verifiedAt": null,
+    "note": "Awaiting official verification"
+   }
+  },
+  {
+   "code": "req-purpose-studies",
+   "category": "entry",
+   "title": "Study: Admission Letter",
+   "summary": "Proof that you are joining a school or programme.",
+   "simpleExplanation": "Carry the admission or enrolment letter from your institution. Long stays may need a student pass; check with the institution and DCIC.",
+   "applicableCondition": "Travelling to study.",
+   "officialSource": "Seeded from prototype guidance; to be verified with DCIC",
+   "mandatory": false,
+   "order": 110,
+   "version": 1,
+   "when": {
+    "purposes": [
+     "studies"
+    ],
+    "excludeNationalityGroups": [
+     "citizen"
+    ]
+   },
+   "checklist": {
+    "id": "doc-purpose-studies",
+    "title": "Admission / Enrolment Letter",
+    "description": "Letter from your school, university or programme.",
+    "category": "supporting",
+    "guidanceNote": "Ask the institution about a student pass for long stays."
+   },
+   "verification": {
+    "status": "pending",
+    "verifiedAt": null,
+    "note": "Awaiting official verification"
+   }
+  },
+  {
+   "code": "req-purpose-family",
+   "category": "entry",
+   "title": "Family Visit: Host Invitation and Contact Details",
+   "summary": "Details of the relative you are visiting.",
+   "simpleExplanation": "Carry your host's name, address and phone number, and an invitation letter if possible.",
+   "applicableCondition": "Visiting family or friends.",
+   "officialSource": "Seeded from prototype guidance; to be verified with DCIC",
+   "mandatory": false,
+   "order": 110,
+   "version": 1,
+   "when": {
+    "purposes": [
+     "family"
+    ],
+    "excludeNationalityGroups": [
+     "citizen"
+    ]
+   },
+   "checklist": {
+    "id": "doc-purpose-family",
+    "title": "Host Invitation and Contact Details",
+    "description": "Host name, address, phone number and an invitation letter if available.",
+    "category": "supporting",
+    "guidanceNote": "Keep the host reachable by phone on arrival day."
+   },
+   "verification": {
+    "status": "pending",
+    "verifiedAt": null,
+    "note": "Awaiting official verification"
+   }
+  },
+  {
+   "code": "req-purpose-transit",
+   "category": "entry",
+   "title": "Transit: Entry Permission for Your Next Country",
+   "summary": "You must be able to enter the country you are travelling to.",
+   "simpleExplanation": "When passing through Uganda, carry a valid visa, residence permit or proof of citizenship for your final destination.",
+   "applicableCondition": "Travelling in transit through Uganda.",
+   "officialSource": "Seeded from prototype guidance (DCIC Border Management); to be verified",
+   "mandatory": true,
+   "order": 110,
+   "version": 1,
+   "when": {
+    "purposes": [
+     "transit"
+    ]
+   },
+   "checklist": {
+    "id": "doc-purpose-transit",
+    "title": "Entry Permission for Next Country",
+    "description": "Visa, residence permit or proof of citizenship for your final destination.",
+    "category": "travel",
+    "guidanceNote": "Officers may ask to see it."
+   },
+   "verification": {
+    "status": "pending",
+    "verifiedAt": null,
+    "note": "Awaiting official verification"
+   }
+  },
+  {
+   "code": "req-purpose-employment",
+   "category": "entry",
+   "title": "Work or Assignment: Permit or Employer Letter",
+   "summary": "Proof of your work assignment in Uganda.",
+   "simpleExplanation": "Carry your work permit, or a letter from your employer or organisation describing your assignment and its length.",
+   "applicableCondition": "Travelling for work, an NGO assignment or a posting.",
+   "officialSource": "Seeded from prototype guidance; to be verified with DCIC",
+   "mandatory": false,
+   "order": 110,
+   "version": 1,
+   "when": {
+    "purposes": [
+     "employment"
+    ],
+    "excludeNationalityGroups": [
+     "citizen"
+    ]
+   },
+   "checklist": {
+    "id": "doc-purpose-employment",
+    "title": "Work Permit / Employer Letter",
+    "description": "Work permit, or a letter from your employer about your assignment.",
+    "category": "supporting",
+    "guidanceNote": "Ask your employer which permit applies to your role."
+   },
+   "verification": {
+    "status": "pending",
+    "verifiedAt": null,
+    "note": "Awaiting official verification"
+   }
+  }
+ ]
+}

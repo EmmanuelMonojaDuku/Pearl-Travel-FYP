@@ -7,6 +7,17 @@ import { PostgresDatabaseClient } from './database/pool.js';
 import type { DatabaseClient } from './database/types.js';
 import { createAuthMiddleware } from './middleware/auth.js';
 import { adminRoutes } from './modules/admin/routes.js';
+import { adminManagementRoutes } from './modules/admin/management.js';
+import { AssistantService } from './modules/assistant/service.js';
+import { assistantRoutes } from './modules/assistant/routes.js';
+import { createProviders, type EmbeddingProvider, type LlmProvider } from './modules/assistant/providers.js';
+import { ContentService } from './modules/content/service.js';
+import { meRoutes } from './modules/me/routes.js';
+import { QrService } from './modules/qr/service.js';
+import { qrRoutes } from './modules/qr/routes.js';
+import { QrSigner } from './modules/qr/signing.js';
+import { RulesService } from './modules/rules/service.js';
+import { rulesRoutes } from './modules/rules/routes.js';
 import { PasswordService } from './modules/auth/password.js';
 import { type AuthRepository, PostgresAuthRepository } from './modules/auth/repository.js';
 import { authRoutes } from './modules/auth/routes.js';
@@ -20,6 +31,8 @@ export interface BuildAppOptions {
   db?: DatabaseClient;
   authRepository?: AuthRepository;
   emailService?: EmailService;
+  embeddingProvider?: EmbeddingProvider | null;
+  llmProvider?: LlmProvider | null;
   logger?: boolean;
 }
 
@@ -171,6 +184,28 @@ export async function buildApp(options: BuildAppOptions = {}): Promise<BuiltAppl
     authService,
     authMiddleware,
   });
+
+  const signer = new QrSigner(config.qr.privateKey, config.qr.keyId, config.nodeEnv !== 'production');
+  const rulesService = new RulesService(db);
+  const qrService = new QrService(db, signer, rulesService);
+
+  const providers = createProviders(config);
+  const assistant = new AssistantService(
+    db,
+    config,
+    options.embeddingProvider !== undefined ? options.embeddingProvider : providers.embeddings,
+    options.llmProvider !== undefined ? options.llmProvider : providers.llm
+  );
+  // Publishing guidance indexes it for semantic retrieval. Indexing problems never block publishing.
+  const contentService = new ContentService(db, async (kind, id) => {
+    if (kind === 'content') await assistant.indexContentItem(id).catch((e) => app.log.warn(e, 'KB indexing failed'));
+  });
+
+  await app.register(assistantRoutes, { prefix: '/api/v1/assistant', assistant, db, authMiddleware });
+  await app.register(meRoutes, { prefix: '/api/v1/me', db, authMiddleware });
+  await app.register(adminManagementRoutes, { prefix: '/api/v1/admin', db, content: contentService, assistant, authMiddleware });
+  await app.register(rulesRoutes, { prefix: '/api/v1/rules', rules: rulesService });
+  await app.register(qrRoutes, { prefix: '/api/v1/qr', qr: qrService, signer, authMiddleware });
 
   await app.register(adminRoutes, {
     prefix: '/api/v1/admin',
