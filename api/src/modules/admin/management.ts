@@ -3,7 +3,7 @@ import { z } from 'zod';
 import type { DatabaseClient } from '../../database/types.js';
 import type { createAuthMiddleware } from '../../middleware/auth.js';
 import { writeAudit } from '../../shared/audit.js';
-import { ConflictError, NotFoundError, ValidationError } from '../../shared/errors.js';
+import { AppError, ConflictError, NotFoundError, ValidationError } from '../../shared/errors.js';
 import { ALL_USER_ROLES, USER_ROLES } from '../../shared/roles.js';
 import type { AssistantService } from '../assistant/service.js';
 import type { ContentService, Kind } from '../content/service.js';
@@ -222,7 +222,9 @@ export const adminManagementRoutes: FastifyPluginAsync<Options> = async (fastify
 
   /* ── Knowledge base index ── */
   fastify.post('/kb/reindex', { preHandler: adminOnly }, async (req, reply) => {
+    if (!assistant.isConfigured()) throw new AppError(503, 'ASSISTANT_NOT_CONFIGURED', 'No AI key is set on the server. Add LLM_API_KEY to api/.env and restart.');
     const out = await assistant.reindexAll();
+    if (out.items > 0 && out.chunks === 0) throw new AppError(502, 'PROVIDER_ERROR', `Indexing failed: ${out.firstError ?? 'the AI provider rejected the request'}`);
     await writeAudit(db, { actorUserId: req.authUser!.userId, actorRole: 'admin_staff', action: 'kb.reindex', metadata: out, ipAddress: req.ip });
     return reply.send({ success: true, data: out });
   });

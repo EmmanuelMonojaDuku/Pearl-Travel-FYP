@@ -45,11 +45,17 @@ export class OpenAiCompatibleProvider implements EmbeddingProvider, LlmProvider 
         body: JSON.stringify(body),
         signal: controller.signal,
       });
-      if (!res.ok) throw new ProviderError(`Provider returned HTTP ${res.status}.`, res.status);
+      if (!res.ok) {
+        // Include the provider's own explanation (never the key) so a wrong model name or key is easy to spot.
+        const raw = await res.text().catch(() => '');
+        let detail = raw.slice(0, 300);
+        try { const j = JSON.parse(raw); const m = (Array.isArray(j) ? j[0] : j)?.error?.message; if (m) detail = String(m).slice(0, 300); } catch { /* keep raw text */ }
+        throw new ProviderError(`Provider returned HTTP ${res.status}${detail ? `: ${detail}` : '.'}`, res.status);
+      }
       return (await res.json()) as T;
     } catch (e) {
       if (e instanceof ProviderError) throw e;
-      throw new ProviderError(e instanceof Error && e.name === 'AbortError' ? 'Provider request timed out.' : 'Provider request failed.');
+      throw new ProviderError(e instanceof Error && e.name === 'AbortError' ? 'Provider request timed out.' : `Provider request failed (${e instanceof Error ? e.message : 'network error'}). Check LLM_BASE_URL and the internet connection.`);
     } finally {
       clearTimeout(timer);
     }

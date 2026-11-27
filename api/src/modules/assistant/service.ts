@@ -104,13 +104,19 @@ export class AssistantService {
     return { indexed: chunks.length };
   }
 
-  public async reindexAll(): Promise<{ items: number; chunks: number }> {
+  public async reindexAll(): Promise<{ items: number; chunks: number; failed: number; firstError?: string }> {
     const ids = await this.db.query<{ id: string }>(`SELECT id FROM public.pt_admin_content_items WHERE workflow_status = 'published'`);
     // Also clears chunks of items that are no longer published.
     await this.db.query(`DELETE FROM public.pt_kb_chunks WHERE content_item_id NOT IN (SELECT id FROM public.pt_admin_content_items WHERE workflow_status = 'published')`);
     let chunks = 0;
-    for (const r of ids.rows) chunks += (await this.indexContentItem(r.id)).indexed;
-    return { items: ids.rows.length, chunks };
+    let failed = 0;
+    let firstError: string | undefined;
+    // One article failing (for example a provider hiccup) must not stop the others from being indexed.
+    for (const r of ids.rows) {
+      try { chunks += (await this.indexContentItem(r.id)).indexed; }
+      catch (e) { failed += 1; firstError ??= e instanceof Error ? e.message : 'Indexing failed.'; }
+    }
+    return { items: ids.rows.length, chunks, failed, ...(firstError ? { firstError } : {}) };
   }
 
   /** Semantic retrieval: nearest published passages by cosine similarity of embeddings. */
@@ -140,9 +146,11 @@ export class AssistantService {
     try {
       const [vec] = await this.embeddings.embed([q]);
       hits = await this.retrieve(vec!, this.config.rag.topK, this.config.rag.minSimilarity);
-    } catch {
+    } catch (e) {
+      console.warn(`[assistant] embedding or retrieval failed: ${e instanceof Error ? e.message : e}`);
       return this.fallback('provider_unavailable');
     }
+    if (hits.length === 0) console.info(`[assistant] no passages above similarity ${this.config.rag.minSimilarity} for the question`);
     if (hits.length === 0) return this.fallback('no_relevant_sources');
 
     const sourceBlock = hits.map((h, i) => `<source id="S${i + 1}" title="${h.title.replace(/"/g, "'")}" authority="${h.authority.replace(/"/g, "'")}">\n${h.text}\n</source>`).join('\n');
@@ -154,7 +162,8 @@ export class AssistantService {
         { role: 'system', content: SYSTEM_PROMPT },
         { role: 'user', content: `${sourceBlock}\n\nTraveller context: ${context || 'not provided'}\nTraveller question: ${q}` },
       ]);
-    } catch {
+    } catch (e) {
+      console.warn(`[assistant] language model call failed: ${e instanceof Error ? e.message : e}`);
       return this.fallback('provider_unavailable');
     }
 
