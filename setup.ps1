@@ -19,6 +19,10 @@ $pw = Read-Host "Enter your PostgreSQL 'postgres' password"
 $env:PGPASSWORD = $pw
 Write-Host "2/5 Creating the database..." -ForegroundColor Yellow
 $exists = & psql -U postgres -h localhost -tAc "SELECT 1 FROM pg_database WHERE datname='pearl_travel'"
+if ($LASTEXITCODE -ne 0) {
+  Write-Host "Could not connect to PostgreSQL. The password is probably wrong (or the PostgreSQL service is stopped). Run the script again and re-enter it." -ForegroundColor Red
+  exit 1
+}
 if ($exists -ne '1') { & psql -U postgres -h localhost -c "CREATE DATABASE pearl_travel" | Out-Null }
 
 Write-Host "3/5 Writing api\.env..." -ForegroundColor Yellow
@@ -31,7 +35,14 @@ if (-not (Test-Path api\.env)) {
   $envText = $envText -replace '(?m)^JWT_REFRESH_SECRET=.*$', ("JWT_REFRESH_SECRET=" + (Secret))
   $envText = $envText -replace '(?m)^CORS_ORIGINS=.*$', 'CORS_ORIGINS=http://localhost:3000'
   Set-Content -Path api\.env -Value $envText -Encoding UTF8
-} else { Write-Host "api\.env already exists, keeping it." }
+} else {
+  Write-Host "api\.env already exists: updating only the database password."
+  $enc = [uri]::EscapeDataString($pw)
+  $envText = Get-Content api\.env -Raw
+  $envText = $envText -replace '(?m)^DATABASE_URL=.*$', "DATABASE_URL=postgresql://postgres:$enc@localhost:5432/pearl_travel"
+  $envText = $envText -replace '(?m)^DB_SSL_MODE=.*$', 'DB_SSL_MODE=disable'
+  Set-Content -Path api\.env -Value $envText -Encoding UTF8
+}
 
 Write-Host "4/5 Installing packages (this takes a few minutes)..." -ForegroundColor Yellow
 npm install
@@ -39,7 +50,9 @@ Push-Location api
 npm install
 Write-Host "5/5 Creating tables and demo accounts..." -ForegroundColor Yellow
 npm run migrate
+if ($LASTEXITCODE -ne 0) { Pop-Location; Write-Host "Migration failed (see the message above). Fix it and run the script again." -ForegroundColor Red; exit 1 }
 npm run seed:demo
+if ($LASTEXITCODE -ne 0) { Pop-Location; Write-Host "Creating demo accounts failed (see above)." -ForegroundColor Red; exit 1 }
 Pop-Location
 
 Write-Host ""

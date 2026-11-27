@@ -3,6 +3,7 @@
  * so presentations use genuine server-side authentication and roles.
  * Usage: DATABASE_URL=... [DEMO_PASSWORD=...] npm run seed:demo
  */
+import 'dotenv/config';
 import argon2 from 'argon2';
 import pg from 'pg';
 
