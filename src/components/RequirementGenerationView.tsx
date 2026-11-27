@@ -27,36 +27,36 @@ interface RequirementGenerationViewProps {
 const STEPS = [
   {
     number: 1,
-    title: 'Validate Profile',
-    summary: 'Verifying travel document type and nationality.',
-    detail: 'Verifying travel document type, visa reciprocity, and residency exemptions.',
+    title: 'Profile',
+    summary: 'Checking nationality and documents.',
+    detail: 'Checking nationality, visa and exemptions.',
     eta: '15 s',
     authority: 'System',
     requiredDocs: ['Passport', 'Yellow Fever Certificate', 'Travel Insurance Certificate'],
   },
   {
     number: 2,
-    title: 'Check Itinerary',
-    summary: 'Loading clearance rules for the selected border point.',
-    detail: 'Loading specific clearance rules for Malaba One-Stop Border Post (OSBP).',
+    title: 'Journey',
+    summary: 'Loading rules for your border.',
+    detail: 'Loading rules for your border post.',
     eta: '30 s',
     authority: 'System',
     requiredDocs: ['Passport', 'Yellow Fever Certificate', 'Travel Insurance Certificate'],
   },
   {
     number: 3,
-    title: 'Run Requirement Engine',
-    summary: 'Evaluating immigration statutes and health mandates.',
-    detail: 'Evaluating Uganda DCIC immigration statutes, Yellow Fever mandates & URA customs.',
+    title: 'Rules',
+    summary: 'Immigration, health and customs.',
+    detail: 'Immigration, Yellow Fever and customs rules.',
     eta: '45 s',
     authority: 'System',
     requiredDocs: ['Passport', 'Yellow Fever Certificate', 'Travel Insurance Certificate'],
   },
   {
     number: 4,
-    title: 'Generate Checklist',
-    summary: 'Creating personalised document checklist and QR summary.',
-    detail: 'Generating readiness score, QR summary payload, and grounded guidance.',
+    title: 'Checklist',
+    summary: 'Building your checklist and QR pass.',
+    detail: 'Building checklist, score and QR pass.',
     eta: '60 s',
     authority: 'System',
     requiredDocs: ['Passport', 'Yellow Fever Certificate', 'Travel Insurance Certificate'],
@@ -105,18 +105,18 @@ export const RequirementGenerationView: React.FC<RequirementGenerationViewProps>
     <div className="w-full max-w-2xl mx-auto px-4 py-8">
       <div className="bg-pearl-dark rounded-2xl p-6 sm:p-8 border border-pearl-border text-center space-y-6">
         {/* Processing Icon */}
-        <div className="mx-auto w-16 h-16 rounded-2xl bg-pearl-navy text-pearl-gold-light flex items-center justify-center ring-2 ring-pearl-gold/60">
+        <div className="mx-auto w-16 h-16 rounded-2xl bg-pearl-navy text-pearl-accent flex items-center justify-center ring-2 ring-pearl-gold/60">
           <Cpu className="w-8 h-8" />
         </div>
 
         {/* Header Text */}
         <div>
           <h2 className="text-xl sm:text-2xl font-bold text-pearl-text font-heading tracking-tight">
-            Preparing your personalised travel requirements...
+            Preparing your requirements…
           </h2>
           <p className="text-xs sm:text-sm text-pearl-text-secondary mt-1.5 max-w-md mx-auto">
-            Checking your profile and journey information for{' '}
-            <span className="font-bold text-pearl-text">{profile.fullName}</span> ({profile.nationality}) via{' '}
+            Setting up{' '}
+            <span className="font-bold text-pearl-text">{profile.fullName}</span> via{' '}
             <span className="font-bold text-pearl-text">{journey.intendedBorderPoint}</span>.
           </p>
         </div>
@@ -160,7 +160,7 @@ export const RequirementGenerationView: React.FC<RequirementGenerationViewProps>
                 <div className="flex-1 space-y-1">
                   {/* Header row: number, title, ETA, authority */}
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-pearl-gold-light">{step.number}.</span>
+                    <span className="font-medium text-pearl-accent">{step.number}.</span>
                     <span className="font-bold">{step.title}</span>
                     <span className="text-xs text-pearl-text-secondary ml-2">{step.eta} • {step.authority}</span>
                   </div>
@@ -183,30 +183,30 @@ export const RequirementGenerationView: React.FC<RequirementGenerationViewProps>
         </div>
 
         {/* Conceptual Architecture Diagram */}
-        <div className="p-4 rounded-xl bg-pearl-navy text-pearl-text text-left text-xs space-y-3 border border-pearl-dark">
-          <div className="flex items-center justify-between pb-2 border-b border-pearl-dark text-[10px] uppercase font-bold tracking-wider text-pearl-placeholder">
+        <div className="p-4 rounded-xl bg-pearl-surface text-pearl-text text-left text-xs space-y-3 border border-pearl-border">
+          <div className="flex items-center justify-between pb-2 border-b border-pearl-border text-[10px] uppercase font-bold tracking-wider text-pearl-placeholder">
             <span>Core System Architecture</span>
-            <span className="text-pearl-gold-light">Rule-Based Execution</span>
+            <span className="text-pearl-accent">Rule-Based Execution</span>
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-center text-[11px]">
-            <div className="p-2.5 rounded-lg bg-pearl-dark border border-pearl-slate w-full sm:w-auto flex-1">
-              <div className="font-bold text-pearl-gold-light">Passenger Profile</div>
+            <div className="p-2.5 rounded-lg bg-pearl-dark border border-pearl-border w-full sm:w-auto flex-1">
+              <div className="font-bold text-pearl-accent">Passenger Profile</div>
               <div className="text-[10px] text-pearl-text-secondary">Identity &amp; Nationality</div>
             </div>
             <div className="text-pearl-placeholder font-bold sm:rotate-0 rotate-90">+</div>
-            <div className="p-2.5 rounded-lg bg-pearl-dark border border-pearl-slate w-full sm:w-auto flex-1">
-              <div className="font-bold text-pearl-gold-light">Journey Details</div>
+            <div className="p-2.5 rounded-lg bg-pearl-dark border border-pearl-border w-full sm:w-auto flex-1">
+              <div className="font-bold text-pearl-accent">Journey Details</div>
               <div className="text-[10px] text-pearl-text-secondary">Malaba OSBP &amp; Purpose</div>
             </div>
           </div>
 
-          <div className="flex justify-center my-1 text-pearl-gold">
+          <div className="flex justify-center my-1 text-pearl-accent">
             <ArrowRight className="w-4 h-4 rotate-90" />
           </div>
 
           <div className="p-2.5 rounded-lg bg-pearl-dark border border-pearl-gold/50 text-center">
-            <div className="font-bold text-pearl-gold-light uppercase tracking-wider text-xs">
+            <div className="font-bold text-pearl-accent uppercase tracking-wider text-xs">
               Rule-Based Requirement Engine
             </div>
             <div className="text-[10px] text-pearl-text-secondary">
@@ -214,7 +214,7 @@ export const RequirementGenerationView: React.FC<RequirementGenerationViewProps>
             </div>
           </div>
 
-          <div className="flex justify-center my-1 text-pearl-gold">
+          <div className="flex justify-center my-1 text-pearl-accent">
             <ArrowRight className="w-4 h-4 rotate-90" />
           </div>
 
@@ -231,9 +231,6 @@ export const RequirementGenerationView: React.FC<RequirementGenerationViewProps>
           </div>
 
           {/* Clarification Note */}
-          <div className="pt-2 border-t border-pearl-dark text-[11px] text-pearl-text-secondary leading-relaxed">
-            <strong className="text-pearl-text font-semibold">System Notice:</strong> The rule-based requirement engine deterministically evaluates applicable statutory requirements. The AI guidance assistant retrieves grounded explanations from the verified knowledge base.
-          </div>
         </div>
 
         {/* Immediate Continue Button */}

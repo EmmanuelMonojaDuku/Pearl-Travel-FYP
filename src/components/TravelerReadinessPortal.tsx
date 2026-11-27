@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { OfflineStatusBanner } from './OfflineStatusBanner';
-import { ReadinessScoreCard } from './ReadinessScoreCard';
 import { RequirementGuidanceCard } from './RequirementGuidanceCard';
 import { DocumentChecklistCard } from './DocumentChecklistCard';
 import { QRSummaryCard } from './QRSummaryCard';
@@ -16,9 +15,17 @@ import { JourneySetupView } from './JourneySetupView';
 import { RequirementGenerationView } from './RequirementGenerationView';
 import { AIGuidanceCard } from './AIGuidanceCard';
 import { BorderStepByStepGuideCard } from './BorderStepByStepGuideCard';
+import { hydrateRulesFromCache, useRulesRevision } from '../data/ruleStore';
+import { hydrateKnowledgeFromCache } from '../data/knowledgeStore';
+import { flushOutbox, queueAssessment, queueJourney, syncAll } from '../offline/sync';
 import { getPortalHash, getPortalTabFromHash, PortalTab } from './dashboard/navTypes';
 import { DashboardSidebar } from './dashboard/DashboardSidebar';
 import { DashboardHeader } from './dashboard/DashboardHeader';
+import { ReadinessAssessmentView } from './ReadinessAssessmentView';
+import { Footer } from './Footer';
+import { NotificationsTab } from './NotificationsTab';
+import { OfflineAccessTab } from './OfflineAccessTab';
+import { buildAlerts } from '../utils/alerts';
 import { MobileBottomNav } from './dashboard/MobileBottomNav';
 import { OverviewTab } from './dashboard/OverviewTab';
 import { SupportContactModal } from './dashboard/SupportContactModal';
@@ -27,6 +34,7 @@ import {
   generateRequirementsForProfile,
   generateDefaultChecklist,
   calculateReadinessScore,
+  reconcileChecklist,
 } from '../data/travelRequirementsEngine';
 import {
   PassengerProfile,
@@ -220,10 +228,53 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
     }
   }, [checklist]);
 
+  const hasServerSession = Boolean(currentUser?.accessToken);
+
+  // Offline caches: load the saved rules and guidance first, then refresh from the server when possible.
+  const rulesRevision = useRulesRevision();
+  useEffect(() => {
+    void (async () => {
+      await hydrateRulesFromCache();
+      await hydrateKnowledgeFromCache();
+      if (navigator.onLine) await syncAll(hasServerSession);
+    })();
+    const onOnline = () => void syncAll(hasServerSession);
+    window.addEventListener('online', onOnline);
+    return () => window.removeEventListener('online', onOnline);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasServerSession]);
+
+  // Changing nationality, purpose or journey (or receiving updated rules) re-aligns the checklist with the applicable rules.
+  useEffect(() => {
+    setChecklist((prev) => {
+      const next = reconcileChecklist(prev, generateDefaultChecklist(profile));
+      return JSON.stringify(next) === JSON.stringify(prev) ? prev : next;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profile.nationality, profile.travelPurpose, profile.destination, profile.travellerType, profile.journey?.travelPurpose, profile.journey?.travelMode, profile.journey?.intendedBorderPoint, profile.journey?.destinationCountry, rulesRevision]);
+
+  // Save journey and readiness changes for synchronisation. They are sent now if online, or when the connection returns.
+  useEffect(() => {
+    if (!hasServerSession || flowState !== 'dashboard') return;
+    const t = setTimeout(() => {
+      void (async () => {
+        const j = profile.journey;
+        if (j?.intendedBorderPoint && j.travelDate && j.travelMode) {
+          await queueJourney({ intendedBorderPoint: j.intendedBorderPoint, destinationCountry: (j.destinationCountry || 'Uganda').slice(0, 140), travelPurpose: j.travelPurpose, travelMode: j.travelMode, travelDate: j.travelDate, stayDurationDays: j.stayDurationDays ?? null, notes: j.notes ? j.notes.slice(0, 500) : null });
+        }
+        const r = calculateReadinessScore(checklist);
+        await queueAssessment({ nationality: profile.nationality || 'Unknown', score: r.score, status: r.statusLabel, completedItems: r.completedCount, totalItems: r.totalCount, missingMandatoryCount: r.missingMandatoryCount, checklist: checklist.map((i) => ({ code: i.id, status: i.status })) });
+        if (navigator.onLine) await flushOutbox();
+      })();
+    }, 4000);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [checklist, profile.journey, hasServerSession, flowState]);
+
   // Requirement Guidance computed from profile + journey
   const requirements = useMemo(() => {
     return generateRequirementsForProfile(profile);
-  }, [profile]);
+  }, [profile, rulesRevision]);
 
   // Readiness Score calculation
   const readiness = useMemo(() => {
@@ -253,7 +304,15 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
     setProfile(updated);
 
     // Re-generate default checklist for updated profile parameters
-    setChecklist(generateDefaultChecklist(updated));
+    const FLAG_DOCS: Record<string, keyof PassengerProfile> = { 'doc-yellow-fever': 'hasYellowFeverVax', 'doc-return-ticket': 'hasReturnTicket', 'doc-accommodation': 'hasAccommodationProof', 'doc-travel-insurance': 'hasTravelInsurance', 'doc-passport': 'passportNumber' };
+    setChecklist((prev) => {
+      const fresh = generateDefaultChecklist(updated);
+      const merged = reconcileChecklist(prev, fresh);
+      return merged.map((item) => {
+        const flag = FLAG_DOCS[item.id];
+        return flag && profile[flag] !== updated[flag] ? fresh.find((f) => f.id === item.id) ?? item : item;
+      });
+    });
 
     const completed = isTravellerProfileComplete(updated);
 
@@ -363,51 +422,28 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
     onShowToast('Loaded default Uganda Safari profile.');
   };
 
-  const handleSyncNow = () => {
+  const handleSyncNow = async () => {
     setIsSyncing(true);
-    setTimeout(() => {
+    try {
+      const r = await syncAll(hasServerSession);
+      if (!r.online) {
+        onShowToast(r.remaining ? `You are offline. ${r.remaining} change(s) will sync when you reconnect.` : 'You are offline. Saved data stays available.');
+        return;
+      }
       const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       setLastSyncedTime(`Today at ${now}`);
       localStorage.setItem(STORAGE_KEY_LAST_SYNC, `Today at ${now}`);
+      const parts = [
+        r.rulesUpdated ? 'new rules applied' : 'rules up to date',
+        r.knowledgeRefreshed ? 'guidance refreshed' : 'guidance not refreshed',
+        hasServerSession ? `${r.sent} change(s) sent${r.remaining ? `, ${r.remaining} waiting` : ''}` : 'sign in to a server account to sync your data',
+      ];
+      onShowToast(`Sync finished: ${parts.join(', ')}.`);
+    } finally {
       setIsSyncing(false);
-      onShowToast('Readiness data successfully synchronized with cloud.');
-    }, 900);
+    }
   };
 
-  // Construct QR Payload
-  const qrData: QRSummaryData = useMemo(() => {
-    const passportItem = checklist.find((c) => c.id === 'doc-passport');
-    const visaItem = checklist.find((c) => c.id === 'doc-visa');
-    const yFeverItem = checklist.find((c) => c.id === 'doc-yellow-fever');
-    const returnTicketItem = checklist.find((c) => c.id === 'doc-return-ticket');
-    const hotelItem = checklist.find((c) => c.id === 'doc-accommodation');
-    const insItem = checklist.find((c) => c.id === 'doc-travel-insurance');
-
-    const safeFullName = profile?.fullName || 'Traveller';
-    return {
-      version: 'PEARL-LOCAL-SUMMARY-1.0',
-      referenceId: `UG-${Math.abs(safeFullName.split('').reduce((a, b) => a + b.charCodeAt(0), 0) * 137).toString().padStart(6, '0')}`,
-      passengerName: safeFullName,
-      nationality: profile?.nationality || 'Not provided',
-      destination: profile?.journey?.intendedBorderPoint || 'Not set',
-      travelPurpose: profile?.journey?.travelPurpose || profile?.travelPurpose || 'Not set',
-      travellerType: profile?.travellerType || 'Not set',
-      readinessScore: readiness.score,
-      readinessStatus: readiness.statusLabel,
-      checklistSummary: {
-        passport: passportItem?.status || 'missing',
-        visa: visaItem?.status || 'missing',
-        yellowFever: yFeverItem?.status || 'missing',
-        returnTicket: returnTicketItem?.status || 'missing',
-        accommodation: hotelItem?.status || 'missing',
-        travelInsurance: insItem?.status || 'missing',
-      },
-      timestamp: new Date().toISOString(),
-      cachedOffline: isOfflineMode,
-      disclaimer:
-        'This QR code is generated locally in the browser as an informational checklist snapshot. It is not server-issued or verified, does not grant entry, and does not replace official travel documents or immigration decisions.',
-    };
-  }, [profile, checklist, readiness, isOfflineMode]);
 
   // ==========================================
   // FLOW VIEW 1: TRAVELLER PROFILE SETUP
@@ -621,11 +657,12 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
                 <RequirementGuidanceCard
                   requirements={requirements}
                   nationality={profile.nationality}
+                  purpose={profile.travelPurpose}
                 />
 
                 <div className="p-4 bg-pearl-dark border border-pearl-border rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3">
                   <span className="text-xs text-pearl-text-secondary font-medium text-center sm:text-left">
-                    Verify your physical documents against these computed Uganda border requirements:
+                    Check your documents against these rules.
                   </span>
                   <button
                     type="button"
@@ -633,7 +670,7 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
                     onClick={() => setActiveTab('checklist')}
                     className="w-full sm:w-auto px-5 py-2.5 bg-pearl-gold hover:bg-pearl-gold-light text-pearl-text text-xs font-bold rounded-xl cursor-pointer transition-colors whitespace-nowrap"
                   >
-                    Open Document Checklist &rarr;
+                    Open checklist →
                   </button>
                 </div>
               </motion.div>
@@ -648,22 +685,13 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
                 transition={{ duration: 0.2 }}
                 className="space-y-5"
               >
-                <ReadinessScoreCard
-                  score={readiness.score}
-                  completedCount={readiness.completedCount}
-                  totalCount={readiness.totalCount}
-                  missingMandatoryCount={readiness.missingMandatoryCount}
-                  missingItems={readiness.missingItems}
-                  onFocusChecklist={() => {}}
-                  onOpenQR={() => setActiveTab('qr')}
-                />
-
                 <DocumentChecklistCard
                   checklist={checklist}
                   onUpdateItemStatus={handleUpdateChecklistItemStatus}
                   onUpdateItemDetails={handleUpdateChecklistItemDetails}
                   onOpenReviewAudit={() => setIsReviewModalOpen(true)}
                 />
+                <button type="button" onClick={() => setActiveTab('readiness')} className="w-full min-h-[44px] rounded-xl bg-pearl-gold hover:bg-pearl-gold-light text-pearl-navy text-sm font-bold cursor-pointer">View Details</button>
               </motion.div>
             )}
 
@@ -676,13 +704,16 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
                 transition={{ duration: 0.2 }}
                 className="space-y-5"
               >
-                <ReadinessScoreCard
+                <ReadinessAssessmentView
                   score={readiness.score}
-                  completedCount={readiness.completedCount}
-                  totalCount={readiness.totalCount}
+                  statusLabel={readiness.statusLabel}
+                  readyCount={readiness.completedCount}
+                  missingCount={readiness.missingItems.length}
+                  notApplicableCount={readiness.notApplicableCount}
                   missingMandatoryCount={readiness.missingMandatoryCount}
-                  missingItems={readiness.missingItems}
-                  onFocusChecklist={() => setActiveTab('checklist')}
+                  lastSavedTime={lastSyncedTime}
+                  onViewMissing={() => setActiveTab('checklist')}
+                  onBack={() => setActiveTab('overview')}
                   onOpenQR={() => setActiveTab('qr')}
                 />
               </motion.div>
@@ -700,6 +731,8 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
                 <AIGuidanceCard
                   profile={profile}
                   journey={profile.journey}
+                  checklist={checklist}
+                  hasServerSession={hasServerSession}
                   onShowToast={onShowToast}
                 />
               </motion.div>
@@ -743,18 +776,54 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
                 transition={{ duration: 0.2 }}
                 className="space-y-5"
               >
-                <QRSummaryCard qrData={qrData} />
+                <QRSummaryCard profile={profile} checklist={checklist} readinessScore={readiness.score} isOfflineMode={isOfflineMode} userKey={currentUser?.email || profile.email || 'local'} hasServerSession={hasServerSession} />
+              </motion.div>
+            )}
+
+            {activeTab === 'alerts' && (
+              <motion.div key="tab-alerts" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.2 }}>
+                <NotificationsTab
+                  isProfileComplete={profileComplete}
+                  missingItems={readiness.missingItems}
+                  missingMandatoryCount={readiness.missingMandatoryCount}
+                  isOfflineMode={isOfflineMode}
+                  onSelectTab={(tab) => setActiveTab(tab)}
+                />
+              </motion.div>
+            )}
+
+            {activeTab === 'offline' && (
+              <motion.div key="tab-offline" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.2 }}>
+                <OfflineAccessTab
+                  isOfflineMode={isOfflineMode}
+                  isSyncing={isSyncing}
+                  lastSyncedTime={lastSyncedTime}
+                  onRetry={handleSyncNow}
+                  onToggleOffline={handleToggleOfflineMode}
+                  onBack={() => setActiveTab('checklist')}
+                />
               </motion.div>
             )}
           </AnimatePresence>
         </div>
+
+        <Footer
+          className="pb-20 md:pb-0"
+          quickLinks={[
+            { label: 'Home', href: '#/traveller/dashboard' },
+            { label: 'Checklist', href: '#/traveller/checklist' },
+            { label: 'Requirements', href: '#/traveller/requirements' },
+            { label: 'Readiness', href: '#/traveller/readiness' },
+            { label: 'QR Pass', href: '#/traveller/qr' },
+          ]}
+        />
       </div>
 
       {/* Mobile Fixed Thumb-Zone Bottom Navigation */}
       <MobileBottomNav
         activeTab={activeTab}
         onSelectTab={(tab) => setActiveTab(tab)}
-        onOpenMenu={() => setIsMobileDrawerOpen(true)}
+        alertCount={buildAlerts({ isProfileComplete: profileComplete, missingItems: readiness.missingItems, missingMandatoryCount: readiness.missingMandatoryCount, isOfflineMode }).length}
       />
 
       {/* Profile Settings Modal */}

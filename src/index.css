@@ -1,44 +1,68 @@
 @import "tailwindcss";
 
-/* ─── Pearl Travel Light Design System (authenticated pages) ─── */
-.light-shell {
-  --pt-bg: #F8FAFC;
-  --pt-sidebar: #0F172A;
-  --pt-card: #FFFFFF;
-  --pt-border: #E2E8F0;
-  --pt-accent: #FACC15;
-  --pt-accent-deep: #EAB308;
-  --pt-text: #0F172A;
-  --pt-text-secondary: #64748B;
-  --pt-success: #16A34A;
-  --pt-warning: #D97706;
-  --pt-error: #DC2626;
-  --pt-info: #2563EB;
-}
-
-.light-shell {
-  background-color: var(--pt-bg);
-  color: var(--pt-text);
-}
-
 :root {
-  color-scheme: dark;
-  --pearl-navy: #0F172A;
-  --pearl-dark: #1E293B;
-  --pearl-slate: #334155;
-  --pearl-surface: #273449;
-  --pearl-input: #243247;
-  --pearl-gold: #EAB308;
-  --pearl-gold-light: #FACC15;
-  --pearl-text: #F1F5F9;
-  --pearl-text-secondary: #CBD5E1;
-  --pearl-placeholder: #94A3B8;
-  --pearl-border: #475569;
+  color-scheme: light;
+  /* ───────── Pearl Travel design tokens — the single source of truth ─────────
+     Bright Navy · Yellow · White. Components use the semantic names below
+     (bg-pearl-*, text-pearl-*), never raw hex values. */
+
+  /* Brand */
+  --pearl-navy: #0F172A;            /* primary navy: sidebar, header, footer, important text */
+  --pearl-navy-2: #1E293B;          /* secondary navy: raised surfaces on navy */
+  --pearl-gold: #FFC400;            /* primary yellow: buttons, active nav, badges, highlights */
+  --pearl-gold-light: #EAB308;      /* golden accent: hover and pressed states */
+  --pearl-accent: #92560A;          /* gold for TEXT on light surfaces (AA contrast); bright yellow on navy */
+
+  /* Surfaces */
+  --pearl-slate: #F5F7FB;           /* main page background */
+  --pearl-dark: #FFFFFF;            /* cards, panels, modals */
+  --pearl-surface: #F1F5F9;         /* light grey: chips, table stripes, raised areas */
+  --pearl-input: #FFFFFF;           /* form fields */
+  --pearl-border: #E2E8F0;
+
+  /* Text */
+  --pearl-text: #0F172A;            /* primary text */
+  --pearl-text-secondary: #334155;  /* secondary text */
+  --pearl-placeholder: #5B6B83;     /* muted text (palette #64748B, nudged darker to pass 4.5:1 on light-grey surfaces) */
+
+  /* Status */
+  --pearl-success: #16A34A;
+  --pearl-success-light: #166534;   /* success TEXT on light surfaces */
   --pearl-danger: #DC2626;
-  --pearl-danger-light: #FCA5A5;
-  --pearl-success: #15803D;
-  --pearl-success-light: #86EFAC;
+  --pearl-danger-light: #B91C1C;    /* error TEXT on light surfaces */
+  --pearl-info: #1D4ED8;
+
+  /* Interaction */
+  --pearl-focus: #0F172A;           /* focus outline on light surfaces */
+  --pearl-white: #FFFFFF;
+  --pearl-shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 4px 14px rgba(15, 23, 42, 0.06);
 }
+
+/* Anything with a navy background re-maps the semantic tokens to their on-navy values,
+   so every component placed inside the sidebar, header, footer or a navy button stays readable
+   without per-component overrides. */
+.on-navy,
+[class~="bg-pearl-navy"],
+[class*="bg-pearl-navy/"] {
+  --pearl-text: #FFFFFF;
+  --pearl-text-secondary: #CBD5E1;
+  --pearl-placeholder: #B4C0D1;
+  --pearl-border: #334155;
+  --pearl-dark: #1E293B;
+  --pearl-surface: #1E293B;
+  --pearl-input: #1E293B;
+  --pearl-accent: #FFC400;
+  --pearl-success-light: #86EFAC;
+  --pearl-danger-light: #FCA5A5;
+  --pearl-info: #60A5FA;
+  --pearl-focus: #FFC400;
+  color: var(--pearl-text);
+}
+
+/* Solid status/brand fills pick their own readable text colour. */
+[class~="bg-pearl-gold"] { --pearl-text: #0F172A; --pearl-text-secondary: #0F172A; --pearl-accent: #0F172A; }
+[class~="bg-pearl-danger"] { --pearl-text: #FFFFFF; --pearl-text-secondary: #FFFFFF; }
+[class~="bg-pearl-success"] { --pearl-text: #0F172A; --pearl-text-secondary: #0F172A; }
 
 @theme inline {
   --color-pearl-navy: var(--pearl-navy);
@@ -56,6 +80,12 @@
   --color-pearl-danger-light: var(--pearl-danger-light);
   --color-pearl-success: var(--pearl-success);
   --color-pearl-success-light: var(--pearl-success-light);
+  --color-pearl-info: var(--pearl-info);
+  --color-pearl-accent: var(--pearl-accent);
+  --color-pearl-navy-2: var(--pearl-navy-2);
+  --color-pearl-white: var(--pearl-white);
+  --color-pearl-focus: var(--pearl-focus);
+  --color-pearl-scrim: #0F172A; /* modal backdrops (kept separate so they do not switch child colours) */
 }
 
 @layer base {
@@ -66,6 +96,11 @@
     color: var(--pearl-text);
     min-height: 100vh;
     overflow-x: hidden;
+  }
+
+  button:disabled,
+  [aria-disabled='true'] {
+    cursor: not-allowed;
   }
 
   h1, h2, h3, h4, .font-heading {
@@ -86,7 +121,7 @@
   input:focus-visible,
   select:focus-visible,
   textarea:focus-visible {
-    outline: 2px solid var(--pearl-gold);
+    outline: 2px solid var(--pearl-focus);
     outline-offset: 2px;
   }
 
@@ -134,139 +169,20 @@
   }
 }
 
-@layer utilities {
-  .bg-pearl-gold.text-pearl-text,
-  .bg-pearl-gold.text-white,
-  .bg-pearl-gold.text-black {
-    color: var(--pearl-navy);
-  }
-
-  .document-paper {
-    background-color: #FFFFFF;
-    color: var(--pearl-navy);
-  }
-
-  .document-paper.bg-pearl-dark {
-    background-color: #FFFFFF;
-  }
-
-  .document-paper .bg-pearl-dark {
-    background-color: var(--pearl-text);
-  }
-
-  .document-paper .bg-pearl-surface,
-  .document-paper .bg-pearl-input {
-    background-color: var(--pearl-input);
-  }
-
-  .document-paper .text-pearl-text,
-  .document-paper .text-pearl-gold-light {
-    color: var(--pearl-navy);
-  }
-
-  .document-paper .text-pearl-text-secondary {
-    color: var(--pearl-slate);
-  }
-
-  .document-paper .text-pearl-placeholder {
-    color: var(--pearl-border);
-  }
-
-  .document-paper .text-pearl-success-light {
-    color: var(--pearl-success);
-  }
-
-  .document-paper .text-pearl-danger-light {
-    color: var(--pearl-danger);
-  }
-
-  .document-paper .bg-pearl-navy.text-pearl-text {
-    color: var(--pearl-text);
-  }
-
-  .document-paper .border-pearl-border {
-    border-color: var(--pearl-text-secondary);
-  }
-}
-
-.neu-card {
-  background: var(--pearl-dark);
-  box-shadow: 10px 10px 24px rgba(2, 6, 23, 0.32), -6px -6px 18px rgba(71, 85, 105, 0.12);
-}
-
-.neu-card-sm {
-  background: var(--pearl-surface);
-  box-shadow: 6px 6px 14px rgba(2, 6, 23, 0.3), -4px -4px 12px rgba(71, 85, 105, 0.1);
-}
-
-.neu-inset {
-  background: var(--pearl-input);
-  box-shadow: inset 3px 3px 6px rgba(2, 6, 23, 0.32), inset -3px -3px 6px rgba(71, 85, 105, 0.12);
-}
-
-.neu-inset-focus {
-  box-shadow:
-    inset 2px 2px 4px rgba(2, 6, 23, 0.22),
-    inset -2px -2px 4px rgba(71, 85, 105, 0.12),
-    0 0 0 2px rgba(234, 179, 8, 0.6);
-}
-
-.neu-btn {
-  background: var(--pearl-surface);
-  color: var(--pearl-text);
-  box-shadow: 4px 4px 10px rgba(2, 6, 23, 0.32), -4px -4px 10px rgba(71, 85, 105, 0.1);
-  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.neu-btn:hover {
-  background: var(--pearl-dark);
-}
-
-.neu-btn:active, .neu-btn-pressed {
-  box-shadow: inset 3px 3px 6px rgba(2, 6, 23, 0.38), inset -3px -3px 6px rgba(71, 85, 105, 0.1);
-}
-
-.neu-btn-icon {
-  background: var(--pearl-surface);
-  color: var(--pearl-text-secondary);
-  box-shadow: 4px 4px 10px rgba(2, 6, 23, 0.3), -4px -4px 10px rgba(71, 85, 105, 0.1);
-  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.neu-btn-icon:hover {
-  transform: translateY(-1px);
-  color: var(--pearl-gold-light);
-}
-
-.neu-btn-icon:active {
-  transform: translateY(1px);
-  box-shadow: inset 2px 2px 5px rgba(2, 6, 23, 0.36), inset -2px -2px 5px rgba(71, 85, 105, 0.1);
-}
-
 .pearl-gradient-btn {
   background: var(--pearl-gold);
   color: var(--pearl-navy);
-  box-shadow: 0 6px 18px rgba(234, 179, 8, 0.18);
-  position: relative;
-  overflow: hidden;
-  transition: all 0.25s ease;
+  box-shadow: var(--pearl-shadow);
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
-
 .pearl-gradient-btn:hover,
 .pearl-gradient-btn:focus-visible {
   background: var(--pearl-gold-light);
-  transform: translateY(-1px);
 }
+.pearl-gradient-btn:active { transform: translateY(1px); }
 
-.pearl-gradient-btn:active {
-  transform: translateY(1px);
-}
-
-.pearl-gradient-btn-active {
-  color: var(--pearl-navy) !important;
-  background: var(--pearl-gold-light) !important;
-  box-shadow: 0 6px 18px rgba(234, 179, 8, 0.2) !important;
-}
+/* Printable document preview: always white paper with navy text. */
+.document-paper { background-color: #FFFFFF; color: var(--pearl-navy); }
 
 .perspective-1000 {
   perspective: 1200px;

@@ -134,7 +134,7 @@ export const ReviewDocumentDownloadModal: React.FC<ReviewDocumentDownloadModalPr
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-pearl-navy/60 backdrop-blur-sm overflow-y-auto">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-pearl-scrim/60 backdrop-blur-sm overflow-y-auto">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -166,7 +166,7 @@ export const ReviewDocumentDownloadModal: React.FC<ReviewDocumentDownloadModalPr
                 type="button"
                 id="btn-close-review-doc-top"
                 onClick={onClose}
-                className="w-8 h-8 rounded-full bg-pearl-dark hover:bg-pearl-slate text-pearl-text-secondary hover:text-pearl-text flex items-center justify-center transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-full bg-pearl-dark hover:bg-pearl-surface text-pearl-text-secondary hover:text-pearl-text flex items-center justify-center transition-colors cursor-pointer"
                 title="Close review document"
               >
                 <X className="w-4 h-4" />
@@ -185,8 +185,8 @@ export const ReviewDocumentDownloadModal: React.FC<ReviewDocumentDownloadModalPr
                   <Check className="w-3 h-3" /> All Mandatory Fields Entered
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1 text-[11px] font-bold text-pearl-gold-light bg-pearl-gold/10 px-2.5 py-0.5 rounded-full">
-                  <AlertTriangle className="w-3 h-3 text-pearl-gold-light" /> Some Mandatory Fields Need Attention
+                <span className="inline-flex items-center gap-1 text-[11px] font-bold text-pearl-accent bg-pearl-gold/10 px-2.5 py-0.5 rounded-full">
+                  <AlertTriangle className="w-3 h-3 text-pearl-accent" /> Some Mandatory Fields Need Attention
                 </span>
               )}
             </div>
@@ -443,7 +443,7 @@ export const ReviewDocumentDownloadModal: React.FC<ReviewDocumentDownloadModalPr
                                 Ready ✓
                               </span>
                             ) : (
-                              <span className="font-bold text-pearl-gold-light bg-pearl-gold/10 px-2 py-0.5 rounded-full text-[10px]">
+                              <span className="font-bold text-pearl-accent bg-pearl-gold/10 px-2 py-0.5 rounded-full text-[10px]">
                                 Pending
                               </span>
                             )}

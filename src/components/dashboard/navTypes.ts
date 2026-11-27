@@ -10,7 +10,9 @@ export type PortalTab =
   | 'multimedia'
   | 'qr'
   | 'audit'
-  | 'download-pdf';
+  | 'download-pdf'
+  | 'alerts'
+  | 'offline';
 
 const PORTAL_TAB_ROUTES: Record<PortalTab, string> = {
   overview: 'dashboard',
@@ -25,6 +27,8 @@ const PORTAL_TAB_ROUTES: Record<PortalTab, string> = {
   qr: 'qr',
   audit: 'audit',
   'download-pdf': 'report',
+  alerts: 'alerts',
+  offline: 'offline',
 };
 
 const PORTAL_TAB_BY_ROUTE: Record<string, PortalTab> = {
@@ -40,6 +44,8 @@ const PORTAL_TAB_BY_ROUTE: Record<string, PortalTab> = {
   qr: 'qr',
   audit: 'audit',
   report: 'download-pdf',
+  alerts: 'alerts',
+  offline: 'offline',
 };
 
 export function getPortalTabFromHash(hash: string): PortalTab | null {

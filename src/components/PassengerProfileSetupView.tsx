@@ -262,7 +262,7 @@ export const PassengerProfileSetupView: React.FC<PassengerProfileSetupViewProps>
         {/* Authenticated Account Summary (No duplicated Name/Email inputs) */}
         <div className="mt-5 p-3.5 rounded-xl bg-pearl-input border border-pearl-border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 rounded-lg bg-pearl-navy text-pearl-gold-light flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-lg bg-pearl-navy text-pearl-accent flex items-center justify-center shrink-0">
               <User className="w-4 h-4" />
             </div>
             <div className="min-w-0">
@@ -289,7 +289,7 @@ export const PassengerProfileSetupView: React.FC<PassengerProfileSetupViewProps>
             size="md"
           />
           <div className="min-w-0 flex-1 text-center sm:text-left">
-            <p className="text-xs font-semibold uppercase tracking-wide text-pearl-gold-light">
+            <p className="text-xs font-semibold uppercase tracking-wide text-pearl-accent">
               Traveller Profile
             </p>
             <h2 className="mt-1 text-base font-bold text-pearl-text truncate">
@@ -297,7 +297,7 @@ export const PassengerProfileSetupView: React.FC<PassengerProfileSetupViewProps>
             </h2>
             <p className="mt-1 text-xs text-pearl-text-secondary">
               Profile status:{' '}
-              <span className={isProfileComplete ? 'text-pearl-success-light' : 'text-pearl-gold-light'}>
+              <span className={isProfileComplete ? 'text-pearl-success-light' : 'text-pearl-accent'}>
                 {isProfileComplete ? 'Complete' : 'In progress'}
               </span>
             </p>
@@ -333,7 +333,7 @@ export const PassengerProfileSetupView: React.FC<PassengerProfileSetupViewProps>
                 if (errors.nationality) setErrors({ ...errors, nationality: undefined });
               }}
               error={errors.nationality}
-              helperText="Requested to determine Uganda visa requirements, EAC exemptions, and entry rules."
+              helperText="Used for visa and entry rules."
               required
               disabled={isSaving}
             />
@@ -365,11 +365,11 @@ export const PassengerProfileSetupView: React.FC<PassengerProfileSetupViewProps>
                       }}
                       className={`h-11 px-3 rounded-xl border text-sm font-medium transition-colors flex items-center justify-center gap-1.5 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-pearl-gold ${
                         selected
-                          ? 'bg-pearl-navy text-pearl-text border-pearl-gold'
-                          : 'bg-pearl-input text-pearl-text border-pearl-border hover:bg-pearl-slate hover:border-pearl-gold'
+                          ? 'bg-pearl-gold/15 text-pearl-text border-pearl-gold ring-1 ring-pearl-gold'
+                          : 'bg-pearl-input text-pearl-text border-pearl-border hover:bg-pearl-surface hover:border-pearl-gold'
                       } disabled:opacity-60 disabled:cursor-not-allowed`}
                     >
-                      {selected && <Check className="w-3.5 h-3.5 text-pearl-gold-light shrink-0" />}
+                      {selected && <Check className="w-3.5 h-3.5 text-pearl-accent shrink-0" />}
                       <span className="truncate">{option}</span>
                     </button>
                   );
@@ -382,7 +382,7 @@ export const PassengerProfileSetupView: React.FC<PassengerProfileSetupViewProps>
                 </p>
               ) : (
                 <p className="mt-1.5 text-xs text-pearl-text-secondary">
-                  Requested to align your profile with passport and immigration arrival records.
+                  Match your passport.
                 </p>
               )}
             </div>
@@ -415,7 +415,7 @@ export const PassengerProfileSetupView: React.FC<PassengerProfileSetupViewProps>
                       </option>
                     ))}
                   </select>
-                  <ChevronDown className="w-4 h-4 text-pearl-gold-light pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" />
+                  <ChevronDown className="w-4 h-4 text-pearl-accent pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" />
                 </div>
 
                 <div className="sm:col-span-7 relative">
@@ -500,7 +500,7 @@ export const PassengerProfileSetupView: React.FC<PassengerProfileSetupViewProps>
                       }}
                       className={`p-3 rounded-xl border text-left transition-colors cursor-pointer flex items-start justify-between gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-pearl-gold ${
                         selected
-                          ? 'bg-pearl-navy text-pearl-text border-pearl-border'
+                          ? 'bg-pearl-gold/15 text-pearl-text border-pearl-gold ring-1 ring-pearl-gold'
                           : 'bg-pearl-input text-pearl-text border-pearl-border hover:bg-pearl-input hover:border-pearl-border'
                       } disabled:opacity-60 disabled:cursor-not-allowed`}
                     >
@@ -535,7 +535,7 @@ export const PassengerProfileSetupView: React.FC<PassengerProfileSetupViewProps>
                 </p>
               ) : (
                 <p className="mt-1.5 text-xs text-pearl-text-secondary">
-                  Helps tailor your visa category, permit guidance, and border document checklist.
+                  Tailors your checklist.
                 </p>
               )}
             </div>
@@ -557,7 +557,7 @@ export const PassengerProfileSetupView: React.FC<PassengerProfileSetupViewProps>
             </div>
 
             <p className="text-xs text-pearl-text-secondary leading-relaxed">
-              Requested so border authorities or Pearl Travel support can notify a trusted contact if an urgent travel or health situation arises.
+              Someone we can contact in an emergency.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -629,7 +629,7 @@ export const PassengerProfileSetupView: React.FC<PassengerProfileSetupViewProps>
                       </option>
                     ))}
                   </select>
-                  <ChevronDown className="w-4 h-4 text-pearl-gold-light pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" />
+                  <ChevronDown className="w-4 h-4 text-pearl-accent pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" />
                 </div>
                 {errors.relationship && relationSelect !== 'Other' && (
                   <p role="alert" className="mt-1.5 flex items-center gap-1.5 text-xs font-medium text-pearl-danger-light">

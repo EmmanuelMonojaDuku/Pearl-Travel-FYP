@@ -1,89 +1,97 @@
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
+import { Loader2 } from 'lucide-react';
+import { Button, Field } from './ui';
+import type { GoogleIdentity } from '../utils/authStorage';
+import { isDemoMode, isGoogleConfigured, signInWithGoogle } from '../utils/googleAuth';
 
-interface SocialAuthButtonsProps {
-  onSelectProvider?: (provider: string) => void;
+const GoogleMark = () => (
+  <svg viewBox="0 0 48 48" className="w-5 h-5" aria-hidden="true">
+    <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.7 2.4 30.2 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.8 6.1C12.3 13.6 17.7 9.5 24 9.5z" />
+    <path fill="#4285F4" d="M46.1 24.6c0-1.6-.1-3.1-.4-4.6H24v9h12.4c-.5 2.9-2.2 5.3-4.6 7l7.4 5.7c4.3-4 6.9-9.9 6.9-17.1z" />
+    <path fill="#FBBC05" d="M10.4 28.7c-.5-1.4-.8-3-.8-4.7s.3-3.2.8-4.7l-7.8-6.1C1 16.5 0 20.1 0 24s1 7.5 2.6 10.8l7.8-6.1z" />
+    <path fill="#34A853" d="M24 48c6.2 0 11.4-2 15.2-5.5l-7.4-5.7c-2 1.4-4.7 2.2-7.8 2.2-6.3 0-11.7-4.1-13.6-9.8l-7.8 6.1C6.5 42.6 14.6 48 24 48z" />
+  </svg>
+);
+
+interface Props {
+  onIdentity: (identity: GoogleIdentity) => void;
+  onError: (message: string) => void;
 }
 
-export const SocialAuthButtons: React.FC<SocialAuthButtonsProps> = ({ onSelectProvider }) => {
-  const [clickedProvider, setClickedProvider] = useState<string | null>(null);
+/** "Continue with Google". Real Google OAuth when VITE_GOOGLE_CLIENT_ID is set; labelled demo chooser in demo mode. */
+export const GoogleSignIn: React.FC<Props> = ({ onIdentity, onError }) => {
+  const [busy, setBusy] = useState(false);
+  const [chooser, setChooser] = useState(false);
+  const [demo, setDemo] = useState({ name: '', email: '' });
 
-  const handleClick = (name: string) => {
-    setClickedProvider(name);
-    setTimeout(() => setClickedProvider(null), 350);
-    onSelectProvider?.(name);
+  const start = async () => {
+    if (isGoogleConfigured) {
+      setBusy(true);
+      try {
+        onIdentity(await signInWithGoogle());
+      } catch (e) {
+        onError(e instanceof Error ? e.message : 'Google sign-in failed.');
+      } finally {
+        setBusy(false);
+      }
+    } else if (isDemoMode) {
+      setChooser(true);
+    } else {
+      onError('Google sign-in is not set up for this deployment. Add VITE_GOOGLE_CLIENT_ID (see README).');
+    }
+  };
+
+  const submitDemo = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(demo.email.trim()) || !demo.name.trim()) {
+      onError('Enter a name and a valid email for the demo Google account.');
+      return;
+    }
+    setChooser(false);
+    onIdentity({ email: demo.email.trim(), name: demo.name.trim() });
   };
 
   return (
-    <div className="flex items-center justify-center gap-4 my-2">
-      {/* Google */}
-      <motion.button
-        type="button"
-        id="social-btn-google"
-        onClick={() => handleClick('Google')}
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.92 }}
-        className={`w-11 h-11 rounded-full flex items-center justify-center neu-btn-icon relative ${
-          clickedProvider === 'Google' ? 'neu-btn-pressed' : ''
-        }`}
-        title="Continue with Google"
-        aria-label="Continue with Google"
-      >
-        <svg className="w-4 h-4" viewBox="0 0 24 24">
-          <path
-            fill="#EA4335"
-            d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"
-          />
-          <path
-            fill="#4285F4"
-            d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"
-          />
-          <path
-            fill="#FBBC05"
-            d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.8s.1-2.1.4-2.8L1.9 6.3C.7 8.7 0 10.3 0 12s.7 3.3 1.9 5.7l3.7-2.9z"
-          />
-          <path
-            fill="#34A853"
-            d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.4-6.4-5.2L1.9 16c1.8 3.7 5.6 7 10.1 7z"
-          />
-        </svg>
-      </motion.button>
+    <div className="mt-6">
+      <div className="flex items-center gap-3 text-[11px] text-pearl-placeholder mb-4">
+        <span className="flex-1 h-px bg-pearl-border" />
+        Or
+        <span className="flex-1 h-px bg-pearl-border" />
+      </div>
+      <Button variant="outline" onClick={() => void start()} disabled={busy}>
+        {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <GoogleMark />}
+        Continue with Google
+      </Button>
 
-      {/* Apple */}
-      <motion.button
-        type="button"
-        id="social-btn-apple"
-        onClick={() => handleClick('Apple')}
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.92 }}
-        className={`w-11 h-11 rounded-full flex items-center justify-center neu-btn-icon relative ${
-          clickedProvider === 'Apple' ? 'neu-btn-pressed' : ''
-        }`}
-        title="Continue with Apple"
-        aria-label="Continue with Apple"
-      >
-        <svg className="w-4 h-4 fill-gray-900" viewBox="0 0 24 24">
-          <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.85c.66-.82 1.11-1.96.99-3.1-.96.04-2.18.66-2.87 1.48-.61.71-1.15 1.88-1.01 2.98 1.08.08 2.23-.54 2.89-1.36z" />
-        </svg>
-      </motion.button>
+      {chooser && (
+        <div role="dialog" aria-modal="true" aria-label="Choose a Google account (demo)" className="fixed inset-0 z-[80] bg-black/70 flex items-end sm:items-center justify-center p-4">
+          <form onSubmit={submitDemo} className="w-full max-w-sm bg-pearl-dark border border-pearl-border rounded-2xl p-5 space-y-4">
+            <div className="flex items-center gap-2"><GoogleMark /><h2 className="font-bold">Choose a Google account</h2></div>
+            <p className="text-[11px] text-pearl-accent">Demo mode: no real Google call is made. Set VITE_GOOGLE_CLIENT_ID for real Google sign-in.</p>
+            <Field label="Name" value={demo.name} onChange={(e) => setDemo((d) => ({ ...d, name: e.target.value }))} placeholder="Amina Kato" autoFocus />
+            <Field label="Gmail address" type="email" value={demo.email} onChange={(e) => setDemo((d) => ({ ...d, email: e.target.value }))} placeholder="amina@gmail.com" />
+            <div className="grid grid-cols-2 gap-3">
+              <Button variant="outline" onClick={() => setChooser(false)}>Cancel</Button>
+              <Button type="submit">Continue</Button>
+            </div>
+          </form>
+        </div>
+      )}
+    </div>
+  );
+};
 
-      {/* Facebook */}
-      <motion.button
-        type="button"
-        id="social-btn-facebook"
-        onClick={() => handleClick('Facebook')}
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.92 }}
-        className={`w-11 h-11 rounded-full flex items-center justify-center neu-btn-icon relative ${
-          clickedProvider === 'Facebook' ? 'neu-btn-pressed' : ''
-        }`}
-        title="Continue with Facebook"
-        aria-label="Continue with Facebook"
-      >
-        <svg className="w-4 h-4 fill-[#1877F2]" viewBox="0 0 24 24">
-          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-        </svg>
-      </motion.button>
+/** One-click role access for presentations (VITE_DEMO_MODE=true only). */
+export const DemoAccess: React.FC<{ onPick: (role: 'traveller' | 'border_officer' | 'admin_staff') => void }> = ({ onPick }) => {
+  if (!isDemoMode) return null;
+  return (
+    <div className="mt-6 p-3 rounded-xl border border-dashed border-pearl-gold/50">
+      <p className="text-[11px] font-bold uppercase tracking-wider text-pearl-accent mb-2">Demo access</p>
+      <div className="grid grid-cols-3 gap-2">
+        <Button variant="outline" onClick={() => onPick('traveller')} className="!px-2 text-xs">Traveller</Button>
+        <Button variant="outline" onClick={() => onPick('border_officer')} className="!px-2 text-xs">Officer</Button>
+        <Button variant="outline" onClick={() => onPick('admin_staff')} className="!px-2 text-xs">Admin</Button>
+      </div>
     </div>
   );
 };

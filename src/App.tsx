@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { BackgroundElements } from './components/BackgroundElements';
-import { AuthCard } from './components/AuthCard';
+import { WelcomeScreen } from './components/WelcomeScreen';
+import { SignupView } from './components/SignupView';
+import { OfficerPortal } from './components/officer/OfficerPortal';
+import { LegalPage } from './components/LegalPage';
+import { getLegalSlugFromHash, type LegalSlug } from './config/site';
 import { LoginPage } from './components/LoginPage';
 import { ForgotPasswordModal } from './components/ForgotPasswordModal';
 import { AdminDashboard } from './components/AdminDashboard';
@@ -13,7 +16,8 @@ import {
   loadPersistedSession,
   persistSession,
 } from './utils/authStorage';
-import { logoutFromApi, verifyEmailWithApi } from './utils/apiClient';
+import { ConnectionBanner } from './components/ConnectionBanner';
+import { ApiRequestError, fetchServerRoles, logoutFromApi, refreshWithApi, verifyEmailWithApi } from './utils/apiClient';
 
 export default function App() {
   const initialSession = loadPersistedSession();
@@ -25,12 +29,33 @@ export default function App() {
     (window.location.search.includes('mode=signup') ||
       window.location.hash.includes('signup'))
       ? 'signup'
-      : 'login';
+      : initialSession
+        ? 'login'
+        : 'welcome';
   const [authMode, setAuthMode] = useState<AuthMode>(initialMode);
   const [rememberSession, setRememberSession] = useState<boolean>(
     initialSession?.rememberMe ?? true
   );
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  /* Legal pages live at #/legal/<slug> and are reachable from every footer. */
+  const [legalSlug, setLegalSlug] = useState<LegalSlug | null>(() => getLegalSlugFromHash(window.location.hash));
+  const lastAppHash = React.useRef('');
+  useEffect(() => {
+    const sync = () => {
+      const slug = getLegalSlugFromHash(window.location.hash);
+      if (!slug) lastAppHash.current = window.location.hash;
+      setLegalSlug(slug);
+    };
+    sync();
+    window.addEventListener('hashchange', sync);
+    return () => window.removeEventListener('hashchange', sync);
+  }, []);
+  const closeLegal = () => {
+    window.location.hash = lastAppHash.current;
+    if (!lastAppHash.current) window.history.replaceState(null, '', window.location.pathname + window.location.search);
+    setLegalSlug(null);
+  };
 
   /* Forgot-password modal state (used by the new LoginPage) */
   const [forgotModalOpen, setForgotModalOpen] = useState(false);
@@ -94,112 +119,134 @@ export default function App() {
     persistSession(merged, rememberSession);
   };
 
-  /* ── Determine which unauthenticated view to show ── */
-  const isLogin = authMode === 'login';
+  /* Roles are decided by the server. A stored session is re-checked on start; privileged roles
+     without a server token are dropped, and the server enforces every privileged request anyway. */
+  useEffect(() => {
+    const u = currentUser;
+    if (!u) return;
+    const privileged = u.roles?.some((r) => r !== 'traveller');
+    if (!u.accessToken) {
+      if (privileged) {
+        const demoted = { ...u, roles: ['traveller' as const] };
+        setCurrentUser(demoted);
+        persistSession(demoted, rememberSession);
+      }
+      return;
+    }
+    let cancelled = false;
+    void (async () => {
+      try {
+        let token = u.accessToken!;
+        let refreshToken = u.refreshToken;
+        let roles;
+        try {
+          roles = await fetchServerRoles(token);
+        } catch (e) {
+          if (!(e instanceof ApiRequestError) || e.statusCode !== 401 || !u.refreshToken) throw e;
+          const r = await refreshWithApi(u.refreshToken);
+          token = r.accessToken; refreshToken = r.refreshToken; roles = r.roles;
+        }
+        if (cancelled) return;
+        if (JSON.stringify(roles) !== JSON.stringify(u.roles) || token !== u.accessToken) {
+          const next = { ...u, roles, accessToken: token, refreshToken };
+          setCurrentUser(next);
+          persistSession(next, rememberSession);
+        }
+      } catch (e) {
+        if (cancelled) return;
+        if (e instanceof ApiRequestError && (e.statusCode === 401 || e.statusCode === 403)) {
+          clearPersistedSession();
+          setCurrentUser(null);
+          setAuthMode('login');
+        }
+        // Server unreachable: keep the cached view. Privileged data still needs the server.
+      }
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser?.accessToken]);
+
+  const [prefillEmail, setPrefillEmail] = useState('');
+  const role = currentUser?.roles?.includes('admin_staff')
+    ? 'admin'
+    : currentUser?.roles?.includes('border_officer')
+      ? 'officer'
+      : 'traveller';
+
+  const toast = (
+    <AnimatePresence>
+      {toastMessage && (
+        <motion.aside
+          role="status"
+          aria-label="Notification"
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -16 }}
+          transition={{ duration: 0.2 }}
+          className="fixed top-4 right-4 left-4 sm:left-auto sm:right-6 z-[70] sm:max-w-sm px-4 py-3 rounded-xl bg-pearl-navy border border-pearl-border shadow-lg flex items-center gap-3 text-sm font-medium text-pearl-text"
+        >
+          <div className="w-6 h-6 rounded-full bg-pearl-success/15 border border-pearl-success/40 text-pearl-success-light flex items-center justify-center shrink-0">
+            <Check className="w-3.5 h-3.5 stroke-[3]" />
+          </div>
+          <span className="leading-snug">{toastMessage}</span>
+        </motion.aside>
+      )}
+    </AnimatePresence>
+  );
+
+  let screen: React.ReactNode;
+  if (currentUser) {
+    screen =
+      role === 'admin' ? (
+        <AdminDashboard key={currentUser.email} currentUser={currentUser} onLogout={handleLogout} />
+      ) : role === 'officer' ? (
+        <OfficerPortal key={currentUser.email} currentUser={currentUser} onLogout={handleLogout} />
+      ) : (
+        <TravelerReadinessPortal
+          key={currentUser.email}
+          currentUser={currentUser}
+          onLogout={handleLogout}
+          onShowToast={showToast}
+          onUpdateCurrentUser={handleUpdateCurrentUser}
+        />
+      );
+  } else if (authMode === 'welcome') {
+    screen = <WelcomeScreen onGetStarted={() => setAuthMode('signup')} onLogin={() => setAuthMode('login')} />;
+  } else if (authMode === 'login') {
+    screen = (
+      <>
+        <LoginPage
+          initialEmail={prefillEmail}
+          onBack={() => setAuthMode('welcome')}
+          onSwitchToSignup={() => setAuthMode('signup')}
+          onOpenForgotModal={(email) => {
+            setForgotPrefillEmail(email);
+            setForgotModalOpen(true);
+          }}
+          onSuccess={handleLoginSuccess}
+        />
+        <ForgotPasswordModal isOpen={forgotModalOpen} onClose={() => setForgotModalOpen(false)} defaultEmail={forgotPrefillEmail} />
+      </>
+    );
+  } else {
+    screen = (
+      <SignupView
+        onBack={() => setAuthMode('welcome')}
+        onSuccessToast={showToast}
+        onAuthenticated={handleLoginSuccess}
+        onSwitchToLogin={(email) => {
+          if (email) setPrefillEmail(email);
+          setAuthMode('login');
+        }}
+      />
+    );
+  }
 
   return (
-    <div
-      className={`relative min-h-screen w-full overflow-x-hidden selection:bg-pearl-gold-light selection:text-pearl-text ${
-        currentUser
-          ? 'bg-pearl-slate text-pearl-text'
-          : isLogin
-            ? '' /* LoginPage owns its own full-page layout */
-            : 'flex flex-col justify-center items-center bg-pearl-navy text-pearl-text'
-      }`}
-    >
-      {/* Background elements only for signup (login has its own background now) */}
-      {!currentUser && !isLogin && <BackgroundElements variant={authMode} />}
-
-      {/* Global Toast Notification */}
-      <AnimatePresence>
-        {toastMessage && (
-          <motion.aside
-            aria-label="Notification"
-            initial={{ opacity: 0, y: -16, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -16, scale: 0.96 }}
-            transition={{ duration: 0.2 }}
-            className="fixed top-4 right-4 sm:right-6 z-[70] max-w-sm px-4 py-3 rounded-xl bg-pearl-input border border-pearl-border shadow-lg flex items-center gap-3 text-sm font-medium text-pearl-text"
-          >
-            <div className="w-6 h-6 rounded-full bg-pearl-success/15 border border-pearl-success/30 text-pearl-success-light flex items-center justify-center shrink-0">
-              <Check className="w-3.5 h-3.5 stroke-[3]" />
-            </div>
-            <span className="leading-snug">{toastMessage}</span>
-          </motion.aside>
-        )}
-      </AnimatePresence>
-
-      {currentUser ? (
-        <main className="relative z-10 w-full min-h-screen">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`view-portal-${currentUser.email}`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="w-full min-h-screen"
-            >
-              {currentUser.roles?.includes('admin_staff') ? (
-                <AdminDashboard
-                  key={currentUser.email}
-                  currentUser={currentUser}
-                  onLogout={handleLogout}
-                />
-              ) : (
-                <TravelerReadinessPortal
-                  key={currentUser.email}
-                  currentUser={currentUser}
-                  onLogout={handleLogout}
-                  onShowToast={showToast}
-                  onUpdateCurrentUser={handleUpdateCurrentUser}
-                />
-              )}
-            </motion.div>
-          </AnimatePresence>
-        </main>
-      ) : isLogin ? (
-        /* ── New full-page Login ── */
-        <>
-          <LoginPage
-            onSwitchToSignup={() => setAuthMode('signup')}
-            onOpenForgotModal={(email) => {
-              setForgotPrefillEmail(email);
-              setForgotModalOpen(true);
-            }}
-            onSuccess={handleLoginSuccess}
-          />
-          <ForgotPasswordModal
-            isOpen={forgotModalOpen}
-            onClose={() => setForgotModalOpen(false)}
-            defaultEmail={forgotPrefillEmail}
-          />
-        </>
-      ) : (
-        /* ── Signup (uses existing AuthCard + BackgroundElements) ── */
-        <main
-          aria-label="Pearl Travel Authentication"
-          className="relative z-10 flex-1 flex flex-col items-center justify-center w-full my-auto py-4"
-        >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key="view-auth-signup"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.22 }}
-              className="w-full flex justify-center"
-            >
-              <AuthCard
-                mode={authMode}
-                onModeChange={setAuthMode}
-                onSuccessToast={showToast}
-                onLoginSuccess={handleLoginSuccess}
-              />
-            </motion.div>
-          </AnimatePresence>
-        </main>
-      )}
+    <div className="relative min-h-screen w-full overflow-x-hidden bg-pearl-slate text-pearl-text selection:bg-pearl-gold selection:text-pearl-navy">
+      <ConnectionBanner />
+      {toast}
+      {legalSlug ? <LegalPage slug={legalSlug} onBack={closeLegal} /> : screen}
     </div>
   );
 }

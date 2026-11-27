@@ -1,3 +1,4 @@
+import { buildAlerts } from '../../utils/alerts';
 import React, { useState, useRef, useEffect } from 'react';
 import {
   Menu,
@@ -32,18 +33,20 @@ interface DashboardHeaderProps {
 }
 
 const TAB_TITLES: Record<PortalTab, string> = {
-  overview: 'Traveller Overview',
-  profile: 'My Profile',
-  journey: 'My Journey',
-  guidance: 'Travel Requirements',
-  checklist: 'Document Checklist',
-  readiness: 'Readiness Assessment',
-  'ai-guidance': 'Travel Assistant',
-  'border-guide': 'Malaba OSBP Border Guide',
-  multimedia: 'Multimedia Guidance (4K)',
-  qr: 'QR Readiness Summary',
-  audit: 'Review & Audit',
-  'download-pdf': 'Export Readiness Report',
+  overview: 'Home',
+  profile: 'Profile',
+  journey: 'Journey',
+  guidance: 'Requirements',
+  checklist: 'Checklist',
+  readiness: 'Readiness',
+  'ai-guidance': 'Assistant',
+  'border-guide': 'Border Guide',
+  multimedia: 'Videos',
+  qr: 'QR Pass',
+  audit: 'Review',
+  'download-pdf': 'Report',
+  alerts: 'Alerts',
+  offline: 'Offline',
 };
 
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
@@ -79,59 +82,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
     return () => document.removeEventListener('mousedown', handleOutside);
   }, []);
 
-  // Derive genuine alerts from real readiness and sync state
-  const alerts: {
-    id: string;
-    title: string;
-    detail: string;
-    severity: 'critical' | 'warning' | 'info';
-    targetTab: PortalTab;
-  }[] = [];
-
-  if (!isProfileComplete) {
-    alerts.push({
-      id: 'alert-profile',
-      title: 'Traveller Profile Incomplete',
-      detail: 'Complete passport, contact, and emergency contact details.',
-      severity: 'warning',
-      targetTab: 'profile',
-    });
-  }
-
-  if (missingMandatoryCount > 0) {
-    alerts.push({
-      id: 'alert-mandatory',
-      title: `${missingMandatoryCount} Mandatory Document${missingMandatoryCount > 1 ? 's' : ''} Needed`,
-      detail: missingItems
-        .filter((i) => i.mandatory)
-        .slice(0, 2)
-        .map((i) => i.title)
-        .join(', '),
-      severity: 'critical',
-      targetTab: 'checklist',
-    });
-  } else if (missingItems.length > 0) {
-    alerts.push({
-      id: 'alert-optional',
-      title: `${missingItems.length} Recommended Item${missingItems.length > 1 ? 's' : ''} Pending`,
-      detail: missingItems
-        .slice(0, 2)
-        .map((i) => i.title)
-        .join(', '),
-      severity: 'info',
-      targetTab: 'checklist',
-    });
-  }
-
-  if (isOfflineMode) {
-    alerts.push({
-      id: 'alert-offline',
-      title: 'Offline Border Cache Active',
-      detail: 'Requirements, checklist, and QR pass are available offline.',
-      severity: 'info',
-      targetTab: 'qr',
-    });
-  }
+  const alerts = buildAlerts({ isProfileComplete, missingItems, missingMandatoryCount, isOfflineMode });
 
   const firstName = profile.firstName || profile.fullName.split(' ')[0] || 'Traveller';
   const initials = (profile.fullName || 'PT')
@@ -142,7 +93,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
     .join('');
 
   return (
-    <header className="sticky top-0 z-30 h-14 sm:h-16 w-full bg-pearl-navy border-b border-pearl-dark px-3 sm:px-6 flex items-center justify-between gap-2 text-pearl-text">
+    <header className="sticky top-0 z-30 h-14 sm:h-16 w-full bg-pearl-navy border-b border-pearl-border px-3 sm:px-6 flex items-center justify-between gap-2 text-pearl-text">
       {/* Left: Drawer Trigger + Page Title */}
       <div className="flex items-center gap-2.5 min-w-0">
         <button
@@ -155,9 +106,6 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
         </button>
 
         <div className="min-w-0">
-          <p className="hidden sm:block text-[10px] font-semibold uppercase tracking-wider text-pearl-placeholder">
-            Malaba OSBP Readiness Portal
-          </p>
           <h1 className="font-heading text-sm sm:text-base font-bold text-pearl-text truncate">
             {TAB_TITLES[activeTab]}
           </h1>
@@ -174,13 +122,13 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
           title={isOfflineMode ? 'Switch back to Live Online mode' : 'Simulate Offline Border mode'}
           className={`min-h-[36px] px-2.5 sm:px-3 py-1.5 rounded-lg border text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
             isOfflineMode
-              ? 'bg-pearl-gold/20 border-pearl-gold/50 text-pearl-gold-light'
-              : 'bg-pearl-dark border-pearl-slate text-pearl-text-secondary hover:text-pearl-text'
+              ? 'bg-pearl-gold/20 border-pearl-gold/50 text-pearl-accent'
+              : 'bg-pearl-dark border-pearl-border text-pearl-text-secondary hover:text-pearl-text'
           }`}
         >
           {isOfflineMode ? (
             <>
-              <WifiOff className="w-3.5 h-3.5 text-pearl-gold-light" />
+              <WifiOff className="w-3.5 h-3.5 text-pearl-accent" />
               <span className="hidden sm:inline">Offline Cache</span>
             </>
           ) : (
@@ -198,11 +146,11 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
           onClick={onSyncNow}
           disabled={isSyncing}
           title={`Last synced: ${lastSyncedTime}. Click to sync now.`}
-          className="hidden md:flex items-center gap-1.5 min-h-[36px] px-3 py-1.5 rounded-lg bg-pearl-dark border border-pearl-slate text-xs font-medium text-pearl-text-secondary hover:text-pearl-text hover:border-pearl-border transition-colors cursor-pointer disabled:opacity-60 whitespace-nowrap shrink-0"
+          className="hidden md:flex items-center gap-1.5 min-h-[36px] px-3 py-1.5 rounded-lg bg-pearl-dark border border-pearl-border text-xs font-medium text-pearl-text-secondary hover:text-pearl-text hover:border-pearl-border transition-colors cursor-pointer disabled:opacity-60 whitespace-nowrap shrink-0"
         >
-          <RefreshCw className={`w-3.5 h-3.5 text-pearl-gold ${isSyncing ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`w-3.5 h-3.5 text-pearl-accent ${isSyncing ? 'animate-spin' : ''}`} />
           <span className="tabular-nums text-[11px]">
-            {isSyncing ? 'Syncing...' : `Synced ${lastSyncedTime}`}
+            {isSyncing ? 'Syncing…' : 'Synced'}
           </span>
         </button>
 
@@ -215,7 +163,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               setShowNotifications((prev) => !prev);
               setShowProfileMenu(false);
             }}
-            className="relative min-h-[44px] min-w-[44px] sm:min-h-[38px] sm:min-w-[38px] flex items-center justify-center rounded-xl bg-pearl-dark border border-pearl-slate text-pearl-text-secondary hover:text-pearl-text transition-colors cursor-pointer"
+            className="relative min-h-[44px] min-w-[44px] sm:min-h-[38px] sm:min-w-[38px] flex items-center justify-center rounded-xl bg-pearl-dark border border-pearl-border text-pearl-text-secondary hover:text-pearl-text transition-colors cursor-pointer"
           >
             <Bell className="w-4 h-4" />
             {alerts.length > 0 && (
@@ -262,7 +210,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
                           alert.severity === 'critical'
                             ? 'text-pearl-danger-light'
                             : alert.severity === 'warning'
-                            ? 'text-pearl-gold-light'
+                            ? 'text-pearl-accent'
                             : 'text-pearl-text'
                         }`}
                       />
@@ -288,7 +236,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               setShowProfileMenu((prev) => !prev);
               setShowNotifications(false);
             }}
-            className="min-h-[40px] pl-1.5 pr-2.5 py-1 rounded-xl bg-pearl-dark border border-pearl-slate hover:border-pearl-border flex items-center gap-2 transition-colors cursor-pointer"
+            className="min-h-[40px] pl-1.5 pr-2.5 py-1 rounded-xl bg-pearl-dark border border-pearl-border hover:border-pearl-border flex items-center gap-2 transition-colors cursor-pointer"
           >
             {profile.avatarUrl ? (
               <img

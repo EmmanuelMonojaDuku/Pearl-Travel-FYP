@@ -1,4 +1,4 @@
-export type AuthMode = 'login' | 'signup';
+export type AuthMode = 'welcome' | 'login' | 'signup';
 export type UserRole = 'traveller' | 'admin_staff' | 'border_officer';
 
 export interface LoginFormState {
@@ -82,7 +82,7 @@ export type TravellerType =
   | 'resident'
   | 'student';
 
-export type DocumentStatus = 'complete' | 'missing' | 'expired';
+export type DocumentStatus = 'complete' | 'missing' | 'expired' | 'not_applicable';
 
 export type TravelDocumentType =
   | 'Biometric Passport'
@@ -151,6 +151,11 @@ export interface AIChatMessage {
   groundedSource?: string;
   category?: string;
   verifiedBadge?: boolean;
+  followUps?: string[];
+  scope?: 'in' | 'out';
+  /** rag: AI explanation grounded in approved guidance. local: limited on-device keyword answer. refusal: no supported answer. */
+  origin?: 'rag' | 'refusal' | 'local';
+  sources?: { id: string; title: string; authority: string; reviewedAt: string }[];
 }
 
 export interface ChecklistItem {
@@ -164,6 +169,7 @@ export interface ChecklistItem {
   expiryDate?: string;
   guidanceNote?: string;
   issuingAuthority?: string;
+  verification?: { status: 'verified' | 'pending' };
 }
 
 export interface TravelRequirement {
@@ -175,6 +181,8 @@ export interface TravelRequirement {
   applicableCondition: string;
   mandatory: boolean;
   officialSource?: string;
+  /** 'pending' until an administrator has verified the rule against its official source. */
+  verification?: { status: 'verified' | 'pending' };
 }
 
 export interface QRSummaryData {

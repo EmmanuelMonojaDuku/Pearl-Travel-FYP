@@ -68,6 +68,7 @@ export interface AuthRepository {
   revokeAllUserRefreshTokens(userId: string, reason: string): Promise<void>;
   findEmailVerificationTokenByHash(tokenHash: string): Promise<EmailVerificationTokenRecord | null>;
   markEmailVerified(params: { tokenId: string; userId: string }): Promise<void>;
+  markUserEmailVerified(userId: string): Promise<void>;
   replaceEmailVerificationToken(params: {
     userId: string;
     tokenHash: string;
@@ -475,6 +476,17 @@ export class PostgresAuthRepository implements AuthRepository {
       usedAt: row.used_at ? new Date(row.used_at) : null,
       createdAt: new Date(row.created_at),
     };
+  }
+
+  public async markUserEmailVerified(userId: string): Promise<void> {
+    await this.db.query(
+      `
+      UPDATE public.pt_auth_users
+      SET email_verified = TRUE, email_verified_at = COALESCE(email_verified_at, NOW())
+      WHERE id = $1
+      `,
+      [userId]
+    );
   }
 
   public async markEmailVerified(params: { tokenId: string; userId: string }): Promise<void> {

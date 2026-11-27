@@ -14,11 +14,13 @@ import { TravelRequirement } from '../types';
 interface RequirementGuidanceCardProps {
   requirements: TravelRequirement[];
   nationality: string;
+  purpose?: string;
 }
 
 export const RequirementGuidanceCard: React.FC<RequirementGuidanceCardProps> = ({
   requirements,
   nationality,
+  purpose,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -40,22 +42,22 @@ export const RequirementGuidanceCard: React.FC<RequirementGuidanceCardProps> = (
     <div className="w-full bg-pearl-dark rounded-2xl p-5 sm:p-7 border border-pearl-border">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-4 border-b border-pearl-border gap-2">
         <div>
-          <span className="text-[11px] font-bold uppercase tracking-wider text-pearl-gold-light">
-            Official Compliance & Rules
-          </span>
           <h2 className="text-xl font-bold text-pearl-text font-heading">
-            Requirement Guidance
+            Requirements
           </h2>
-          <p className="text-xs text-pearl-text-secondary mt-0.5">
-            Explaining Uganda border & immigration requirements in clear, plain language.
-          </p>
         </div>
 
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-pearl-surface border border-pearl-border text-pearl-text-secondary self-start sm:self-auto">
-          <span>Tailored for</span>
-          <strong className="text-pearl-text font-bold">{nationality}</strong>
+        <div className="flex flex-wrap items-center gap-1.5 self-start sm:self-auto">
+          <span className="px-3 py-1 rounded-full text-[11px] font-bold bg-pearl-gold text-pearl-navy">{nationality}</span>
+          {purpose && <span className="px-3 py-1 rounded-full text-[11px] font-bold bg-pearl-surface border border-pearl-border text-pearl-text capitalize">{purpose}</span>}
         </div>
       </div>
+
+      {requirements.some((r) => r.verification?.status === 'pending') && (
+        <div role="note" className="mb-3 p-2.5 rounded-xl bg-[#FFF8DB] border border-pearl-gold/40 text-[11px] text-pearl-navy font-medium">
+          {requirements.filter((r) => r.verification?.status === 'pending').length} of {requirements.length} rules are waiting for official verification. Confirm important details on the official portals.
+        </div>
+      )}
 
       {/* Category Filter Tabs */}
       <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none mb-4">
@@ -68,7 +70,7 @@ export const RequirementGuidanceCard: React.FC<RequirementGuidanceCardProps> = (
               onClick={() => setSelectedCategory(cat.id)}
               className={`px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
                 active
-                  ? 'bg-pearl-navy text-pearl-gold'
+                  ? 'bg-pearl-gold text-pearl-navy font-bold'
                   : 'bg-pearl-surface border border-pearl-border text-pearl-text-secondary hover:text-pearl-text hover:bg-pearl-input'
               }`}
             >

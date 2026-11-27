@@ -1,4 +1,5 @@
 import type { UserProfile } from '../types';
+import { isTravellerProfileComplete } from './authStorage';
 
 const API_BASE_URL = (
   import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000/api/v1'
@@ -85,7 +86,7 @@ export interface AdminOverview {
   };
 }
 
-async function request<T>(
+export async function request<T>(
   path: string,
   init: RequestInit = {}
 ): Promise<ApiEnvelope<T>> {
@@ -121,7 +122,7 @@ function mapApiUser(user: ApiUser): UserProfile {
     'Prefer not to say',
   ];
   const gender = genderOptions.find((option) => option === user.gender);
-  return {
+  const mapped: UserProfile = {
     id: user.id,
     name: user.fullName,
     firstName: user.firstName ?? undefined,
@@ -138,6 +139,21 @@ function mapApiUser(user: ApiUser): UserProfile {
     roles: user.roles,
     profileCompleted: false,
   };
+  return { ...mapped, profileCompleted: isTravellerProfileComplete(null, mapped) };
+}
+
+export async function refreshWithApi(refreshToken: string): Promise<{ accessToken: string; refreshToken: string; roles: NonNullable<UserProfile['roles']> }> {
+  const result = await request<{ user: ApiUser; tokens: { accessToken: string; refreshToken: string } }>('/auth/refresh', {
+    method: 'POST',
+    body: JSON.stringify({ refreshToken }),
+  });
+  return { ...result.data.tokens, roles: result.data.user.roles };
+}
+
+/** Roles as the server knows them. The browser never decides roles; this is the source of truth. */
+export async function fetchServerRoles(accessToken: string): Promise<NonNullable<UserProfile['roles']>> {
+  const result = await request<{ user: ApiUser }>('/auth/me', { headers: { Authorization: `Bearer ${accessToken}` } });
+  return result.data.user.roles;
 }
 
 export function isBootstrapAdminEmail(email: string): boolean {
@@ -168,7 +184,7 @@ export async function registerWithApi(input: {
   lastName: string;
   email: string;
   password: string;
-}): Promise<{ verificationDelivered: boolean }> {
+}): Promise<{ verificationRequired: boolean; verificationDelivered: boolean }> {
   const result = await request<{
     emailVerification: {
       required: boolean;
@@ -183,6 +199,7 @@ export async function registerWithApi(input: {
   });
 
   return {
+    verificationRequired: result.data.emailVerification.required,
     verificationDelivered: result.data.emailVerification.delivery.delivered,
   };
 }

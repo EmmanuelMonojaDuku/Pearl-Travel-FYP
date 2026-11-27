@@ -61,6 +61,22 @@ const envSchema = z.object({
   AUTH_RATE_LIMIT_MAX: z.coerce.number().int().min(1).default(10),
   AUTH_RATE_LIMIT_WINDOW_MS: z.coerce.number().int().min(1000).default(60000),
 
+  REQUIRE_EMAIL_VERIFICATION: z
+    .enum(['true', 'false'])
+    .default('false')
+    .transform((v) => v === 'true'),
+  // QR pass signing (Ed25519, PKCS#8 PEM, optionally base64-encoded). Required in production.
+  QR_SIGNING_PRIVATE_KEY: z.string().optional().default(''),
+  QR_SIGNING_KEY_ID: z.string().min(1).max(40).default('k1'),
+
+  // RAG assistant. Any OpenAI-compatible API works (OpenAI, Azure OpenAI, OpenRouter, a local server).
+  LLM_BASE_URL: z.string().url().default('https://api.openai.com/v1'),
+  LLM_API_KEY: z.string().optional().default(''),
+  LLM_MODEL: z.string().default('gpt-4o-mini'),
+  EMBEDDING_MODEL: z.string().default('text-embedding-3-small'),
+  RAG_MIN_SIMILARITY: z.coerce.number().min(0).max(1).default(0.3),
+  RAG_TOP_K: z.coerce.number().int().min(1).max(10).default(4),
+
   EMAIL_PROVIDER: z.enum(['disabled', 'resend']).default('disabled'),
   EMAIL_FROM: z.string().email().default('noreply@example.com'),
   RESEND_API_KEY: z.string().optional().default(''),
@@ -74,6 +90,9 @@ export type AppConfig = Readonly<{
   corsOrigins: string[];
   appBaseUrl: string;
   adminEmails: string[];
+  requireEmailVerification: boolean;
+  qr: { privateKey: string; keyId: string };
+  rag: { baseUrl: string; apiKey: string; model: string; embeddingModel: string; minSimilarity: number; topK: number };
   database: {
     url: string;
     migrationUrl: string;
@@ -145,6 +164,16 @@ export function loadConfig(source: NodeJS.ProcessEnv = process.env): AppConfig {
       .filter(Boolean),
     appBaseUrl: data.APP_BASE_URL.replace(/\/+$/, ''),
     adminEmails: data.ADMIN_EMAILS,
+    requireEmailVerification: data.REQUIRE_EMAIL_VERIFICATION,
+    qr: { privateKey: data.QR_SIGNING_PRIVATE_KEY.trim(), keyId: data.QR_SIGNING_KEY_ID },
+    rag: {
+      baseUrl: data.LLM_BASE_URL.replace(/\/+$/, ''),
+      apiKey: data.LLM_API_KEY.trim(),
+      model: data.LLM_MODEL,
+      embeddingModel: data.EMBEDDING_MODEL,
+      minSimilarity: data.RAG_MIN_SIMILARITY,
+      topK: data.RAG_TOP_K,
+    },
     database: {
       url: data.DATABASE_URL.trim(),
       migrationUrl: (data.MIGRATION_DATABASE_URL || data.DATABASE_URL).trim(),

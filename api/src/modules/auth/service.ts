@@ -78,6 +78,22 @@ export class AuthService {
       userAgent: meta.userAgent,
     });
 
+    // Email verification is optional. Administrator accounts always verify, because
+    // verification is what stops a stranger claiming a bootstrap admin address.
+    const needsVerification =
+      this.config.requireEmailVerification || this.config.adminEmails.includes(emailNormalized);
+
+    if (!needsVerification) {
+      await this.repository.markUserEmailVerified(user.id);
+      return {
+        user: sanitizeUser({ ...user, emailVerified: true, emailVerifiedAt: new Date() }),
+        emailVerification: {
+          required: false,
+          delivery: { delivered: false, configured: false, provider: 'none', reason: 'Email verification is disabled.' },
+        },
+      };
+    }
+
     const verificationUrl = `${this.config.appBaseUrl}/verify-email?token=${encodeURIComponent(
       verification.rawToken
     )}`;
@@ -138,14 +154,9 @@ export class AuthService {
       throw new ForbiddenError('This account has been deactivated.', 'ACCOUNT_INACTIVE');
     }
 
-    if (this.config.adminEmails.includes(emailNormalized)) {
-      if (!user.emailVerified) {
-        throw new ForbiddenError(
-          'Verify this email address before administrator access can be granted.',
-          'EMAIL_VERIFICATION_REQUIRED'
-        );
-      }
-
+    // Administrator access is only ever granted to a verified bootstrap address. An unverified
+    // address still signs in, but as an ordinary traveller, so registration never dead-ends.
+    if (this.config.adminEmails.includes(emailNormalized) && user.emailVerified) {
       if (!user.roles.includes(USER_ROLES.ADMIN_STAFF)) {
         await this.repository.assignUserRole(user.id, USER_ROLES.ADMIN_STAFF);
         const updatedUser = await this.repository.findUserById(user.id);

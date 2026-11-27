@@ -16,6 +16,8 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
+  Bell,
+  WifiOff,
 } from 'lucide-react';
 import { PortalTab } from './navTypes';
 
@@ -39,6 +41,7 @@ interface NavItem {
   tab?: PortalTab;
   action?: 'settings';
   badge?: number;
+  group?: string;
 }
 
 export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
@@ -56,22 +59,25 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
   const [logoError, setLogoError] = useState(false);
 
   const primaryNav: NavItem[] = [
-    { id: 'overview', label: 'Overview', icon: LayoutDashboard, tab: 'overview' },
-    { id: 'journey', label: 'My Journey', icon: Compass, tab: 'journey' },
+    { id: 'overview', label: 'Home', icon: LayoutDashboard, tab: 'overview', group: 'Plan' },
+    { id: 'journey', label: 'Journey', icon: Compass, tab: 'journey' },
     { id: 'guidance', label: 'Requirements', icon: Globe, tab: 'guidance' },
     {
       id: 'checklist',
-      label: 'Document Checklist',
+      label: 'Checklist',
       icon: FileCheck,
       tab: 'checklist',
+      group: 'Prepare',
       badge: missingMandatoryCount > 0 ? missingMandatoryCount : undefined,
     },
     { id: 'readiness', label: 'Readiness', icon: ShieldCheck, tab: 'readiness' },
-    { id: 'ai-guidance', label: 'Travel Assistant', icon: Bot, tab: 'ai-guidance' },
+    { id: 'qr', label: 'QR Pass', icon: QrCode, tab: 'qr' },
+    { id: 'ai-guidance', label: 'Assistant', icon: Bot, tab: 'ai-guidance', group: 'Guides' },
     { id: 'border-guide', label: 'Border Guide', icon: MapPinned, tab: 'border-guide' },
-    { id: 'qr', label: 'QR Summary', icon: QrCode, tab: 'qr' },
-    { id: 'multimedia', label: 'Multimedia', icon: Video, tab: 'multimedia' },
-    { id: 'profile', label: 'My Profile', icon: User, tab: 'profile' },
+    { id: 'multimedia', label: 'Videos', icon: Video, tab: 'multimedia' },
+    { id: 'alerts', label: 'Alerts', icon: Bell, tab: 'alerts', group: 'Account' },
+    { id: 'offline', label: 'Offline', icon: WifiOff, tab: 'offline' },
+    { id: 'profile', label: 'Profile', icon: User, tab: 'profile' },
     { id: 'settings', label: 'Settings', icon: Settings, action: 'settings' },
   ];
 
@@ -85,22 +91,21 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
   };
 
   const renderLogo = (compact: boolean) => (
-    <div
-      className={`flex items-center justify-center transition-all ${
-        compact ? 'w-11 h-11 p-1.5 mx-auto' : 'w-full px-3 py-2'
-      }`}
-    >
+    <div className={`flex items-center transition-all ${compact ? 'justify-center py-2' : 'gap-3 px-3 py-3'}`}>
       {!logoError ? (
         <img
-          src="/assets/aistudio/logo_dark.png"
+          src="/pearl-travel-logo.png"
           alt="Pearl Travel — Plan, Prepare, Cross"
-          referrerPolicy="no-referrer"
           onError={() => setLogoError(true)}
-          className={compact ? 'h-8 w-auto object-contain' : 'h-12 w-auto object-contain'}
+          className={`${compact ? 'w-12 h-12' : 'w-[72px] h-[72px]'} rounded-xl bg-white p-0.5 object-contain shrink-0`}
         />
       ) : (
-        <span className="font-heading font-extrabold text-sm text-pearl-text tracking-tight">
-          {compact ? 'PT' : 'Pearl Travel'}
+        <span className="font-heading font-extrabold text-sm text-pearl-text tracking-tight">PT</span>
+      )}
+      {!compact && (
+        <span className="min-w-0">
+          <span className="block font-heading font-extrabold text-sm text-pearl-text leading-tight">Pearl Travel</span>
+          <span className="block text-[10px] text-pearl-placeholder">Plan · Prepare · Cross</span>
         </span>
       )}
     </div>
@@ -109,7 +114,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
   const sidebarContent = (compact: boolean) => (
     <div className="flex flex-col h-full bg-pearl-navy text-pearl-text select-none">
       {/* Brand Header */}
-      <div className="px-3.5 pt-4 pb-3 border-b border-pearl-dark flex flex-col gap-2">
+      <div className="px-3.5 pt-4 pb-3 border-b border-pearl-border flex flex-col gap-2">
         <div className="flex items-center justify-between gap-2">
           {renderLogo(compact)}
           {isMobileDrawerOpen && (
@@ -136,7 +141,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
           ) : (
             <>
               <ChevronLeft className="w-3.5 h-3.5" />
-              <span>Collapse Menu</span>
+              <span>Collapse</span>
             </>
           )}
         </button>
@@ -149,8 +154,14 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
           const isActive = item.tab ? activeTab === item.tab : false;
 
           return (
+            <React.Fragment key={item.id}>
+            {item.group &&
+              (compact ? (
+                <div className="my-2 border-t border-pearl-border" aria-hidden="true" />
+              ) : (
+                <p className="px-3 pt-3 pb-1 text-[10px] font-bold uppercase tracking-wider text-pearl-placeholder">{item.group}</p>
+              ))}
             <button
-              key={item.id}
               type="button"
               id={`tab-nav-${item.id}`}
               title={compact ? item.label : undefined}
@@ -177,7 +188,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                 <span
                   className={`ml-2 px-1.5 py-0.5 rounded-md text-[10px] font-bold tabular-nums shrink-0 ${
                     isActive
-                      ? 'bg-pearl-navy text-pearl-gold-light'
+                      ? 'bg-pearl-gold text-pearl-navy font-bold'
                       : 'bg-pearl-danger text-pearl-text'
                   }`}
                 >
@@ -185,26 +196,27 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                 </span>
               )}
             </button>
+            </React.Fragment>
           );
         })}
       </nav>
 
       {/* Bottom Utility Section: Contact Support & Sign Out */}
-      <div className="px-2.5 py-3 border-t border-pearl-dark space-y-1">
+      <div className="px-2.5 py-3 border-t border-pearl-border space-y-1">
         <button
           type="button"
           id="btn-sidebar-support"
-          title={compact ? 'Contact Support' : undefined}
+          title={compact ? 'Support' : undefined}
           onClick={() => {
             onOpenSupport();
             onCloseMobileDrawer();
           }}
           className={`w-full flex items-center ${
             compact ? 'justify-center px-2' : 'gap-2.5 px-3'
-          } min-h-[40px] py-2 rounded-xl text-[13px] font-medium text-pearl-text-secondary hover:bg-pearl-dark hover:text-pearl-gold-light transition-colors cursor-pointer whitespace-nowrap`}
+          } min-h-[40px] py-2 rounded-xl text-[13px] font-medium text-pearl-text-secondary hover:bg-pearl-dark hover:text-pearl-accent transition-colors cursor-pointer whitespace-nowrap`}
         >
-          <HelpCircle className="w-4 h-4 shrink-0 text-pearl-gold" />
-          {!compact && <span>Contact Support</span>}
+          <HelpCircle className="w-4 h-4 shrink-0 text-pearl-accent" />
+          {!compact && <span>Support</span>}
         </button>
 
         {onLogout && (
@@ -229,7 +241,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
     <>
       {/* Desktop Fixed/Collapsible Sidebar */}
       <aside
-        className={`hidden lg:flex flex-col shrink-0 border-r border-pearl-dark sticky top-0 h-screen z-30 transition-all duration-200 ${
+        className={`hidden lg:flex flex-col shrink-0 border-r border-pearl-border sticky top-0 h-screen z-30 transition-all duration-200 ${
           isCollapsed ? 'w-[76px]' : 'w-64'
         }`}
       >
@@ -240,11 +252,11 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
       {isMobileDrawerOpen && (
         <div className="fixed inset-0 z-50 lg:hidden flex">
           <div
-            className="fixed inset-0 bg-pearl-navy/60 backdrop-blur-xs"
+            className="fixed inset-0 bg-pearl-scrim/60 backdrop-blur-xs"
             onClick={onCloseMobileDrawer}
             aria-hidden="true"
           />
-          <aside className="relative z-10 w-72 max-w-[85vw] h-full border-r border-pearl-dark shadow-2xl">
+          <aside className="relative z-10 w-72 max-w-[85vw] h-full border-r border-pearl-border shadow-2xl">
             {sidebarContent(false)}
           </aside>
         </div>

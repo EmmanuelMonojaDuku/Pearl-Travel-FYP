@@ -187,7 +187,7 @@ export const ShareVideoDownloadModal: React.FC<ShareVideoDownloadModalProps> = (
   );
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-pearl-navy/75 backdrop-blur-md flex items-center justify-center p-3 sm:p-5">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-pearl-scrim/75 backdrop-blur-md flex items-center justify-center p-3 sm:p-5">
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 15 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -206,11 +206,11 @@ export const ShareVideoDownloadModal: React.FC<ShareVideoDownloadModalProps> = (
         <div className="px-5 sm:px-7 py-4 border-b border-pearl-border flex items-center justify-between bg-pearl-navy text-pearl-text shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-pearl-danger text-pearl-text flex items-center justify-center shadow-md shrink-0">
-              <Download className="w-5 h-5 text-pearl-gold" />
+              <Download className="w-5 h-5 text-pearl-accent" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-black uppercase tracking-wider text-pearl-gold">
+                <span className="text-[10px] font-black uppercase tracking-wider text-pearl-accent">
                   Universal Video Downloader Hub
                 </span>
                 <span className="text-[9px] font-bold px-2 py-0.2 rounded-full bg-pearl-success/15 text-pearl-success-light border border-pearl-success/30">
@@ -226,7 +226,7 @@ export const ShareVideoDownloadModal: React.FC<ShareVideoDownloadModalProps> = (
           <button
             type="button"
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-pearl-dark hover:bg-pearl-slate text-pearl-text-secondary hover:text-pearl-text flex items-center justify-center transition cursor-pointer"
+            className="w-8 h-8 rounded-full bg-pearl-dark hover:bg-pearl-surface text-pearl-text-secondary hover:text-pearl-text flex items-center justify-center transition cursor-pointer"
             title="Close dialog"
           >
             <X className="w-4 h-4" />
@@ -256,13 +256,13 @@ export const ShareVideoDownloadModal: React.FC<ShareVideoDownloadModalProps> = (
                     onClick={() => setSelectedFormat(item.id)}
                     className={`p-3 rounded-2xl text-left border transition-all cursor-pointer relative flex flex-col justify-between ${
                       isSel
-                        ? 'bg-pearl-navy text-pearl-text border-black shadow-md ring-2 ring-pearl-gold'
+                        ? 'bg-pearl-gold/15 text-pearl-text border-pearl-gold ring-1 ring-pearl-gold'
                         : 'bg-pearl-surface hover:bg-pearl-surface text-pearl-text-secondary border-pearl-border'
                     }`}
                   >
                     <div>
                       <div className="flex items-center justify-between mb-1.5">
-                        <Icon className={`w-4 h-4 ${isSel ? 'text-pearl-gold' : 'text-pearl-placeholder'}`} />
+                        <Icon className={`w-4 h-4 ${isSel ? 'text-pearl-accent' : 'text-pearl-placeholder'}`} />
                         <span className={`text-[9px] font-black uppercase px-1.5 py-0.2 rounded ${
                           isSel ? 'bg-pearl-gold text-pearl-navy' : 'bg-pearl-surface text-pearl-text-secondary'
                         }`}>
@@ -281,10 +281,10 @@ export const ShareVideoDownloadModal: React.FC<ShareVideoDownloadModalProps> = (
           </div>
 
           {/* Primary Action Box: Direct Video URL for Downloaders */}
-          <div className="bg-pearl-navy rounded-2xl p-4 sm:p-5 text-pearl-text border border-pearl-border shadow-lg space-y-4">
+          <div className="bg-pearl-surface rounded-2xl p-4 sm:p-5 text-pearl-text border border-pearl-border shadow-lg space-y-4">
             <div className="flex items-start sm:items-center justify-between gap-3 flex-wrap">
               <div>
-                <span className="text-[10px] font-black uppercase tracking-wider text-pearl-gold flex items-center gap-1.5">
+                <span className="text-[10px] font-black uppercase tracking-wider text-pearl-accent flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-pearl-success-light" />
                   Direct Download Link (Works with ALL Video Downloaders)
                 </span>
@@ -302,12 +302,12 @@ export const ShareVideoDownloadModal: React.FC<ShareVideoDownloadModalProps> = (
 
             {/* Direct URL input bar with copy & download buttons */}
             <div className="space-y-2">
-              <div className="flex items-center gap-2 bg-pearl-navy p-1.5 rounded-xl border border-pearl-border">
+              <div className="flex items-center gap-2 bg-pearl-surface p-1.5 rounded-xl border border-pearl-border">
                 <input
                   type="text"
                   readOnly
                   value={currentItem.url}
-                  className="w-full bg-transparent text-xs font-mono text-pearl-gold px-2 py-1 outline-hidden select-all"
+                  className="w-full bg-transparent text-xs font-mono text-pearl-accent px-2 py-1 outline-hidden select-all"
                   onClick={(e) => (e.target as HTMLInputElement).select()}
                 />
                 <button
@@ -352,7 +352,7 @@ export const ShareVideoDownloadModal: React.FC<ShareVideoDownloadModalProps> = (
                 onClick={() => handleDirectDownload(currentItem.url, currentItem.filename)}
                 className="flex-1 py-2.5 px-4 rounded-xl bg-pearl-danger hover:bg-pearl-danger text-pearl-text text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 transition cursor-pointer shadow-md"
               >
-                <Download className="w-4 h-4 text-pearl-gold" />
+                <Download className="w-4 h-4 text-pearl-accent" />
                 <span>Download Video File (.mp4)</span>
               </button>
 
@@ -360,9 +360,9 @@ export const ShareVideoDownloadModal: React.FC<ShareVideoDownloadModalProps> = (
                 type="button"
                 id="btn-native-share-video"
                 onClick={handleNativeShare}
-                className="py-2.5 px-4 rounded-xl bg-pearl-dark hover:bg-pearl-slate text-pearl-text text-xs font-bold flex items-center justify-center gap-2 transition cursor-pointer border border-pearl-border"
+                className="py-2.5 px-4 rounded-xl bg-pearl-dark hover:bg-pearl-surface text-pearl-text text-xs font-bold flex items-center justify-center gap-2 transition cursor-pointer border border-pearl-border"
               >
-                <Share2 className="w-4 h-4 text-pearl-gold-light" />
+                <Share2 className="w-4 h-4 text-pearl-accent" />
                 <span>Share via Device</span>
               </button>
             </div>
@@ -562,12 +562,12 @@ export const ShareVideoDownloadModal: React.FC<ShareVideoDownloadModalProps> = (
                     { tool: 'wget', cmd: `wget "${currentItem.url}"` },
                     { tool: 'yt-dlp', cmd: `yt-dlp "${currentItem.url}"` },
                   ].map((c) => (
-                    <div key={c.tool} className="flex items-center justify-between gap-2 bg-pearl-navy text-pearl-text-secondary px-3 py-2 rounded-xl font-mono text-[11px]">
+                    <div key={c.tool} className="flex items-center justify-between gap-2 bg-pearl-surface text-pearl-text-secondary px-3 py-2 rounded-xl font-mono text-[11px]">
                       <span className="truncate">{c.cmd}</span>
                       <button
                         type="button"
                         onClick={() => copyToClipboard(c.cmd, `cli-${c.tool}`, `Copied ${c.tool} command!`)}
-                        className="p-1 rounded hover:bg-pearl-surface text-pearl-gold-light shrink-0 cursor-pointer"
+                        className="p-1 rounded hover:bg-pearl-surface text-pearl-accent shrink-0 cursor-pointer"
                         title="Copy command"
                       >
                         {copiedFormat === `cli-${c.tool}` ? <Check className="w-3.5 h-3.5 text-pearl-success-light" /> : <Copy className="w-3.5 h-3.5" />}
@@ -605,7 +605,7 @@ export const ShareVideoDownloadModal: React.FC<ShareVideoDownloadModalProps> = (
                 onClick={() => handleDownloadSRT('sw')}
                 className="px-3 py-1.5 bg-pearl-dark border border-pearl-border hover:border-black rounded-lg text-xs font-bold text-pearl-text transition cursor-pointer flex items-center gap-1 shadow-2xs"
               >
-                <Download className="w-3 h-3 text-pearl-gold" />
+                <Download className="w-3 h-3 text-pearl-accent" />
                 <span>Kiswahili .SRT</span>
               </button>
             </div>

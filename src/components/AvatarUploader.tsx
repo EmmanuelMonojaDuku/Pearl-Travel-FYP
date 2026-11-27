@@ -112,7 +112,7 @@ export const AvatarUploader: React.FC<AvatarUploaderProps> = ({
           )}
 
           <div className="absolute inset-0 bg-pearl-navy/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-pearl-text text-[10px] font-semibold gap-0.5">
-            <Camera className="w-4 h-4 text-pearl-gold-light" />
+            <Camera className="w-4 h-4 text-pearl-accent" />
             <span>Change</span>
           </div>
 
@@ -148,7 +148,7 @@ export const AvatarUploader: React.FC<AvatarUploaderProps> = ({
         </div>
 
         <p className="text-xs text-pearl-text-secondary text-center sm:text-left">
-          PNG, JPG, or WebP up to 5 MB. You can skip this or add a photo anytime.
+          PNG, JPG or WebP, up to 5 MB.
         </p>
 
         {errorMsg && (

@@ -46,3 +46,10 @@ export class ServiceUnavailableError extends AppError {
     this.name = 'ServiceUnavailableError';
   }
 }
+
+export class NotFoundError extends AppError {
+  constructor(message = 'Resource not found.', code = 'NOT_FOUND') {
+    super(404, code, message);
+    this.name = 'NotFoundError';
+  }
+}

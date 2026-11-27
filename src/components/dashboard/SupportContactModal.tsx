@@ -24,7 +24,7 @@ export const SupportContactModal: React.FC<SupportContactModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-pearl-navy/60 backdrop-blur-xs">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-pearl-scrim/60 backdrop-blur-xs">
       <div
         role="dialog"
         aria-modal="true"
@@ -38,9 +38,9 @@ export const SupportContactModal: React.FC<SupportContactModalProps> = ({
             </div>
             <div>
               <h2 id="support-modal-title" className="font-heading text-sm font-bold text-pearl-text">
-                Pearl Travel Traveller Support
+                Support
               </h2>
-              <p className="text-[11px] text-pearl-placeholder">Pre-Arrival & Border Guidance Desk</p>
+              <p className="text-[11px] text-pearl-placeholder">Pearl Travel</p>
             </div>
           </div>
           <button
@@ -67,7 +67,7 @@ export const SupportContactModal: React.FC<SupportContactModalProps> = ({
               onClick={handleCopyEmail}
               className="px-3 py-1.5 rounded-lg bg-pearl-navy hover:bg-pearl-dark text-pearl-text font-semibold flex items-center gap-1.5 cursor-pointer shrink-0"
             >
-              {copied ? <Check className="w-3.5 h-3.5 text-pearl-gold" /> : <Copy className="w-3.5 h-3.5 text-pearl-gold" />}
+              {copied ? <Check className="w-3.5 h-3.5 text-pearl-accent" /> : <Copy className="w-3.5 h-3.5 text-pearl-accent" />}
               <span>{copied ? 'Copied' : 'Copy'}</span>
             </button>
           </div>
@@ -77,7 +77,7 @@ export const SupportContactModal: React.FC<SupportContactModalProps> = ({
             <div>
               <p className="font-bold text-pearl-text">Malaba One-Stop Border Post (OSBP)</p>
               <p className="text-pearl-text-secondary mt-0.5 leading-relaxed">
-                Joint Immigration & Port Health Desk operates 24/7 on the Ugandan side of the terminal. Always present original travel documents upon arrival.
+                Open 24/7. Always carry original documents.
               </p>
             </div>
           </div>
@@ -85,7 +85,7 @@ export const SupportContactModal: React.FC<SupportContactModalProps> = ({
           <div className="p-3.5 rounded-xl bg-pearl-surface border border-pearl-border flex items-start gap-2.5">
             <ShieldCheck className="w-4 h-4 text-pearl-success-light shrink-0 mt-0.5" />
             <p className="text-pearl-text-secondary leading-relaxed">
-              Statutory entry clearance and visa eligibility decisions are made exclusively by Uganda Directorate of Citizenship and Immigration Control (DCIC) officers.
+              Entry decisions are made only by Uganda Immigration (DCIC) officers.
             </p>
           </div>
         </div>

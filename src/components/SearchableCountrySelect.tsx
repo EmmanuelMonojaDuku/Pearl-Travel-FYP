@@ -129,7 +129,7 @@ export const SearchableCountrySelect: React.FC<SearchableCountrySelectProps> = (
           </span>
         </span>
         <ChevronDown
-          className={`w-4 h-4 text-pearl-gold-light shrink-0 transition-transform ${
+          className={`w-4 h-4 text-pearl-accent shrink-0 transition-transform ${
             isOpen ? 'rotate-180' : ''
           }`}
         />
@@ -159,7 +159,7 @@ export const SearchableCountrySelect: React.FC<SearchableCountrySelectProps> = (
                 }}
                 onKeyDown={handleKeyDown}
                 placeholder="Search country or EAC partner state..."
-                className="w-full h-9 pl-9 pr-8 rounded-lg bg-pearl-navy border border-pearl-border text-sm text-pearl-text placeholder:text-pearl-placeholder focus:outline-none focus:border-pearl-gold focus:ring-2 focus:ring-pearl-gold/35"
+                className="w-full h-9 pl-9 pr-8 rounded-lg bg-pearl-input border border-pearl-border text-sm text-pearl-text placeholder:text-pearl-placeholder focus:outline-none focus:border-pearl-gold focus:ring-2 focus:ring-pearl-gold/35"
               />
               {query && (
                 <button
@@ -203,8 +203,8 @@ export const SearchableCountrySelect: React.FC<SearchableCountrySelectProps> = (
                       isSelected
                         ? 'bg-pearl-gold/15 text-pearl-text font-semibold'
                         : isHighlighted
-                        ? 'bg-pearl-slate text-pearl-text'
-                        : 'text-pearl-text hover:bg-pearl-slate'
+                        ? 'bg-pearl-surface text-pearl-text'
+                        : 'text-pearl-text hover:bg-pearl-surface'
                     }`}
                   >
                     <div className="flex items-center gap-2 min-w-0">
@@ -215,7 +215,7 @@ export const SearchableCountrySelect: React.FC<SearchableCountrySelectProps> = (
                         </span>
                       )}
                     </div>
-                    {isSelected && <Check className="w-4 h-4 text-pearl-gold-light shrink-0" />}
+                    {isSelected && <Check className="w-4 h-4 text-pearl-accent shrink-0" />}
                   </li>
                 );
               })
