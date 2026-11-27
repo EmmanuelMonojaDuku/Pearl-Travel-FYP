@@ -1,7 +1,6 @@
 import type { ChecklistItem, JourneyDetails, KnowledgeArticle, PassengerProfile } from '../types';
-import { VERIFIED_KNOWLEDGE_ARTICLES } from './verifiedKnowledgeBase';
+import { getKnowledgeArticles } from './knowledgeStore';
 import { calculateReadinessScore } from './travelRequirementsEngine';
-import { getContent } from '../utils/opsStore';
 
 /**
  * Pearl Travel assistant brain.
@@ -64,7 +63,7 @@ function bullets(article: KnowledgeArticle, max = 4): string[] {
 }
 
 function related(article: KnowledgeArticle): string[] {
-  const others = VERIFIED_KNOWLEDGE_ARTICLES.filter((a) => a.id !== article.id);
+  const others = getKnowledgeArticles().filter((a) => a.id !== article.id);
   const picks = [...others.filter((a) => a.category === article.category), ...others.filter((a) => a.category !== article.category)].slice(0, 2);
   const titles: Record<string, string> = {
     'kb-malaba-osbp-clearing': 'How does clearance work at Malaba?',
@@ -221,7 +220,7 @@ export function answerQuestion(rawQuestion: string, ctx: AssistantContext): Assi
       followUps: ['What am I still missing?'],
     };
   }
-  const topicHit = VERIFIED_KNOWLEDGE_ARTICLES.some((a) => scoreArticle(q, a) >= 2);
+  const topicHit = getKnowledgeArticles().some((a) => scoreArticle(q, a) >= 2);
   if (!topicHit && (/\bwhat documents|which documents|documents (do i|should i|to) (need|carry|bring)|\bdocuments needed|show documents\b/.test(q) || (hasWord(q, 'documents') && /(need|carry|bring|required)/.test(q)))) {
     const sym = (i: ChecklistItem) => (i.status === 'complete' ? '✔' : i.status === 'not_applicable' ? '–' : '✖');
     const list = ctx.checklist.map((i) => `${sym(i)} ${i.title}${i.mandatory ? '' : ' (optional)'}`);
@@ -250,9 +249,9 @@ export function answerQuestion(rawQuestion: string, ctx: AssistantContext): Assi
   }
 
   // 4. Follow-ups that refer to the previous topic
-  const last = ctx.lastArticleId ? VERIFIED_KNOWLEDGE_ARTICLES.find((a) => a.id === ctx.lastArticleId) : undefined;
+  const last = ctx.lastArticleId ? getKnowledgeArticles().find((a) => a.id === ctx.lastArticleId) : undefined;
   const isFollowUp = words.length <= 6 && /^(tell me more|more|more details|details|explain|go on|continue|elaborate|and|what about|how much|cost|fee|price|how long|why|really|is that|does that|can i|do i)\b/.test(q);
-  if (last && isFollowUp && !VERIFIED_KNOWLEDGE_ARTICLES.some((a) => a.id !== last.id && scoreArticle(q, a) >= 2)) {
+  if (last && isFollowUp && !getKnowledgeArticles().some((a) => a.id !== last.id && scoreArticle(q, a) >= 2)) {
     if (/(how much|cost|fee|price|pay|\$|ugx)/.test(q)) {
       const money = last.detailedContent.split('\n').filter((l) => /\$|UGX|fee/i.test(l)).map((l) => l.trim().replace(/^(\d+\.|•|-)\s*/, ''));
       return money.length
@@ -267,14 +266,14 @@ export function answerQuestion(rawQuestion: string, ctx: AssistantContext): Assi
   if (/\b(my|selected|chosen) (border|crossing|border post)\b|which border am i|where am i crossing/.test(q)) {
     const chosen = (ctx.journey?.intendedBorderPoint || '').toLowerCase();
     const id = PLACE_BY_NAME.find(([n]) => chosen.includes(n))?.[1];
-    const art = id ? VERIFIED_KNOWLEDGE_ARTICLES.find((a) => a.id === id) : undefined;
+    const art = id ? getKnowledgeArticles().find((a) => a.id === id) : undefined;
     if (art) return { ...articleReply(art, ctx), text: `You chose ${ctx.journey?.intendedBorderPoint}.\n\n${articleReply(art, ctx).text}` };
     return { kind: 'app', text: 'You have not chosen a border post yet. Open Home, tap Configure Journey and pick one, then ask me again.', citations: ['Pearl Travel app guide'], followUps: ['Which border crossings can I use?'] };
   }
 
   let best: KnowledgeArticle | null = null;
   let top = 0;
-  for (const a of VERIFIED_KNOWLEDGE_ARTICLES) {
+  for (const a of getKnowledgeArticles()) {
     const s = scoreArticle(q, a);
     // ties: topic articles (visa, Yellow Fever...) beat place articles, which beat the general overview
     if (s > top || (s === top && best && rank(a.id) > rank(best.id))) { top = s; best = a; }
@@ -283,7 +282,7 @@ export function answerQuestion(rawQuestion: string, ctx: AssistantContext): Assi
     const place = PLACE_BY_NAME.find(([n]) => hasWord(q, n));
     // General hours/steps questions that name a crossing are answered by that crossing's article.
     if (place && best.id === 'kb-land-border-general') {
-      const art = VERIFIED_KNOWLEDGE_ARTICLES.find((a) => a.id === place[1]);
+      const art = getKnowledgeArticles().find((a) => a.id === place[1]);
       if (art) return articleReply(art, ctx);
     }
     // Topic questions that name a crossing: answer the topic and say the rules apply there too.
@@ -292,16 +291,6 @@ export function answerQuestion(rawQuestion: string, ctx: AssistantContext): Assi
       return { ...r, text: `At ${place[2]} the same rules apply as at other Uganda crossings.\n\n${r.text}` };
     }
     return articleReply(best, ctx);
-  }
-
-  // 6. Administrator-published FAQs (so content added in the admin portal is answerable)
-  const qTokens = new Set(words);
-  const faq = getContent()
-    .filter((c) => c.status === 'published' && (c.module === 'faqs' || c.module === 'requirements' || c.module === 'guidance'))
-    .map((c) => ({ c, overlap: tokens(`${c.title} ${c.body}`).filter((t) => t.length > 3 && qTokens.has(t)).length }))
-    .sort((x, y) => y.overlap - x.overlap)[0];
-  if (faq && faq.overlap >= 2) {
-    return { kind: 'knowledge', text: `${faq.c.title}\n\n${faq.c.body}`, citations: ['Pearl Travel administrator-approved content'], followUps: ['What am I still missing?'] };
   }
 
   // 7. In scope but no verified answer, otherwise out of scope

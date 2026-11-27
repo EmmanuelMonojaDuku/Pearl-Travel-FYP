@@ -15,7 +15,9 @@ import { JourneySetupView } from './JourneySetupView';
 import { RequirementGenerationView } from './RequirementGenerationView';
 import { AIGuidanceCard } from './AIGuidanceCard';
 import { BorderStepByStepGuideCard } from './BorderStepByStepGuideCard';
-import { publishQr } from '../utils/opsStore';
+import { hydrateRulesFromCache, useRulesRevision } from '../data/ruleStore';
+import { hydrateKnowledgeFromCache } from '../data/knowledgeStore';
+import { flushOutbox, queueAssessment, queueJourney, syncAll } from '../offline/sync';
 import { getPortalHash, getPortalTabFromHash, PortalTab } from './dashboard/navTypes';
 import { DashboardSidebar } from './dashboard/DashboardSidebar';
 import { DashboardHeader } from './dashboard/DashboardHeader';
@@ -32,6 +34,7 @@ import {
   generateRequirementsForProfile,
   generateDefaultChecklist,
   calculateReadinessScore,
+  reconcileChecklist,
 } from '../data/travelRequirementsEngine';
 import {
   PassengerProfile,
@@ -225,10 +228,53 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
     }
   }, [checklist]);
 
+  const hasServerSession = Boolean(currentUser?.accessToken);
+
+  // Offline caches: load the saved rules and guidance first, then refresh from the server when possible.
+  const rulesRevision = useRulesRevision();
+  useEffect(() => {
+    void (async () => {
+      await hydrateRulesFromCache();
+      await hydrateKnowledgeFromCache();
+      if (navigator.onLine) await syncAll(hasServerSession);
+    })();
+    const onOnline = () => void syncAll(hasServerSession);
+    window.addEventListener('online', onOnline);
+    return () => window.removeEventListener('online', onOnline);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasServerSession]);
+
+  // Changing nationality, purpose or journey (or receiving updated rules) re-aligns the checklist with the applicable rules.
+  useEffect(() => {
+    setChecklist((prev) => {
+      const next = reconcileChecklist(prev, generateDefaultChecklist(profile));
+      return JSON.stringify(next) === JSON.stringify(prev) ? prev : next;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profile.nationality, profile.travelPurpose, profile.destination, profile.travellerType, profile.journey?.travelPurpose, profile.journey?.travelMode, profile.journey?.intendedBorderPoint, profile.journey?.destinationCountry, rulesRevision]);
+
+  // Save journey and readiness changes for synchronisation. They are sent now if online, or when the connection returns.
+  useEffect(() => {
+    if (!hasServerSession || flowState !== 'dashboard') return;
+    const t = setTimeout(() => {
+      void (async () => {
+        const j = profile.journey;
+        if (j?.intendedBorderPoint && j.travelDate && j.travelMode) {
+          await queueJourney({ intendedBorderPoint: j.intendedBorderPoint, destinationCountry: (j.destinationCountry || 'Uganda').slice(0, 140), travelPurpose: j.travelPurpose, travelMode: j.travelMode, travelDate: j.travelDate, stayDurationDays: j.stayDurationDays ?? null, notes: j.notes ? j.notes.slice(0, 500) : null });
+        }
+        const r = calculateReadinessScore(checklist);
+        await queueAssessment({ nationality: profile.nationality || 'Unknown', score: r.score, status: r.statusLabel, completedItems: r.completedCount, totalItems: r.totalCount, missingMandatoryCount: r.missingMandatoryCount, checklist: checklist.map((i) => ({ code: i.id, status: i.status })) });
+        if (navigator.onLine) await flushOutbox();
+      })();
+    }, 4000);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [checklist, profile.journey, hasServerSession, flowState]);
+
   // Requirement Guidance computed from profile + journey
   const requirements = useMemo(() => {
     return generateRequirementsForProfile(profile);
-  }, [profile]);
+  }, [profile, rulesRevision]);
 
   // Readiness Score calculation
   const readiness = useMemo(() => {
@@ -258,7 +304,15 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
     setProfile(updated);
 
     // Re-generate default checklist for updated profile parameters
-    setChecklist(generateDefaultChecklist(updated));
+    const FLAG_DOCS: Record<string, keyof PassengerProfile> = { 'doc-yellow-fever': 'hasYellowFeverVax', 'doc-return-ticket': 'hasReturnTicket', 'doc-accommodation': 'hasAccommodationProof', 'doc-travel-insurance': 'hasTravelInsurance', 'doc-passport': 'passportNumber' };
+    setChecklist((prev) => {
+      const fresh = generateDefaultChecklist(updated);
+      const merged = reconcileChecklist(prev, fresh);
+      return merged.map((item) => {
+        const flag = FLAG_DOCS[item.id];
+        return flag && profile[flag] !== updated[flag] ? fresh.find((f) => f.id === item.id) ?? item : item;
+      });
+    });
 
     const completed = isTravellerProfileComplete(updated);
 
@@ -368,56 +422,28 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
     onShowToast('Loaded default Uganda Safari profile.');
   };
 
-  const handleSyncNow = () => {
+  const handleSyncNow = async () => {
     setIsSyncing(true);
-    setTimeout(() => {
+    try {
+      const r = await syncAll(hasServerSession);
+      if (!r.online) {
+        onShowToast(r.remaining ? `You are offline. ${r.remaining} change(s) will sync when you reconnect.` : 'You are offline. Saved data stays available.');
+        return;
+      }
       const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       setLastSyncedTime(`Today at ${now}`);
       localStorage.setItem(STORAGE_KEY_LAST_SYNC, `Today at ${now}`);
+      const parts = [
+        r.rulesUpdated ? 'new rules applied' : 'rules up to date',
+        r.knowledgeRefreshed ? 'guidance refreshed' : 'guidance not refreshed',
+        hasServerSession ? `${r.sent} change(s) sent${r.remaining ? `, ${r.remaining} waiting` : ''}` : 'sign in to a server account to sync your data',
+      ];
+      onShowToast(`Sync finished: ${parts.join(', ')}.`);
+    } finally {
       setIsSyncing(false);
-      onShowToast('Readiness data successfully synchronized with cloud.');
-    }, 900);
+    }
   };
 
-  // Construct QR Payload
-  const qrData: QRSummaryData = useMemo(() => {
-    const passportItem = checklist.find((c) => c.id === 'doc-passport');
-    const visaItem = checklist.find((c) => c.id === 'doc-visa');
-    const yFeverItem = checklist.find((c) => c.id === 'doc-yellow-fever');
-    const returnTicketItem = checklist.find((c) => c.id === 'doc-return-ticket');
-    const hotelItem = checklist.find((c) => c.id === 'doc-accommodation');
-    const insItem = checklist.find((c) => c.id === 'doc-travel-insurance');
-
-    const safeFullName = profile?.fullName || 'Traveller';
-    return {
-      version: 'PEARL-LOCAL-SUMMARY-1.0',
-      referenceId: `UG-${Math.abs(safeFullName.split('').reduce((a, b) => a + b.charCodeAt(0), 0) * 137).toString().padStart(6, '0')}`,
-      passengerName: safeFullName,
-      nationality: profile?.nationality || 'Not provided',
-      destination: profile?.journey?.intendedBorderPoint || 'Not set',
-      travelPurpose: profile?.journey?.travelPurpose || profile?.travelPurpose || 'Not set',
-      travellerType: profile?.travellerType || 'Not set',
-      readinessScore: readiness.score,
-      readinessStatus: readiness.statusLabel,
-      checklistSummary: {
-        passport: passportItem?.status || 'missing',
-        visa: visaItem?.status || 'missing',
-        yellowFever: yFeverItem?.status || 'missing',
-        returnTicket: returnTicketItem?.status || 'missing',
-        accommodation: hotelItem?.status || 'missing',
-        travelInsurance: insItem?.status || 'missing',
-      },
-      timestamp: new Date().toISOString(),
-      cachedOffline: isOfflineMode,
-      disclaimer:
-        'Informational only. Not an entry approval or an official document.',
-    };
-  }, [profile, checklist, readiness, isOfflineMode]);
-
-  // Publish the latest summary so an officer on this device can look it up by reference or name.
-  useEffect(() => {
-    publishQr(qrData);
-  }, [qrData]);
 
   // ==========================================
   // FLOW VIEW 1: TRAVELLER PROFILE SETUP
@@ -706,6 +732,7 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
                   profile={profile}
                   journey={profile.journey}
                   checklist={checklist}
+                  hasServerSession={hasServerSession}
                   onShowToast={onShowToast}
                 />
               </motion.div>
@@ -749,7 +776,7 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
                 transition={{ duration: 0.2 }}
                 className="space-y-5"
               >
-                <QRSummaryCard qrData={qrData} />
+                <QRSummaryCard profile={profile} checklist={checklist} readinessScore={readiness.score} isOfflineMode={isOfflineMode} userKey={currentUser?.email || profile.email || 'local'} hasServerSession={hasServerSession} />
               </motion.div>
             )}
 

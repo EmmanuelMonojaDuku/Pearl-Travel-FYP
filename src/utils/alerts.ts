@@ -1,6 +1,6 @@
 import type { ChecklistItem } from '../types';
 import type { PortalTab } from '../components/dashboard/navTypes';
-import { getContent } from './opsStore';
+import { getKnowledgeArticles } from '../data/knowledgeStore';
 
 export interface PortalAlert {
   id: string;
@@ -45,17 +45,17 @@ export function buildAlerts(input: {
     alerts.push({ id: 'alert-offline', title: 'Offline Border Cache Active', detail: 'Requirements, checklist, and QR pass are available offline.', severity: 'info', targetTab: 'offline' });
   }
   if (includeContentUpdates) {
-    getContent()
-      .filter((c) => c.status === 'published')
-      .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
+    getKnowledgeArticles()
+      .slice()
+      .sort((a, b) => b.lastReviewedDate.localeCompare(a.lastReviewedDate))
       .slice(0, 3)
       .forEach((c) =>
         alerts.push({
           id: `content-${c.id}`,
-          title: c.module === 'faqs' ? 'New FAQ Available' : c.module === 'requirements' ? 'Requirement Update' : 'Guidance Updated',
+          title: c.category === 'border_post' ? 'Border Guide Updated' : 'Guidance Updated',
           detail: c.title,
           severity: 'info',
-          targetTab: c.module === 'faqs' ? 'ai-guidance' : c.module === 'requirements' ? 'guidance' : 'border-guide',
+          targetTab: c.category === 'border_post' ? 'border-guide' : 'ai-guidance',
         })
       );
   }

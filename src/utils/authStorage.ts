@@ -418,13 +418,8 @@ export function signInWithGoogleIdentity(identity: GoogleIdentity): UserProfile 
 
 export type DemoRole = 'traveller' | 'border_officer' | 'admin_staff';
 
-export function getDemoUser(role: DemoRole): UserProfile {
-  if (role === 'border_officer') {
-    return { name: 'Officer Okello', firstName: 'Officer', lastName: 'Okello', email: 'officer.demo@pearltravel.ug', roles: ['border_officer'], profileCompleted: true };
-  }
-  if (role === 'admin_staff') {
-    return { name: 'Admin Demo', firstName: 'Admin', lastName: 'Demo', email: 'admin.demo@pearltravel.ug', roles: ['admin_staff'], profileCompleted: true };
-  }
+/** Offline-only traveller demo. Officer and administrator roles are never fabricated in the browser. */
+export function getDemoUser(_role: 'traveller'): UserProfile {
   const user: UserProfile = {
     name: 'Amina Kato',
     firstName: 'Amina',

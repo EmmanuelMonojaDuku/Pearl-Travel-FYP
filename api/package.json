@@ -12,6 +12,7 @@
     "lint": "eslint src tests",
     "test": "vitest run",
     "migrate": "tsx src/database/migrate.ts",
+    "seed:demo": "tsx scripts/seed-demo.ts",
     "migrate:validate": "tsx src/database/migrate.ts --validate"
   },
   "dependencies": {

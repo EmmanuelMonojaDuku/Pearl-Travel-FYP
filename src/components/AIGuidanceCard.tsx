@@ -21,11 +21,15 @@ import {
 } from '../data/verifiedKnowledgeBase';
 import { PassengerProfile, JourneyDetails, AIChatMessage, ChecklistItem } from '../types';
 import { answerQuestion } from '../data/assistantEngine';
+import { evaluateForProfile } from '../data/travelRequirementsEngine';
+import { askAssistant } from '../utils/api';
 
 interface AIGuidanceCardProps {
   profile?: PassengerProfile | null;
   journey?: JourneyDetails | null;
   checklist?: ChecklistItem[];
+  /** True when signed in to a server account, which is required to use the AI assistant. */
+  hasServerSession?: boolean;
   onShowToast: (msg: string) => void;
 }
 
@@ -33,6 +37,7 @@ export const AIGuidanceCard: React.FC<AIGuidanceCardProps> = ({
   profile,
   journey,
   checklist = [],
+  hasServerSession = false,
   onShowToast,
 }) => {
   const [messages, setMessages] = useState<AIChatMessage[]>([
@@ -77,31 +82,46 @@ export const AIGuidanceCard: React.FC<AIGuidanceCardProps> = ({
     setInputText('');
     setIsThinking(true);
 
-    // Simulate grounded RAG retrieval
-    setTimeout(() => {
+    const stamp = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const push = (m: Omit<AIChatMessage, 'id' | 'sender' | 'timestamp'>) => {
+      setMessages((prev) => [...prev, { id: `ai-${Date.now()}`, sender: 'assistant', timestamp: stamp(), ...m }]);
+      setIsThinking(false);
+      if (isSpeaking && 'speechSynthesis' in window) speakText(m.text);
+    };
+
+    void (async () => {
+      // 1. Server RAG assistant: retrieval from approved guidance plus an LLM, with sources.
+      if (hasServerSession && navigator.onLine) {
+        try {
+          const ev = evaluateForProfile(profile);
+          const r = await askAssistant(trimmed, { nationalityGroup: ev.group, purpose: ev.purpose === 'other' ? undefined : ev.purpose });
+          push({
+            text: r.answer,
+            origin: r.mode === 'rag' ? 'rag' : 'refusal',
+            sources: r.sources.map((x) => ({ id: x.id, title: x.title, authority: x.authority, reviewedAt: x.reviewedAt })),
+            verifiedBadge: r.mode === 'rag',
+            scope: 'in',
+          });
+          return;
+        } catch {
+          /* not configured, signed out or unreachable: use the on-device answer below and say so */
+        }
+      }
+      // 2. On-device fallback: keyword matching over the saved guidance. Limited, and labelled as such.
       const result = answerQuestion(trimmed, { profile, journey, checklist, lastArticleId: lastArticleRef.current });
       if (result.articleId) lastArticleRef.current = result.articleId;
-
-      const assistantMsg: AIChatMessage = {
-        id: `ai-${Date.now()}`,
-        sender: 'assistant',
+      push({
         text: result.text,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        origin: 'local',
         groundedSource: result.citations.join(' • ') || undefined,
-        verifiedBadge: result.kind !== 'out-of-scope',
+        verifiedBadge: false,
         followUps: result.followUps,
         scope: result.kind === 'out-of-scope' ? 'out' : 'in',
-      };
-
-      setMessages((prev) => [...prev, assistantMsg]);
-      setIsThinking(false);
-
-      // Auto-read snippet if user enabled speech
-      if (isSpeaking && 'speechSynthesis' in window) {
-        speakText(result.text);
-      }
-    }, 500);
+      });
+    })();
   };
+
+
 
   // Text to Speech
   const speakText = (text: string) => {
@@ -298,7 +318,7 @@ export const AIGuidanceCard: React.FC<AIGuidanceCardProps> = ({
                 {isAssistant && (
                   <div className="flex items-center gap-1.5 mb-1 text-[10px] font-bold text-pearl-placeholder">
                     <span className="w-2 h-2 rounded-full bg-pearl-success-light" />
-                    <span className="text-pearl-text font-bold uppercase">Pearl Travel Verified AI</span>
+                    <span className="text-pearl-text font-bold uppercase">{msg.origin === 'rag' ? 'AI explanation' : msg.origin === 'local' ? 'Saved guidance (limited)' : 'Pearl Travel assistant'}</span>
                     <span>•</span>
                     <span className="tabular-nums">{msg.timestamp}</span>
                   </div>
@@ -318,6 +338,21 @@ export const AIGuidanceCard: React.FC<AIGuidanceCardProps> = ({
                       </button>
                     ))}
                   </div>
+                )}
+
+                {isAssistant && msg.origin === 'rag' && msg.sources && msg.sources.length > 0 && (
+                  <div className="mt-2.5 pt-2 border-t border-pearl-border/70 text-[10px] text-pearl-text-secondary space-y-1">
+                    <p className="font-bold uppercase tracking-wider text-pearl-placeholder">Written by AI from this approved guidance</p>
+                    {msg.sources.map((src) => (
+                      <p key={src.id} className="flex items-start gap-1.5 font-medium">
+                        <BookOpen className="w-3 h-3 text-pearl-accent shrink-0 mt-0.5" />
+                        <span>[{src.id}] {src.title}, {src.authority}. Reviewed {src.reviewedAt}.</span>
+                      </p>
+                    ))}
+                  </div>
+                )}
+                {isAssistant && msg.origin === 'local' && (
+                  <p className="mt-2 text-[10px] text-pearl-placeholder">{hasServerSession && navigator.onLine ? 'The AI assistant is not available right now, so this is a short keyword answer from saved guidance.' : 'Offline answer: matched from saved guidance without AI. Connect and sign in for the full AI assistant.'}</p>
                 )}
 
                 {isAssistant && msg.groundedSource && (

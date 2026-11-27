@@ -52,6 +52,22 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   };
 
   /* ── Submit ── */
+  /** Demo access signs in to real seeded server accounts, so roles are always decided by the server. */
+  const handleDemo = async (role: 'traveller' | 'border_officer' | 'admin_staff') => {
+    const email = `${role === 'traveller' ? 'traveller' : role === 'border_officer' ? 'officer' : 'admin'}.demo@pearltravel.ug`;
+    setErrors({});
+    try {
+      const session = await loginWithApi({ email, password: import.meta.env.VITE_DEMO_PASSWORD || 'PearlDemo#2026' });
+      onSuccess({ ...session.user, accessToken: session.accessToken, refreshToken: session.refreshToken }, false);
+    } catch (error) {
+      if (role === 'traveller' && error instanceof ApiUnavailableError) {
+        onSuccess(getDemoUser('traveller'), false); // offline demo of the traveller side only; no privileged roles
+        return;
+      }
+      setErrors({ general: error instanceof ApiUnavailableError ? 'The server is not running. Start it with "npm run dev:full" to use officer and admin demos.' : 'Demo accounts are not set up on the server. Run "npm run seed:demo" in the api folder.' });
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isSubmitting) return;
@@ -199,7 +215,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
           onIdentity={(id) => onSuccess(signInWithGoogleIdentity(id), formData.rememberMe)}
           onError={(m) => setErrors({ general: m })}
         />
-        <DemoAccess onPick={(role) => onSuccess(getDemoUser(role), false)} />
+        <DemoAccess onPick={(role) => void handleDemo(role)} />
 
         <p className="mt-6 text-center text-sm text-pearl-text-secondary">
           Don&apos;t have an account?{' '}

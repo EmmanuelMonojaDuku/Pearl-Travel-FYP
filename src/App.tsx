@@ -16,7 +16,7 @@ import {
   loadPersistedSession,
   persistSession,
 } from './utils/authStorage';
-import { logoutFromApi, verifyEmailWithApi } from './utils/apiClient';
+import { ApiRequestError, fetchServerRoles, logoutFromApi, refreshWithApi, verifyEmailWithApi } from './utils/apiClient';
 
 export default function App() {
   const initialSession = loadPersistedSession();
@@ -117,6 +117,53 @@ export default function App() {
     setCurrentUser(merged);
     persistSession(merged, rememberSession);
   };
+
+  /* Roles are decided by the server. A stored session is re-checked on start; privileged roles
+     without a server token are dropped, and the server enforces every privileged request anyway. */
+  useEffect(() => {
+    const u = currentUser;
+    if (!u) return;
+    const privileged = u.roles?.some((r) => r !== 'traveller');
+    if (!u.accessToken) {
+      if (privileged) {
+        const demoted = { ...u, roles: ['traveller' as const] };
+        setCurrentUser(demoted);
+        persistSession(demoted, rememberSession);
+      }
+      return;
+    }
+    let cancelled = false;
+    void (async () => {
+      try {
+        let token = u.accessToken!;
+        let refreshToken = u.refreshToken;
+        let roles;
+        try {
+          roles = await fetchServerRoles(token);
+        } catch (e) {
+          if (!(e instanceof ApiRequestError) || e.statusCode !== 401 || !u.refreshToken) throw e;
+          const r = await refreshWithApi(u.refreshToken);
+          token = r.accessToken; refreshToken = r.refreshToken; roles = r.roles;
+        }
+        if (cancelled) return;
+        if (JSON.stringify(roles) !== JSON.stringify(u.roles) || token !== u.accessToken) {
+          const next = { ...u, roles, accessToken: token, refreshToken };
+          setCurrentUser(next);
+          persistSession(next, rememberSession);
+        }
+      } catch (e) {
+        if (cancelled) return;
+        if (e instanceof ApiRequestError && (e.statusCode === 401 || e.statusCode === 403)) {
+          clearPersistedSession();
+          setCurrentUser(null);
+          setAuthMode('login');
+        }
+        // Server unreachable: keep the cached view. Privileged data still needs the server.
+      }
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser?.accessToken]);
 
   const [prefillEmail, setPrefillEmail] = useState('');
   const role = currentUser?.roles?.includes('admin_staff')

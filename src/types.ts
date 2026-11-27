@@ -153,6 +153,9 @@ export interface AIChatMessage {
   verifiedBadge?: boolean;
   followUps?: string[];
   scope?: 'in' | 'out';
+  /** rag: AI explanation grounded in approved guidance. local: limited on-device keyword answer. refusal: no supported answer. */
+  origin?: 'rag' | 'refusal' | 'local';
+  sources?: { id: string; title: string; authority: string; reviewedAt: string }[];
 }
 
 export interface ChecklistItem {
@@ -166,6 +169,7 @@ export interface ChecklistItem {
   expiryDate?: string;
   guidanceNote?: string;
   issuingAuthority?: string;
+  verification?: { status: 'verified' | 'pending' };
 }
 
 export interface TravelRequirement {
@@ -177,6 +181,8 @@ export interface TravelRequirement {
   applicableCondition: string;
   mandatory: boolean;
   officialSource?: string;
+  /** 'pending' until an administrator has verified the rule against its official source. */
+  verification?: { status: 'verified' | 'pending' };
 }
 
 export interface QRSummaryData {

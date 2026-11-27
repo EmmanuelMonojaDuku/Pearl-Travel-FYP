@@ -85,7 +85,7 @@ export interface AdminOverview {
   };
 }
 
-async function request<T>(
+export async function request<T>(
   path: string,
   init: RequestInit = {}
 ): Promise<ApiEnvelope<T>> {
@@ -138,6 +138,20 @@ function mapApiUser(user: ApiUser): UserProfile {
     roles: user.roles,
     profileCompleted: false,
   };
+}
+
+export async function refreshWithApi(refreshToken: string): Promise<{ accessToken: string; refreshToken: string; roles: NonNullable<UserProfile['roles']> }> {
+  const result = await request<{ user: ApiUser; tokens: { accessToken: string; refreshToken: string } }>('/auth/refresh', {
+    method: 'POST',
+    body: JSON.stringify({ refreshToken }),
+  });
+  return { ...result.data.tokens, roles: result.data.user.roles };
+}
+
+/** Roles as the server knows them. The browser never decides roles; this is the source of truth. */
+export async function fetchServerRoles(accessToken: string): Promise<NonNullable<UserProfile['roles']>> {
+  const result = await request<{ user: ApiUser }>('/auth/me', { headers: { Authorization: `Bearer ${accessToken}` } });
+  return result.data.user.roles;
 }
 
 export function isBootstrapAdminEmail(email: string): boolean {

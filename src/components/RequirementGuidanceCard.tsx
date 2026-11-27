@@ -53,6 +53,12 @@ export const RequirementGuidanceCard: React.FC<RequirementGuidanceCardProps> = (
         </div>
       </div>
 
+      {requirements.some((r) => r.verification?.status === 'pending') && (
+        <div role="note" className="mb-3 p-2.5 rounded-xl bg-[#FFF8DB] border border-pearl-gold/40 text-[11px] text-pearl-navy font-medium">
+          {requirements.filter((r) => r.verification?.status === 'pending').length} of {requirements.length} rules are waiting for official verification. Confirm important details on the official portals.
+        </div>
+      )}
+
       {/* Category Filter Tabs */}
       <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none mb-4">
         {categories.map((cat) => {
