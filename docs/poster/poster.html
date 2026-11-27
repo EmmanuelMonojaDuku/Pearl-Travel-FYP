@@ -69,6 +69,7 @@
   .kpi { background:var(--navy); color:#fff; border-radius:3.4mm; padding:3mm 4.4mm; }
   .kpi .v { font-size:40pt; font-weight:800; color:var(--yellow); line-height:1; }
   .kpi .l { font-size:16pt; line-height:1.2; color:#E2E8F0; margin-top:1.6mm; }
+  .survey .kpi .v { font-size:34pt; } .survey .kpi { padding:2.4mm 4mm; }
   .legend { display:flex; gap:6mm; font-size:15pt; color:var(--muted); margin-top:2mm; flex-wrap:wrap; }
   .refs p { font-size:13.5pt; line-height:1.28; color:var(--text2); }
   .flow { display:flex; align-items:center; gap:2mm; margin:0 0 3mm; }
@@ -178,23 +179,23 @@
 
   <div class="card">
     <h2><span class="n">6</span>Conceptual framework</h2>
-    <svg viewBox="0 0 1000 470" width="100%" role="img" aria-label="Conceptual framework: inputs, processing, outputs, evaluation">
+    <svg viewBox="0 0 1000 400" width="100%" role="img" aria-label="Conceptual framework: inputs, processing, outputs, evaluation">
       <defs><marker id="ar2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#0F172A"/></marker></defs>
       <g text-anchor="middle" font-weight="800">
-        <rect x="2" y="6" width="226" height="360" rx="16" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="2"/><text x="115" y="60" font-size="37" fill="#0F172A">Inputs</text><g font-size="33" fill="#334155" font-weight="600"><text x="115" y="140">Nationality</text><text x="115" y="212">Purpose</text><text x="115" y="284">Journey</text><text x="115" y="356">Documents</text></g>
-        <rect x="262" y="6" width="226" height="360" rx="16" fill="#0F172A" /><text x="375" y="60" font-size="37" fill="#FFC400">Processing</text><g font-size="33" fill="#fff" font-weight="600"><text x="375" y="140">Rule engine</text><text x="375" y="212">RAG guidance</text><text x="375" y="284">Offline cache</text><text x="375" y="356">QR signing</text></g>
-        <rect x="522" y="6" width="226" height="360" rx="16" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="2"/><text x="635" y="60" font-size="37" fill="#0F172A">Outputs</text><g font-size="33" fill="#334155" font-weight="600"><text x="635" y="140">Checklist</text><text x="635" y="212">Score</text><text x="635" y="284">Cited answers</text><text x="635" y="356">QR pass</text></g>
-        <rect x="782" y="6" width="216" height="360" rx="16" fill="#FFC400" /><text x="890" y="60" font-size="35" fill="#0F172A">Evaluation</text><g font-size="33" fill="#0F172A" font-weight="600"><text x="890" y="140">Correctness</text><text x="890" y="212">Quality</text><text x="890" y="284">Offline use</text><text x="890" y="356">Usability</text></g>
+        <rect x="2" y="6" width="226" height="330" rx="16" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="2"/><text x="115" y="60" font-size="37" fill="#0F172A">Inputs</text><g font-size="33" fill="#334155" font-weight="600"><text x="115" y="132">Nationality</text><text x="115" y="196">Purpose</text><text x="115" y="260">Journey</text><text x="115" y="324">Documents</text></g>
+        <rect x="262" y="6" width="226" height="330" rx="16" fill="#0F172A" /><text x="375" y="60" font-size="37" fill="#FFC400">Processing</text><g font-size="33" fill="#fff" font-weight="600"><text x="375" y="132">Rule engine</text><text x="375" y="196">RAG guidance</text><text x="375" y="260">Offline cache</text><text x="375" y="324">QR signing</text></g>
+        <rect x="522" y="6" width="226" height="330" rx="16" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="2"/><text x="635" y="60" font-size="37" fill="#0F172A">Outputs</text><g font-size="33" fill="#334155" font-weight="600"><text x="635" y="132">Checklist</text><text x="635" y="196">Score</text><text x="635" y="260">Cited answers</text><text x="635" y="324">QR pass</text></g>
+        <rect x="782" y="6" width="216" height="330" rx="16" fill="#FFC400" /><text x="890" y="60" font-size="35" fill="#0F172A">Evaluation</text><g font-size="33" fill="#0F172A" font-weight="600"><text x="890" y="132">Correctness</text><text x="890" y="196">Quality</text><text x="890" y="260">Offline use</text><text x="890" y="324">Usability</text></g>
       </g>
-      <g stroke="#0F172A" stroke-width="4" fill="none" marker-end="url(#ar2)"><path d="M230 190 H260"/><path d="M490 190 H520"/><path d="M750 190 H780"/></g>
-      <path d="M890 376 V424 H115 V376" fill="none" stroke="#EAB308" stroke-width="5" stroke-dasharray="12 9" marker-end="url(#ar2)"/>
-      <text x="500" y="462" text-anchor="middle" font-size="31" font-weight="700" fill="#92560A">design feedback</text>
+      <g stroke="#0F172A" stroke-width="4" fill="none" marker-end="url(#ar2)"><path d="M230 170 H260"/><path d="M490 170 H520"/><path d="M750 170 H780"/></g>
+      <path d="M890 346 V374 H115 V346" fill="none" stroke="#EAB308" stroke-width="5" stroke-dasharray="12 9" marker-end="url(#ar2)"/>
+      <text x="500" y="396" text-anchor="middle" font-size="31" font-weight="700" fill="#92560A">design feedback</text>
     </svg>
   </div>
 
-  <div class="card grow">
+  <div class="card">
     <h2><span class="n">7</span>Pilot survey (5 of 40)</h2>
-    <div class="kpis" style="margin-bottom:2mm">
+    <div class="kpis survey" style="margin-bottom:2mm">
       <div class="kpi"><div class="v">5/5</div><div class="l">found the app useful (1 extremely)</div></div>
       <div class="kpi"><div class="v">2/5</div><div class="l">find it hard to know which documents they need</div></div>
       <div class="kpi"><div class="v">1/5</div><div class="l">willing to show a QR summary (3 no, 1 unsure)</div></div>
@@ -202,13 +203,23 @@
     </div>
     <p class="small muted">Top problems: unreliable internet, unclear steps, repeat queues. Pilot only, not generalisable; target is 40.</p>
   </div>
+
+  <div class="card grow">
+    <h2 style="margin-bottom:2.5mm"><span class="n">8</span>Try Pearl Travel</h2>
+    <div style="display:flex;gap:5mm;align-items:center;flex:1">
+      <div style="flex:none;background:#fff;border:0.6mm solid var(--line);border-radius:3mm;padding:2mm"><img src="assets/qr-app.svg" alt="QR code linking to pearltravelug.netlify.app" style="width:46mm;height:46mm;display:block"/></div>
+      <div><p style="font-size:21pt;font-weight:800;color:var(--navy);line-height:1.15">Scan to open the web app</p>
+      <p class="small muted" style="margin-top:1mm"><b>pearltravelug.netlify.app</b></p>
+      <p class="small muted" style="margin-top:1.2mm">Web preview. Officer, admin and QR-pass demos run on the presenter’s laptop.</p></div>
+    </div>
+  </div>
 </section>
 
 <!-- ═════════ COLUMN 3: ARCHITECTURE + PROTOTYPE ═════════ -->
 <section class="col">
 
   <div class="card">
-    <h2><span class="n">8</span>System architecture</h2>
+    <h2><span class="n">9</span>System architecture</h2>
     <svg viewBox="0 0 800 760" width="100%" role="img" aria-label="System architecture: clients, API, services, data">
       <defs>
         <marker id="ar3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#0F172A"/></marker>
@@ -265,7 +276,7 @@
   </div>
 
   <div class="card grow">
-    <h2><span class="n">9</span>The prototype in use</h2>
+    <h2><span class="n">10</span>The prototype in use</h2>
     <div class="flow"><div class="s">Nationality + purpose</div><div class="a">›</div><div class="s">Checklist</div><div class="a">›</div><div class="s">Readiness</div><div class="a">›</div><div class="s">QR pass</div></div>
     <div class="phones">
       <div class="phone"><div class="frame"><img src="assets/scr-dashboard.png" alt="Home"/></div><div class="cap">Home<span>journey and next step</span></div></div>
@@ -282,7 +293,7 @@
 <section class="col">
 
   <div class="card">
-    <h2><span class="n">10</span>Results so far</h2>
+    <h2><span class="n">11</span>Results so far</h2>
     <div class="kpis">
       <div class="kpi"><div class="v">65/65</div><div class="l">API tests passed, real PostgreSQL</div></div>
       <div class="kpi"><div class="v">15/15</div><div class="l">browser end-to-end checks, real API</div></div>
@@ -303,11 +314,11 @@
         <rect x="372" y="280" width="520" height="34" rx="8" fill="#F1F5F9"/><rect x="372" y="280" width="260" height="34" rx="8" fill="#EAB308"/><text x="912" y="308" font-size="30" font-weight="800" fill="#0F172A">1/2</text>
       </g>
     </svg>
-    <p class="small muted" style="margin-top:1mm"><b>21/27 (78%)</b>, run once, not tuned. First run: 34/39, five defects fixed. The live RAG assistant has <b>not</b> been benchmarked (no API key).</p>
+    <p class="small muted" style="margin-top:1mm"><b>21/27 (78%)</b>, run once, not tuned. First run: 34/39, five defects fixed. The live AI assistant has <b>not</b> been benchmarked.</p>
   </div>
 
   <div class="card">
-    <h2><span class="n">11</span>Implementation status</h2>
+    <h2><span class="n">12</span>Implementation status</h2>
     <table>
       <tr><td><b>Accounts and profile</b></td><td class="st"><span class="chip done">Completed</span></td></tr>
       <tr><td><b>Rules by nationality + purpose</b></td><td class="st"><span class="chip done">Completed</span></td></tr>
@@ -316,8 +327,8 @@
       <tr><td><b>Offline PWA and sync</b></td><td class="st"><span class="chip done">Completed</span></td></tr>
       <tr><td><b>Officer, admin, database</b></td><td class="st"><span class="chip done">Completed</span></td></tr>
       <tr><td><b>Malaba guide and videos</b></td><td class="st"><span class="chip done">Completed</span></td></tr>
-      <tr><td><b>RAG assistant</b> (live LLM untested)</td><td class="st"><span class="chip part">Partial</span></td></tr>
-      <tr><td><b>React Native app</b> (not run on device)</td><td class="st"><span class="chip part">Partial</span></td></tr>
+      <tr><td><b>Assistant</b> (guidance + labelled AI answers)</td><td class="st"><span class="chip part">Partial</span></td></tr>
+      <tr><td><b>React Native app</b> (runs on a phone)</td><td class="st"><span class="chip part">Partial</span></td></tr>
       <tr><td><b>Official rule verification</b></td><td class="st"><span class="chip plan">Planned</span></td></tr>
       <tr><td><b>Traveller survey</b> (5 of 40)</td><td class="st"><span class="chip part">Partial</span></td></tr>
       <tr><td><b>Usability study</b> (SUS, TAM)</td><td class="st"><span class="chip plan">Planned</span></td></tr>
@@ -325,7 +336,7 @@
   </div>
 
   <div class="card grow">
-    <h2><span class="n">12</span>Contribution and limits</h2>
+    <h2><span class="n">13</span>Contribution and limits</h2>
     <ul>
       <li><b>Contribution:</b> personalised, offline pre-arrival guide with a private, verifiable QR pass.</li>
       <li><b>Not claimed:</b> shorter queues.</li>
