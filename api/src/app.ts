@@ -196,6 +196,14 @@ export async function buildApp(options: BuildAppOptions = {}): Promise<BuiltAppl
     options.embeddingProvider !== undefined ? options.embeddingProvider : providers.embeddings,
     options.llmProvider !== undefined ? options.llmProvider : providers.llm
   );
+  // With a real provider configured, index the approved guidance on first start so the assistant works straight away.
+  if (options.llmProvider === undefined && assistant.isConfigured()) {
+    void assistant.status().then(async (st) => {
+      if (st.indexedChunks > 0) return;
+      const r = await assistant.reindexAll();
+      app.log.info(`Assistant knowledge indexed: ${r.items} articles, ${r.chunks} passages`);
+    }).catch((e) => app.log.warn(e, 'Initial assistant indexing failed. Use Admin > Content > AI suggestions > Re-index guidance.'));
+  }
   // Publishing guidance indexes it for semantic retrieval. Indexing problems never block publishing.
   const contentService = new ContentService(db, async (kind, id) => {
     if (kind === 'content') await assistant.indexContentItem(id).catch((e) => app.log.warn(e, 'KB indexing failed'));

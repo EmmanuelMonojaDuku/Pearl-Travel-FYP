@@ -32,6 +32,12 @@ Open http://localhost:3000 and use **Demo access** on the login screen. These ar
 
 **Windows PowerShell 5** does not accept `&&` or `(cd api && ...)`. Run each command on its own line: `cd api`, `npm install`, `npm run migrate`, `npm run seed:demo`, `cd ..`, `npm install`, `npm run dev:full`. Create `api\.env` with `copy api\.env.example api\.env` and create an empty `pearl_travel` database first.
 
+### Phone (Expo Go)
+Install **Expo Go** from the Play Store or App Store. Put the phone on the same Wi-Fi as the computer, then run `npm run phone`. It starts the API and Expo and prints a **QR code in the terminal**; scan it with Expo Go (Android) or the Camera app (iPhone). Sign in with `traveller.demo@pearltravel.ug` / `PearlDemo#2026`. If sign-in fails, allow Node.js through Windows Firewall on Private networks. If Expo Go says the project needs a different SDK, update Expo Go.
+
+### Live AI assistant (RAG)
+Run `powershell -ExecutionPolicy Bypass -File .\setup-ai.ps1`, choose your provider, paste the key (hidden), then restart. Guidance is indexed automatically on start; use **Admin > Content > AI suggestions > Re-index guidance** after changing guidance. Gemini and OpenAI defaults are preset; model names change over time, so edit `LLM_MODEL` and `EMBEDDING_MODEL` in `api/.env` if your provider rejects them. Never put the key in the web app or paste it in chat.
+
 ### Configuration (api/.env, never in the web app)
 
 | Variable | Purpose |
