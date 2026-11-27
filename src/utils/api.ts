@@ -41,7 +41,7 @@ export const getKnowledge = () => api<KnowledgeSnapshot>('GET', '/assistant/know
 
 /* ───────── Assistant (RAG) ───────── */
 export interface AskResult {
-  mode: 'rag' | 'fallback';
+  mode: 'rag' | 'general' | 'fallback';
   reason?: string;
   answer: string;
   sources: { id: string; title: string; authority: string; category: string; excerpt: string; reviewedAt: string }[];

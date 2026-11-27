@@ -97,7 +97,8 @@ export const AIGuidanceCard: React.FC<AIGuidanceCardProps> = ({
           const r = await askAssistant(trimmed, { nationalityGroup: ev.group, purpose: ev.purpose === 'other' ? undefined : ev.purpose });
           push({
             text: r.answer,
-            origin: r.mode === 'rag' ? 'rag' : 'refusal',
+            origin: r.mode === 'rag' ? 'rag' : r.mode === 'general' ? 'general' : 'refusal',
+            groundedSource: r.mode === 'general' ? r.disclaimer : undefined,
             sources: r.sources.map((x) => ({ id: x.id, title: x.title, authority: x.authority, reviewedAt: x.reviewedAt })),
             verifiedBadge: r.mode === 'rag',
             scope: 'in',
@@ -318,7 +319,7 @@ export const AIGuidanceCard: React.FC<AIGuidanceCardProps> = ({
                 {isAssistant && (
                   <div className="flex items-center gap-1.5 mb-1 text-[10px] font-bold text-pearl-placeholder">
                     <span className="w-2 h-2 rounded-full bg-pearl-success-light" />
-                    <span className="text-pearl-text font-bold uppercase">{msg.origin === 'rag' ? 'AI explanation' : msg.origin === 'local' ? 'Saved guidance (limited)' : 'Pearl Travel assistant'}</span>
+                    <span className="text-pearl-text font-bold uppercase">{msg.origin === 'rag' ? 'AI explanation' : msg.origin === 'general' ? 'General travel answer (not approved guidance)' : msg.origin === 'local' ? 'Saved guidance (limited)' : 'Pearl Travel assistant'}</span>
                     <span>•</span>
                     <span className="tabular-nums">{msg.timestamp}</span>
                   </div>

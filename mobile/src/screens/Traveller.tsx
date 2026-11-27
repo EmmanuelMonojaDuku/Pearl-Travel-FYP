@@ -113,7 +113,7 @@ export const Checklist = ({ t, online }: { t: T; online: boolean }) => {
 export const Assistant = ({ t, online }: { t: T; online: boolean }) => {
   const [q, setQ] = useState('');
   const [busy, setBusy] = useState(false);
-  const [res, setRes] = useState<{ answer: string; sources: { id: string; title: string; authority: string }[]; mode: string; disclaimer: string } | null>(null);
+  const [res, setRes] = useState<{ answer: string; sources: { id: string; title: string; authority: string }[]; mode: 'rag' | 'general' | 'fallback'; disclaimer: string } | null>(null);
   const [err, setErr] = useState('');
   const ask = async () => {
     setBusy(true); setErr('');
@@ -131,6 +131,7 @@ export const Assistant = ({ t, online }: { t: T; online: boolean }) => {
       {err ? <Text accessibilityRole="alert" style={{ color: C.error, marginTop: 8 }}>{err}</Text> : null}
       {res && (
         <Card>
+          {res.mode === 'general' ? <Text style={{ color: C.error, fontWeight: '700', fontSize: 12, marginBottom: 6 }}>General travel answer, not approved guidance</Text> : null}
           <Text style={{ color: C.text }}>{res.answer}</Text>
           {res.sources.map((s) => <Muted key={s.id}>{s.id} · {s.title} ({s.authority})</Muted>)}
           <Muted>{res.disclaimer}</Muted>

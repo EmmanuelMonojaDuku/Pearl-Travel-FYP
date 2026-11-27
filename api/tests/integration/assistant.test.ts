@@ -49,7 +49,7 @@ describe.skipIf(!hasDatabase)('RAG assistant pipeline (real PostgreSQL, fake pro
     const { PostgresDatabaseClient } = await import('../../src/database/pool.js');
     const { PostgresAuthRepository } = await import('../../src/modules/auth/repository.js');
     const { TEST_DATABASE_URL } = await import('./harness.js');
-    const config = createTestConfig({ DATABASE_URL: TEST_DATABASE_URL, DB_SSL_MODE: 'disable', REQUIRE_EMAIL_VERIFICATION: 'false', RAG_MIN_SIMILARITY: '0.12' });
+    const config = createTestConfig({ DATABASE_URL: TEST_DATABASE_URL, DB_SSL_MODE: 'disable', REQUIRE_EMAIL_VERIFICATION: 'false', RAG_MIN_SIMILARITY: '0.12', RAG_ALLOW_GENERAL: 'false' });
     const db = new PostgresDatabaseClient(config);
     const built = await buildApp({ config, db, authRepository: new PostgresAuthRepository(db), embeddingProvider: emb, llmProvider: llm });
     ctx = { ...built, db } as typeof ctx;
@@ -157,5 +157,32 @@ describe.skipIf(!hasDatabase)('RAG assistant pipeline (real PostgreSQL, fake pro
     expect(res.json().error.code).toBe('ASSISTANT_NOT_CONFIGURED');
     expect((await bare.app.inject({ method: 'GET', url: '/api/v1/assistant/status' })).json().data.configured).toBe(false);
     await bare.app.close();
+  });
+});
+
+
+describe.skipIf(!hasDatabase)('general travel mode (labelled, not approved guidance)', () => {
+  it('answers travel questions from the model when approved guidance has none, clearly labelled, and still refuses non-travel', async () => {
+    const { buildApp } = await import('../../src/app.js');
+    const { createTestConfig } = await import('../helpers/inMemoryAuthFixtures.js');
+    const { PostgresDatabaseClient } = await import('../../src/database/pool.js');
+    const { PostgresAuthRepository } = await import('../../src/modules/auth/repository.js');
+    const { TEST_DATABASE_URL } = await import('./harness.js');
+    const config = createTestConfig({ DATABASE_URL: TEST_DATABASE_URL, DB_SSL_MODE: 'disable', REQUIRE_EMAIL_VERIFICATION: 'false', RAG_MIN_SIMILARITY: '0.9', RAG_ALLOW_GENERAL: 'true' });
+    const db = new PostgresDatabaseClient(config);
+    const llm = new FakeLlm();
+    const built = await buildApp({ config, db, authRepository: new PostgresAuthRepository(db), embeddingProvider: new FakeEmbeddings(), llmProvider: llm });
+    const user = await makeUser({ ...built, db } as never, USER_ROLES.TRAVELLER);
+    try {
+      llm.next = () => 'Interstate travel passes are usually arranged with the transport authority. Confirm timing with them.';
+      const res = await built.app.inject({ method: 'POST', url: '/api/v1/assistant/ask', headers: auth(user), payload: { question: 'How long does an interstate bus travel pass take to arrange?' } });
+      const d = res.json().data;
+      expect(d).toMatchObject({ mode: 'general', sources: [] });
+      expect(d.disclaimer).toMatch(/NOT from approved/);
+      expect(llm.calls[0]![0]!.content).not.toMatch(/<source/);
+      llm.next = () => 'OUT_OF_SCOPE';
+      const off = await built.app.inject({ method: 'POST', url: '/api/v1/assistant/ask', headers: auth(user), payload: { question: 'Write me a poem about football and cooking' } });
+      expect(off.json().data).toMatchObject({ mode: 'fallback', reason: 'out_of_scope' });
+    } finally { await built.app.close(); }
   });
 });

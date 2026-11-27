@@ -154,7 +154,7 @@ export interface AIChatMessage {
   followUps?: string[];
   scope?: 'in' | 'out';
   /** rag: AI explanation grounded in approved guidance. local: limited on-device keyword answer. refusal: no supported answer. */
-  origin?: 'rag' | 'refusal' | 'local';
+  origin?: 'rag' | 'general' | 'refusal' | 'local';
   sources?: { id: string; title: string; authority: string; reviewedAt: string }[];
 }
 

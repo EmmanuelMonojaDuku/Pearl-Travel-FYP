@@ -76,6 +76,8 @@ const envSchema = z.object({
   EMBEDDING_MODEL: z.string().default('text-embedding-3-small'),
   RAG_MIN_SIMILARITY: z.coerce.number().min(0).max(1).default(0.3),
   RAG_TOP_K: z.coerce.number().int().min(1).max(10).default(4),
+  /** When approved guidance has no answer, let the model answer general travel questions, clearly labelled as not from approved guidance. */
+  RAG_ALLOW_GENERAL: z.enum(['true', 'false']).default('true'),
 
   EMAIL_PROVIDER: z.enum(['disabled', 'resend']).default('disabled'),
   EMAIL_FROM: z.string().email().default('noreply@example.com'),
@@ -92,7 +94,7 @@ export type AppConfig = Readonly<{
   adminEmails: string[];
   requireEmailVerification: boolean;
   qr: { privateKey: string; keyId: string };
-  rag: { baseUrl: string; apiKey: string; model: string; embeddingModel: string; minSimilarity: number; topK: number };
+  rag: { baseUrl: string; apiKey: string; model: string; embeddingModel: string; minSimilarity: number; topK: number; allowGeneral: boolean };
   database: {
     url: string;
     migrationUrl: string;
@@ -173,6 +175,7 @@ export function loadConfig(source: NodeJS.ProcessEnv = process.env): AppConfig {
       embeddingModel: data.EMBEDDING_MODEL,
       minSimilarity: data.RAG_MIN_SIMILARITY,
       topK: data.RAG_TOP_K,
+      allowGeneral: data.RAG_ALLOW_GENERAL === 'true',
     },
     database: {
       url: data.DATABASE_URL.trim(),
