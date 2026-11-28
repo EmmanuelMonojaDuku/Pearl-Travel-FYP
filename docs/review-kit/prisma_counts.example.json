@@ -1,0 +1,25 @@
+{
+  "_note": "EXAMPLE NUMBERS ONLY. Replace every value with your own search log. Do not publish these.",
+  "databases": [
+    {"name": "Scopus", "n": 410},
+    {"name": "Web of Science", "n": 220},
+    {"name": "EBSCOhost", "n": 180},
+    {"name": "Google Scholar (Publish or Perish)", "n": 600},
+    {"name": "AJOL", "n": 90}
+  ],
+  "other_methods": {"websites": 2, "citation_searching": 15},
+  "duplicates_removed": 380,
+  "removed_by_automation_or_other_reasons": 0,
+  "removed_by_automation_or_other": 0,
+  "screened": 1120,
+  "excluded_at_title_abstract": 1060,
+  "reports_sought": 60,
+  "reports_not_retrieved": 6,
+  "reports_assessed": 54,
+  "excluded_at_full_text": {"E1 not about land borders": 12, "E2 no information outcome": 20, "E3 not empirical": 8, "E4 review": 3},
+  "other_reports_sought": 17,
+  "other_reports_not_retrieved": 2,
+  "other_reports_assessed": 15,
+  "other_excluded_at_full_text": {"E2 no information outcome": 6},
+  "studies_included": 20
+}
