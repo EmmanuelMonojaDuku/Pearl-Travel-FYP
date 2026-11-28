@@ -5,7 +5,7 @@ export interface RulesSnapshot { generatedAt: string; version: number; groups: N
 export const BUNDLED_RULES: RulesSnapshot = { generatedAt: 'bundled', version: 0, groups: defaults.groups as NationalityGroupConfig, rules: defaults.rules as unknown as RuleRecord[] };
 
 export interface Traveller { nationality?: string; purpose?: string; travelMode?: string; borderPoint?: string; passport?: boolean; yellowFever?: boolean; returnTicket?: boolean; accommodation?: boolean; insurance?: boolean }
-export interface CheckItem { id: string; title: string; description: string; mandatory: boolean; status: ItemStatus; guidanceNote?: string }
+export interface CheckItem { id: string; title: string; description: string; mandatory: boolean; status: ItemStatus; guidanceNote?: string; reasons?: string[] }
 
 const initial = (id: string, t: Traveller, group: string): ItemStatus => {
   switch (id) {
@@ -25,7 +25,7 @@ export function buildChecklist(t: Traveller, rules: RulesSnapshot, existing: Che
   const result = evaluateRules(profile, rules.rules, rules.groups);
   const kept = new Map(existing.map((i) => [i.id, i.status]));
   const checklist: CheckItem[] = result.checklist.map((c) => ({
-    id: c.id, title: c.title, description: c.description, mandatory: c.mandatory, guidanceNote: c.guidanceNote,
+    id: c.id, title: c.title, description: c.description, mandatory: c.mandatory, guidanceNote: c.guidanceNote, reasons: c.reasons,
     status: kept.get(c.id) ?? initial(c.id, t, result.group),
   }));
   return { ...result, items: checklist, readiness: scoreReadiness(checklist) };

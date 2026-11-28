@@ -90,6 +90,8 @@ export interface EvaluatedChecklistItem {
   guidanceNote?: string;
   issuingAuthority?: string;
   verification: RuleVerification;
+  /** Plain-language reasons this item is on this traveller's list, taken from the rule's conditions. */
+  reasons: string[];
 }
 
 export type EvaluationWarning =
@@ -140,6 +142,22 @@ function matches(when: RuleWhen | undefined, p: { group: NationalityGroup; purpo
   return true;
 }
 
+const GROUP_LABEL: Record<NationalityGroup, string> = { citizen: 'Ugandan citizen', eac: 'EAC citizen', visa_exempt: 'visa-exempt nationality', visa_required: 'e-Visa nationality' };
+export const groupLabel = (g: NationalityGroup) => GROUP_LABEL[g];
+const PURPOSE_LABEL: Record<TravelPurposeKey, string> = { tourism: 'tourism', business: 'business', family: 'family visit', studies: 'study', transit: 'transit', employment: 'work' };
+export const purposeLabel = (p: TravelPurposeKey | 'other') => (p === 'other' ? 'your trip' : PURPOSE_LABEL[p]);
+
+function reasonsFor(r: RuleRecord, group: NationalityGroup, purpose: TravelPurposeKey | 'other', p: EvaluationProfile, byGroup: boolean): string[] {
+  const w = r.when ?? {};
+  const out: string[] = [];
+  if (w.nationalityGroups?.length || byGroup) out.push(`${p.nationality?.trim() || 'Your nationality'} (${GROUP_LABEL[group]})`);
+  if (w.purposes?.length) out.push(`${purposeLabel(purpose)} travel`);
+  if (w.travelModes?.length && p.travelMode) out.push(`travelling by ${p.travelMode}`);
+  if (w.borderPoints?.length && p.borderPoint) out.push(`crossing at ${p.borderPoint}`);
+  if (w.destinationKeywords?.length && p.destination) out.push('your destination');
+  return out.length ? out : ['Needed by every traveller'];
+}
+
 export function evaluateRules(profile: EvaluationProfile, rules: RuleRecord[], groups: NationalityGroupConfig): EvaluationResult {
   const warnings: EvaluationWarning[] = [];
   if (!norm(profile.nationality)) warnings.push('missing_nationality');
@@ -180,6 +198,7 @@ export function evaluateRules(profile: EvaluationProfile, rules: RuleRecord[], g
         guidanceNote: g?.guidanceNote ?? c.guidanceNote,
         issuingAuthority: c.issuingAuthority,
         verification: r.verification,
+        reasons: reasonsFor(r, group, purpose, profile, Boolean(g)),
       };
     });
 

@@ -135,6 +135,7 @@ export function generateDefaultChecklist(profile?: PassengerProfile | null): Che
       guidanceNote: c.guidanceNote,
       issuingAuthority: c.issuingAuthority,
       verification: { status: c.verification.status },
+      reasons: c.reasons,
     };
   });
 }

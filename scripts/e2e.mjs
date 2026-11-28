@@ -94,6 +94,28 @@ try {
   await ap.waitForTimeout(1000);
   check('A second administrator approves and publishes it', await ap.locator('li', { hasText: title }).getByText('published').count() > 0);
 
+  /* 4b. Personalised checklist: banner, reasons and the Missing filter */
+  const pctx = await browser.newContext({ viewport: { width: 430, height: 900 } });
+  const pp = await demoLogin(pctx, 'Traveller');
+  await pp.locator('button:visible', { hasText: /^Checklist$/ }).last().click();
+  await pp.waitForSelector('[data-testid="personalised-banner"]', { timeout: 8000 }).catch(() => {});
+  check('Checklist shows a personalised "Made for you" banner', await pp.getByTestId('personalised-banner').count() > 0);
+  check('Items say why they apply to this traveller', await pp.getByText(/Because:/).count() > 0);
+  const num = async (re) => Number((await pp.getByRole('button', { name: re }).first().innerText()).match(/(\d+)\s*$/)[1]);
+  const items = () => pp.getByRole('button', { name: /^Have It$/ }).count();
+  const nMissing = await num(/^Missing \d+/), nDone = await num(/^Done \d+/), nAll = await num(/^All \d+/);
+  check('All filter lists every item', (await items()) === nAll, `${await items()} vs ${nAll}`);
+  await pp.getByRole('button', { name: /^Missing \d+/ }).click();
+  await pp.waitForTimeout(300);
+  check('Missing filter shows exactly the missing items', (await items()) === nMissing, `${await items()} vs ${nMissing}`);
+  await pp.getByRole('button', { name: /^Done \d+/ }).click();
+  await pp.waitForTimeout(300);
+  check('Done filter shows exactly the completed items', (await items()) === nDone, `${await items()} vs ${nDone}`);
+  await pp.getByRole('button', { name: /^Missing \d+/ }).click();
+  await pp.getByLabel('Required only').check();
+  await pp.waitForTimeout(300);
+  check('"Required only" narrows the list further', (await items()) <= nMissing);
+
   /* 5. Roles come from the server: a forged local role gives no access */
   const fctx = await browser.newContext({ viewport: { width: 430, height: 900 } });
   const fp = await fctx.newPage();

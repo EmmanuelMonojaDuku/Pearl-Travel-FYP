@@ -15,6 +15,7 @@ import { JourneySetupView } from './JourneySetupView';
 import { RequirementGenerationView } from './RequirementGenerationView';
 import { AIGuidanceCard } from './AIGuidanceCard';
 import { BorderStepByStepGuideCard } from './BorderStepByStepGuideCard';
+import { groupLabel, purposeLabel } from '../../shared/rulesEvaluator';
 import { hydrateRulesFromCache, useRulesRevision } from '../data/ruleStore';
 import { hydrateKnowledgeFromCache } from '../data/knowledgeStore';
 import { flushOutbox, queueAssessment, queueJourney, syncAll } from '../offline/sync';
@@ -33,6 +34,7 @@ import { SupportContactModal } from './dashboard/SupportContactModal';
 import {
   generateRequirementsForProfile,
   generateDefaultChecklist,
+  evaluateForProfile,
   calculateReadinessScore,
   reconcileChecklist,
 } from '../data/travelRequirementsEngine';
@@ -687,6 +689,10 @@ export const TravelerReadinessPortal: React.FC<TravelerReadinessPortalProps> = (
               >
                 <DocumentChecklistCard
                   checklist={checklist}
+                  personalisation={(() => {
+                    const ev = evaluateForProfile(profile);
+                    return { nationality: profile.nationality, groupLabel: groupLabel(ev.group), purpose: ev.purpose === 'other' ? undefined : `${purposeLabel(ev.purpose)} trip`, mode: profile.journey?.travelMode, border: profile.journey?.intendedBorderPoint };
+                  })()}
                   onUpdateItemStatus={handleUpdateChecklistItemStatus}
                   onUpdateItemDetails={handleUpdateChecklistItemDetails}
                   onOpenReviewAudit={() => setIsReviewModalOpen(true)}

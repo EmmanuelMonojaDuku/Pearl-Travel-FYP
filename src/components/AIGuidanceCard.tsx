@@ -40,6 +40,21 @@ export const AIGuidanceCard: React.FC<AIGuidanceCardProps> = ({
   hasServerSession = false,
   onShowToast,
 }) => {
+  // Suggested questions follow the traveller's own situation, not a fixed list.
+  const personalisedQuestions = (() => {
+    const ev = evaluateForProfile(profile);
+    const first: string[] = [];
+    if (ev.group === 'visa_required') first.push('How do I apply for my e-Visa?');
+    else if (ev.group === 'eac') first.push('Do I need a visa as an EAC citizen?');
+    else if (ev.group === 'visa_exempt') first.push('Which visa-exempt rules apply to me?');
+    else if (ev.group === 'citizen') first.push('What do I need to re-enter Uganda?');
+    if (ev.purpose === 'business') first.push('What do I need for a business trip?');
+    else if (ev.purpose === 'studies') first.push('What do I need as a student?');
+    else if (ev.purpose === 'transit') first.push('What are the transit rules?');
+    else if (ev.purpose === 'employment') first.push('What do I need to work in Uganda?');
+    return [...first, ...SUGGESTED_QUESTIONS.filter((q) => !/visa\?$/i.test(q))].slice(0, 6);
+  })();
+
   const [messages, setMessages] = useState<AIChatMessage[]>([
     {
       id: 'msg-welcome',
@@ -287,7 +302,7 @@ export const AIGuidanceCard: React.FC<AIGuidanceCardProps> = ({
           Try asking
         </span>
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1.5 scrollbar-none">
-          {SUGGESTED_QUESTIONS.map((q) => (
+          {personalisedQuestions.map((q) => (
             <button
               type="button"
               key={q}

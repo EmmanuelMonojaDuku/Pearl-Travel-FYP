@@ -170,6 +170,8 @@ export interface ChecklistItem {
   guidanceNote?: string;
   issuingAuthority?: string;
   verification?: { status: 'verified' | 'pending' };
+  /** Why this item is on this traveller's list (nationality, purpose, route). */
+  reasons?: string[];
 }
 
 export interface TravelRequirement {

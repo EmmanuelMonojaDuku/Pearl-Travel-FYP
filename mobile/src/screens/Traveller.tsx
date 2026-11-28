@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
+import { groupLabel, purposeLabel } from '../../../shared/rulesEvaluator';
 import { api, ApiError, ApiUnavailableError } from '../http';
 import { buildChecklist, type CheckItem, type RulesSnapshot, type Traveller } from '../logic';
 import { kvDel, kvGet, kvSet } from '../store';
@@ -81,24 +82,47 @@ export const Journey = ({ t }: { t: T }) => (
   </ScrollView>
 );
 
+type CF = 'all' | 'missing' | 'done' | 'na';
+
 export const Checklist = ({ t, online }: { t: T; online: boolean }) => {
   const [msg, setMsg] = useState('');
+  const [filter, setFilter] = useState<CF>('all');
+  const [requiredOnly, setRequiredOnly] = useState(false);
   const b = t.built;
+  const isMissing = (i: CheckItem) => i.status === 'missing' || i.status === 'expired';
+  const counts = { all: b.items.length, missing: b.items.filter(isMissing).length, done: b.items.filter((i) => i.status === 'complete').length, na: b.items.filter((i) => i.status === 'not_applicable').length };
+  const shown = b.items.filter((i) => (requiredOnly ? i.mandatory : true) && (filter === 'all' || (filter === 'missing' ? isMissing(i) : filter === 'done' ? i.status === 'complete' : i.status === 'not_applicable')));
+  const next = b.items.find((i) => isMissing(i) && i.mandatory) ?? b.items.find(isMissing);
+  const who = [t.traveller.nationality ? `${t.traveller.nationality} (${groupLabel(b.group)})` : '', b.purpose !== 'other' ? `${purposeLabel(b.purpose)} trip` : '', t.traveller.travelMode, t.traveller.borderPoint].filter(Boolean).join(' · ');
   return (
     <ScrollView contentContainerStyle={{ padding: 16 }}>
       <H>Checklist</H>
       {b.warnings.includes('missing_nationality') && <Muted>Add your nationality in Journey to see what applies to you.</Muted>}
       {b.warnings.includes('missing_purpose') && <Muted>Choose a purpose of travel to include purpose-specific documents.</Muted>}
       {b.warnings.includes('unsupported_purpose') && <Muted>Your purpose is not covered by a specific rule yet. General requirements are shown.</Muted>}
+      <View style={{ backgroundColor: '#FFF8DB', borderColor: C.gold, borderWidth: 1, borderRadius: 14, padding: 12, marginBottom: 12 }}>
+        <Text style={{ fontSize: 11, fontWeight: '800', color: C.navy }}>MADE FOR YOU</Text>
+        <Text style={{ fontWeight: '700', color: C.navy, marginTop: 2 }}>{who || 'Add your nationality and purpose in Journey'}</Text>
+        <Muted>{b.items.length} items apply to you. Change nationality or purpose and this list updates.</Muted>
+        {next ? <Text style={{ color: C.navy, fontWeight: '700', marginTop: 6 }}>Next step: {next.title}</Text> : null}
+      </View>
       <Card>
         <Text style={{ fontSize: 34, fontWeight: '800', color: C.navy }}>{b.readiness.score}%</Text>
         <Text style={{ color: C.text2, fontWeight: '600' }}>{b.readiness.statusLabel}</Text>
         <Muted>{b.readiness.completedCount} of {b.readiness.totalCount} done</Muted>
       </Card>
-      {b.items.map((i) => (
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: 4 }}>
+        {([['all', 'All'], ['missing', 'Missing'], ['done', 'Done'], ['na', 'Not needed']] as [CF, string][]).map(([id, label]) => (
+          <Chip key={id} label={`${label} ${counts[id]}`} on={filter === id} onPress={() => setFilter(id)} />
+        ))}
+        <Chip label="Required only" on={requiredOnly} onPress={() => setRequiredOnly(!requiredOnly)} />
+      </View>
+      {shown.length === 0 ? <Muted>{filter === 'missing' ? 'Nothing missing. You have everything on your list.' : 'No items match this filter.'}</Muted> : null}
+      {shown.map((i) => (
         <Card key={i.id}>
           <Text style={{ fontWeight: '700', color: C.navy }}>{i.title}{i.mandatory ? ' *' : ''}</Text>
           <Muted>{i.description}</Muted>
+          {i.reasons?.length ? <Text style={{ color: '#92560A', fontSize: 11, fontWeight: '600', marginTop: 4 }}>Because: {i.reasons.join(' · ')}</Text> : null}
           <Btn title={STATUS_TEXT[i.status]} kind={i.status === 'complete' ? 'primary' : 'outline'} onPress={() => void t.setStatus(i.id)} />
         </Card>
       ))}

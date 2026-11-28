@@ -13,12 +13,25 @@ import {
   Trash2,
   Eye,
   X,
+  Sparkles,
+  ArrowRight,
 } from 'lucide-react';
 import { ChecklistItem, DocumentStatus } from '../types';
 import { Pill, Ring } from './ui';
 
+export interface Personalisation {
+  nationality?: string;
+  groupLabel: string;
+  purpose?: string;
+  mode?: string;
+  border?: string;
+}
+
+type Filter = 'all' | 'missing' | 'done' | 'na';
+
 interface DocumentChecklistCardProps {
   checklist: ChecklistItem[];
+  personalisation?: Personalisation;
   onUpdateItemStatus: (id: string, newStatus: DocumentStatus) => void;
   onUpdateItemDetails: (id: string, docNumber?: string, expiryDate?: string) => void;
   onOpenReviewAudit?: () => void;
@@ -26,6 +39,7 @@ interface DocumentChecklistCardProps {
 
 export const DocumentChecklistCard: React.FC<DocumentChecklistCardProps> = ({
   checklist,
+  personalisation,
   onUpdateItemStatus,
   onUpdateItemDetails,
   onOpenReviewAudit,
@@ -54,8 +68,27 @@ export const DocumentChecklistCard: React.FC<DocumentChecklistCardProps> = ({
     }
   };
 
+  const [filter, setFilter] = useState<Filter>('all');
+  const [requiredOnly, setRequiredOnly] = useState(false);
   const applicable = checklist.filter((i) => i.status !== 'not_applicable').length;
   const done = checklist.filter((i) => i.status === 'complete').length;
+  const missingCount = checklist.filter((i) => i.status === 'missing' || i.status === 'expired').length;
+  const naCount = checklist.length - applicable;
+  const visible = checklist.filter((i) => {
+    if (requiredOnly && !i.mandatory) return false;
+    if (filter === 'missing') return i.status === 'missing' || i.status === 'expired';
+    if (filter === 'done') return i.status === 'complete';
+    if (filter === 'na') return i.status === 'not_applicable';
+    return true;
+  });
+  const nextStep = checklist.find((i) => (i.status === 'missing' || i.status === 'expired') && i.mandatory) ?? checklist.find((i) => i.status === 'missing' || i.status === 'expired');
+  const chips: { id: Filter; label: string; n: number }[] = [
+    { id: 'all', label: 'All', n: checklist.length },
+    { id: 'missing', label: 'Missing', n: missingCount },
+    { id: 'done', label: 'Done', n: done },
+    { id: 'na', label: 'Not needed', n: naCount },
+  ];
+  const profileBits = personalisation ? [personalisation.nationality && `${personalisation.nationality} (${personalisation.groupLabel})`, personalisation.purpose, personalisation.mode, personalisation.border].filter(Boolean) as string[] : [];
 
   return (
     <div className="w-full bg-pearl-dark rounded-2xl p-5 sm:p-7 border border-pearl-border">
@@ -79,8 +112,36 @@ export const DocumentChecklistCard: React.FC<DocumentChecklistCardProps> = ({
         )}
       </div>
 
+      {personalisation && (
+        <div className="mb-4 p-3.5 rounded-xl bg-[#FFF8DB] border border-pearl-gold/40" data-testid="personalised-banner">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-pearl-navy flex items-center gap-1.5"><Sparkles className="w-3.5 h-3.5" /> Made for you</p>
+          <p className="text-sm font-semibold text-pearl-navy mt-1">{profileBits.length ? profileBits.join(' · ') : 'Add your nationality and purpose to personalise this list'}</p>
+          <p className="text-xs text-pearl-navy/80 mt-0.5">{checklist.length} items apply to you. Change your nationality or purpose and this list updates.</p>
+          {nextStep && (
+            <p className="mt-2 text-xs font-semibold text-pearl-navy flex items-center gap-1.5"><ArrowRight className="w-3.5 h-3.5" /> Next step: {nextStep.title}</p>
+          )}
+        </div>
+      )}
+
+      <div className="mb-4 flex flex-wrap items-center gap-2" role="group" aria-label="Filter checklist">
+        {chips.map((c) => (
+          <button key={c.id} type="button" aria-pressed={filter === c.id} onClick={() => setFilter(c.id)}
+            className={`h-9 px-3.5 rounded-full text-xs font-bold cursor-pointer border ${filter === c.id ? 'bg-pearl-gold text-pearl-navy border-pearl-gold' : 'bg-pearl-surface text-pearl-text-secondary border-pearl-border hover:border-pearl-gold'}`}>
+            {c.label} <span className="tabular-nums">{c.n}</span>
+          </button>
+        ))}
+        <label className="ml-auto flex items-center gap-1.5 text-xs font-semibold text-pearl-text-secondary cursor-pointer">
+          <input type="checkbox" checked={requiredOnly} onChange={(e) => setRequiredOnly(e.target.checked)} className="accent-[var(--pearl-gold)]" /> Required only
+        </label>
+      </div>
+
       <div className="space-y-3">
-        {checklist.map((item) => {
+        {visible.length === 0 && (
+          <p role="status" className="p-4 rounded-xl bg-pearl-surface border border-pearl-border text-sm text-pearl-text-secondary">
+            {filter === 'missing' ? 'Nothing missing. You have everything on your list.' : 'No items match this filter.'}
+          </p>
+        )}
+        {visible.map((item) => {
           const isComplete = item.status === 'complete';
           const isMissing = item.status === 'missing';
           const isExpired = item.status === 'expired';
@@ -134,6 +195,9 @@ export const DocumentChecklistCard: React.FC<DocumentChecklistCardProps> = ({
                       </span>
                     </div>
                     <p className="text-xs text-pearl-text-secondary mt-0.5">{item.description}</p>
+                    {item.reasons && item.reasons.length > 0 && (
+                      <p className="text-[11px] text-pearl-accent font-semibold mt-1 flex items-start gap-1"><Sparkles className="w-3 h-3 mt-0.5 shrink-0" /> Because: {item.reasons.join(' · ')}</p>
+                    )}
                   </div>
                 </div>
 

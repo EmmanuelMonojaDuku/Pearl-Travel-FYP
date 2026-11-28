@@ -97,3 +97,24 @@ describe('rules evaluator: nationality and purpose of travel', () => {
     expect(s.totalCount).toBe(3);
   });
 });
+
+describe('personalisation: every checklist item says why it applies', () => {
+  it('explains purpose-specific and nationality-specific items in plain language', () => {
+    const biz = run('Kenya', 'business');
+    const letter = biz.checklist.find((c) => c.id === 'doc-purpose-business')!;
+    expect(letter.reasons.join(' ')).toMatch(/business travel/);
+    const visa = run('United States', 'tourism').checklist.find((c) => c.id === 'doc-visa')!;
+    expect(visa.reasons.join(' ')).toMatch(/United States \(e-Visa nationality\)/);
+  });
+
+  it('gives a reason for items that apply to everyone, and never an empty list', () => {
+    for (const c of run('Kenya', 'business').checklist) expect(c.reasons.length).toBeGreaterThan(0);
+    expect(run('Kenya', 'tourism').checklist.find((c) => c.id === 'doc-passport')!.reasons).toEqual(['Needed by every traveller']);
+  });
+
+  it('changes the reasons and items when nationality or purpose change', () => {
+    const a = run('Kenya', 'business').checklist.map((c) => c.id + c.reasons.join());
+    const b = run('Kenya', 'studies').checklist.map((c) => c.id + c.reasons.join());
+    expect(a).not.toEqual(b);
+  });
+});
