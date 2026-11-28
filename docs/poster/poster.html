@@ -17,12 +17,13 @@
   .poster { width:841mm; height:594mm; background:var(--bg); display:grid; grid-template-rows:62mm 1fr 14mm; overflow:hidden; position:relative; }
 
   /* Header */
-  header { background:var(--navy); color:#fff; display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:12mm; padding:0 14mm; position:relative; }
+  header { background:var(--navy); color:#fff; display:grid; grid-template-columns:auto 1fr auto auto; align-items:center; gap:12mm; padding:0 14mm; position:relative; }
   header::after { content:''; position:absolute; left:0; right:0; bottom:0; height:5mm; background:linear-gradient(90deg,#000 0 33.3%,var(--yellow) 33.3% 66.6%,var(--red) 66.6%); }
   .logo-tile { background:#fff; border-radius:4mm; padding:3.5mm 4.5mm; display:flex; align-items:center; }
   .logo-tile img { height:19mm; width:auto; display:block; }
-  h1 { font-size:52pt; line-height:1.07; font-weight:800; letter-spacing:-0.4pt; }
+  h1 { font-size:48pt; line-height:1.07; font-weight:800; letter-spacing:-0.4pt; }
   .sub { margin-top:3mm; font-size:25pt; font-weight:600; color:var(--yellow); }
+  .qrtile { text-align:center; margin-bottom:3mm; } .qrbox { background:#fff; border-radius:3mm; padding:2mm; display:inline-block; } .qrbox img { width:38mm; height:38mm; display:block; } .qrcap { margin-top:1.2mm; font-size:13pt; font-weight:700; color:var(--yellow); }
   .author { text-align:right; font-size:17pt; line-height:1.4; color:#CBD5E1; }
   .author b { color:#fff; font-size:26pt; font-weight:700; display:block; margin-bottom:1mm; }
   .author .pill { display:inline-block; margin-top:2mm; background:var(--yellow); color:var(--navy); font-weight:700; font-size:14pt; padding:1mm 4mm; border-radius:20mm; }
@@ -69,6 +70,7 @@
   .kpi { background:var(--navy); color:#fff; border-radius:3.4mm; padding:3mm 4.4mm; }
   .kpi .v { font-size:40pt; font-weight:800; color:var(--yellow); line-height:1; }
   .kpi .l { font-size:16pt; line-height:1.2; color:#E2E8F0; margin-top:1.6mm; }
+  .row4 { grid-template-columns:repeat(4,1fr) !important; gap:2mm !important; } .row4 .kpi { padding:2mm 2.4mm !important; } .row4 .kpi .v { font-size:30pt !important; } .row4 .kpi .l { font-size:12.5pt !important; }
   .survey .kpi .v { font-size:34pt; } .survey .kpi { padding:2.4mm 4mm; }
   .legend { display:flex; gap:6mm; font-size:15pt; color:var(--muted); margin-top:2mm; flex-wrap:wrap; }
   .refs p { font-size:13.5pt; line-height:1.28; color:var(--text2); }
@@ -91,6 +93,7 @@
     <h1>Mobile Pre-Arrival Guidance and Traveller Readiness Application for Uganda Land Border Points</h1>
     <div class="sub">Case study: Malaba One-Stop Border Post (OSBP) &nbsp;•&nbsp; Prototype: Pearl Travel</div>
   </div>
+  <div class="qrtile"><div class="qrbox"><img src="assets/qr-app.svg" alt="QR code linking to pearltravelug.netlify.app"/></div><div class="qrcap">Scan to try the web app</div></div>
   <div class="author">
     <b>Emmanuel Monoja Duku</b>
     Reg. No. S24B13/056 &nbsp;|&nbsp; Student No. B30265<br/>
@@ -106,46 +109,55 @@
 <section class="col">
 
   <div class="card">
-    <h2><span class="n">1</span>Background</h2>
+    <h2><span class="n">1</span>Background and problem</h2>
     <ul>
-      <li>Uganda’s land borders use <b>e-Visa</b> services and <b>One-Stop Border Posts</b> that clear both countries together.</li>
-      <li><b>Malaba</b> (Uganda–Kenya) is one of the busiest Northern Corridor crossings.</li>
-      <li>Official systems focus on applications, not on <b>traveller readiness</b>.</li>
-    </ul>
-  </div>
-
-  <div class="card">
-    <h2><span class="n">2</span>Problem</h2>
-    <ul>
-      <li>Guidance is <b>scattered</b> across websites, notices and social media.</li>
-      <li>Little <b>personalisation</b> by nationality and purpose of travel.</li>
-      <li>Border-town internet is <b>unreliable or costly</b>.</li>
-      <li>The size of the problem at Malaba is <b>not yet established</b>; the study investigates it.</li>
+      <li>Uganda’s land borders use <b>e-Visa</b> services and <b>One-Stop Border Posts</b>. <b>Malaba</b> (Uganda–Kenya) is among the busiest Northern Corridor crossings.</li>
+      <li>Official systems handle applications, not <b>traveller readiness</b>.</li>
+      <li>Guidance is <b>scattered</b>, not personalised, and border-town internet is <b>unreliable</b>.</li>
+      <li>One missing document can end a journey: an approved e-Visa does <b>not guarantee entry</b>.</li>
     </ul>
     <div class="callout"><p><b>Research gap:</b> no traveller-centred tool for Uganda’s land borders combines a personalised checklist, readiness score, offline access and grounded Q&amp;A.</p></div>
   </div>
 
   <div class="card">
-    <h2><span class="n">3</span>Objectives</h2>
-    <div class="obj"><div class="k">1</div><p>To investigate traveller and official <b>information needs</b>.</p></div>
-    <div class="obj"><div class="k">2</div><p>To build a <b>verified knowledge base</b> of official requirements.</p></div>
-    <div class="obj"><div class="k">3</div><p>To design the <b>profile model, rule engine</b> and architecture.</p></div>
-    <div class="obj"><div class="k">4</div><p>To build a working <b>prototype</b>.</p></div>
-    <div class="obj"><div class="k">5</div><p>To <b>evaluate</b> correctness, answer quality, offline use, usability.</p></div>
+    <h2><span class="n">2</span>Scale of the problem</h2>
+    <div class="kpis survey" style="margin-bottom:2mm">
+      <div class="kpi"><div class="v">~1,000</div><div class="l">travellers a day at Malaba OSBP, growing about 5% a year*</div></div>
+      <div class="kpi"><div class="v">~365,000</div><div class="l">crossings a year (1,000 × 365)</div></div>
+    </div>
+    <div class="callout" style="margin-top:0"><p style="font-size:19pt"><b>Illustration:</b> if only 1 in 100 travellers is delayed or turned back for a missing document, that is <b>about 10 people a day, 3,650 a year</b>.</p></div>
+    <ul style="margin-top:2mm">
+      <li><b>Time</b> lost in queues and repeat visits.</li>
+      <li><b>Money</b> lost on fares, lodging and missed commitments.</li>
+      <li><b>Resources</b> wasted: officer time on repeat questions.</li>
+    </ul>
+    <p class="small muted">*Reported figure (Kenyan Senate committee, via news). No official count of refusals for missing documents exists, so the true size is not yet measured. Pilot survey: 2 of 5 find it hard to know which documents they need.</p>
   </div>
 
   <div class="card grow">
-    <h2><span class="n">4</span>Scope</h2>
-    <ul>
-      <li><b>Site:</b> Malaba OSBP only.</li>
-      <li><b>Users:</b> adult inbound travellers and clearance officials.</li>
-      <li><b>Advisory only:</b> no visas issued, no entry guarantee, officers decide.</li>
-    </ul>
+    <h2><span class="n">3</span>Two cases</h2>
+    <div style="border-left:2mm solid var(--yellow);padding-left:3.5mm;margin-bottom:3mm">
+      <p style="font-size:19pt"><b>A student</b> travels for studies with only a <b>student ID</b>. It is not a travel document, so the student is <b>turned back</b>: the trip, transport money and the first days of term are lost.</p>
+    </div>
+    <div style="border-left:2mm solid var(--red);padding-left:3.5mm">
+      <p style="font-size:19pt"><b>A man crosses for urgent medical care.</b> At the border he lacks a required document and is <b>sent back</b>. Treatment is delayed, money is wasted and the risk to his health rises.</p>
+    </div>
+    <p class="small muted" style="margin-top:2mm">Illustrative scenarios, not reported individuals. Pearl Travel shows each traveller what they need <b>before</b> they leave.</p>
   </div>
 </section>
 
 <!-- ═════════ COLUMN 2: METHODS + CONCEPT ═════════ -->
 <section class="col">
+
+  <div class="card">
+    <h2><span class="n">4</span>Objectives and scope</h2>
+    <div class="obj"><div class="k">1</div><p>To investigate traveller and official <b>information needs</b>.</p></div>
+    <div class="obj"><div class="k">2</div><p>To build a <b>verified knowledge base</b> of official requirements.</p></div>
+    <div class="obj"><div class="k">3</div><p>To design the <b>profile model, rule engine</b> and architecture.</p></div>
+    <div class="obj"><div class="k">4</div><p>To build a working <b>prototype</b>.</p></div>
+    <div class="obj"><div class="k">5</div><p>To <b>evaluate</b> correctness, answer quality, offline use, usability.</p></div>
+    <p class="small muted" style="margin-top:1mm"><b>Scope:</b> Malaba OSBP; advisory only.</p>
+  </div>
 
   <div class="card">
     <h2><span class="n">5</span>Methods</h2>
@@ -174,7 +186,7 @@
       <tr><td><b>Document analysis</b></td><td>EAC OSBP Act, DCIC, URA</td></tr>
       <tr><td><b>Technical tests</b></td><td>API, browser, offline, assistant</td></tr>
     </table>
-    <p class="small muted" style="margin-top:2mm">Ethics: consent, anonymised officials, no passport numbers stored. Indicative, not generalisable.</p>
+    
   </div>
 
   <div class="card">
@@ -193,25 +205,15 @@
     </svg>
   </div>
 
-  <div class="card">
+  <div class="card grow">
     <h2><span class="n">7</span>Pilot survey (5 of 40)</h2>
-    <div class="kpis survey" style="margin-bottom:2mm">
+    <div class="kpis survey row4" style="margin-bottom:2mm">
       <div class="kpi"><div class="v">5/5</div><div class="l">found the app useful (1 extremely)</div></div>
       <div class="kpi"><div class="v">2/5</div><div class="l">find it hard to know which documents they need</div></div>
       <div class="kpi"><div class="v">1/5</div><div class="l">willing to show a QR summary (3 no, 1 unsure)</div></div>
       <div class="kpi"><div class="v">4/5</div><div class="l">prefer English only</div></div>
     </div>
-    <p class="small muted">Top problems: unreliable internet, unclear steps, repeat queues. Pilot only, not generalisable; target is 40.</p>
-  </div>
-
-  <div class="card grow">
-    <h2 style="margin-bottom:2.5mm"><span class="n">8</span>Try Pearl Travel</h2>
-    <div style="display:flex;gap:5mm;align-items:center;flex:1">
-      <div style="flex:none;background:#fff;border:0.6mm solid var(--line);border-radius:3mm;padding:2mm"><img src="assets/qr-app.svg" alt="QR code linking to pearltravelug.netlify.app" style="width:46mm;height:46mm;display:block"/></div>
-      <div><p style="font-size:21pt;font-weight:800;color:var(--navy);line-height:1.15">Scan to open the web app</p>
-      <p class="small muted" style="margin-top:1mm"><b>pearltravelug.netlify.app</b></p>
-      <p class="small muted" style="margin-top:1.2mm">Web preview. Officer, admin and QR-pass demos run on the presenter’s laptop.</p></div>
-    </div>
+    <p class="small muted">Top problems: no internet, unclear steps, repeat queues.</p>
   </div>
 </section>
 
@@ -219,7 +221,7 @@
 <section class="col">
 
   <div class="card">
-    <h2><span class="n">9</span>System architecture</h2>
+    <h2><span class="n">8</span>System architecture</h2>
     <svg viewBox="0 0 800 760" width="100%" role="img" aria-label="System architecture: clients, API, services, data">
       <defs>
         <marker id="ar3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#0F172A"/></marker>
@@ -276,7 +278,7 @@
   </div>
 
   <div class="card grow">
-    <h2><span class="n">10</span>The prototype in use</h2>
+    <h2><span class="n">9</span>The prototype in use</h2>
     <div class="flow"><div class="s">Nationality + purpose</div><div class="a">›</div><div class="s">Checklist</div><div class="a">›</div><div class="s">Readiness</div><div class="a">›</div><div class="s">QR pass</div></div>
     <div class="phones">
       <div class="phone"><div class="frame"><img src="assets/scr-dashboard.png" alt="Home"/></div><div class="cap">Home<span>journey and next step</span></div></div>
@@ -293,7 +295,7 @@
 <section class="col">
 
   <div class="card">
-    <h2><span class="n">11</span>Results so far</h2>
+    <h2><span class="n">10</span>Results so far</h2>
     <div class="kpis">
       <div class="kpi"><div class="v">65/65</div><div class="l">API tests passed, real PostgreSQL</div></div>
       <div class="kpi"><div class="v">15/15</div><div class="l">browser end-to-end checks, real API</div></div>
@@ -318,7 +320,7 @@
   </div>
 
   <div class="card">
-    <h2><span class="n">12</span>Implementation status</h2>
+    <h2><span class="n">11</span>Implementation status</h2>
     <table>
       <tr><td><b>Accounts and profile</b></td><td class="st"><span class="chip done">Completed</span></td></tr>
       <tr><td><b>Rules by nationality + purpose</b></td><td class="st"><span class="chip done">Completed</span></td></tr>
@@ -336,7 +338,7 @@
   </div>
 
   <div class="card grow">
-    <h2><span class="n">13</span>Contribution and limits</h2>
+    <h2><span class="n">12</span>Contribution and limits</h2>
     <ul>
       <li><b>Contribution:</b> personalised, offline pre-arrival guide with a private, verifiable QR pass.</li>
       <li><b>Not claimed:</b> shorter queues.</li>
@@ -344,7 +346,7 @@
       <li><b>Next:</b> live RAG benchmark, device tests, user evaluation.</li>
     </ul>
     <div class="refs" style="margin-top:auto;padding-top:2mm;border-top:0.3mm solid var(--line)">
-      <p><b>References:</b> Hevner et al. (2004) <i>MIS Quarterly</i>; Peffers et al. (2007) <i>JMIS</i>; Davis (1989) <i>MIS Quarterly</i>; Brooke (1996) SUS; Lewis et al. (2020) RAG; EAC (2016) OSBP Act; Uganda Data Protection and Privacy Act (2019).</p>
+      <p><b>References:</b> Hevner et al. (2004) <i>MIS Quarterly</i>; Peffers et al. (2007) <i>JMIS</i>; Davis (1989) <i>MIS Quarterly</i>; Brooke (1996) SUS; Lewis et al. (2020) RAG; EAC (2016) OSBP Act; Uganda Data Protection and Privacy Act (2019); Kenyan Senate committee on Malaba OSBP, as reported by Kenyans.co.ke (traveller volume).</p>
     </div>
   </div>
 </section>
@@ -352,7 +354,7 @@
 </main>
 
 <footer>
-  <div><b>Sources:</b> DCIC, Uganda e-Visa portal, Uganda Revenue Authority, EAC OSBP Act 2016, Malaba OSBP guidance.</div>
+  <div><b>Sources:</b> DCIC, URA, EAC OSBP Act 2016. <b>Ethics:</b> consent, anonymised, no passport numbers stored.</div>
   <div><b>Advisory prototype.</b> Not an immigration decision, visa or guarantee of entry. Officers decide.</div>
   <div style="text-align:right">Uganda Christian University · November 2026</div>
 </footer>
