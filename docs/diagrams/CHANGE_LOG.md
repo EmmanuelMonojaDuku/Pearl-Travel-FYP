@@ -70,6 +70,7 @@ Every change makes a diagram match the system that was built.
 | DFD Level 1 | D6   Knowledge Base (chunks + vectors) | D6 Knowledge Base (chunks + embeddings) |  |
 | DFD Level 1 | D5   QR Summaries & Scan Log | D5 QR Passes & Scan Log |  |
 | DFD Level 1 | E4 and E6 missing | Added E4 (twice, same entity) and E6 with flows; audit flows from 5.0 and 8.0 | Balances with Level 0; audit log now receives all events |
+| DFD Level 1 | tangled layout, 48 crossing-prone flows | rebuilt in three columns: 10 processes, 26 entity/store boxes, 50 flows; line crossings = 0, lines through other boxes = 0 | Lecturer's feedback: entities, then processes, then data stores, with no crossing lines |
 | 7 ERD as built | (new page) | 16 tables, 31 foreign-key links, generated from PostgreSQL | Diagrams now show the real schema |
 | ERD | older 9-table ERD | removed | Duplicated by ERD 1-3 and contained typos |
 | M-ERD | older 9-table ERD | removed | Duplicated by ERD 1-3 and contained typos |

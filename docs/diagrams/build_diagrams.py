@@ -218,6 +218,161 @@ n156 = get(D1, Q + '156')
 n156.set('value', (n156.get('value') or '').replace('2. D10 Audit Log also receives events from 1.0, 5.0 and 8.0 (not drawn for clarity).', '2. D10 Audit Log receives events from 5.0, 8.0 and 9.0 (drawn) and from 1.0 for logins (not drawn for clarity).').replace('4. AI suggestions (D9)', '4. External services E4 and E6 are drawn as in the Level 0 context diagram (E4 appears twice to avoid long lines). 5. AI suggestions (D9)'))
 log.append((D1, 'E4 and E6 missing', 'Added E4 (twice, same entity) and E6 with flows; audit flows from 5.0 and 8.0', 'Balances with Level 0; audit log now receives all events'))
 
+
+# ───────────────────────── 6b. DFD level 1: rebuilt as three columns with no crossing flows ─────────────────────────
+def rebuild_dfd1():
+    page = pages[D1]
+    model = page.find('mxGraphModel')
+    old = {c.get('id'): c for c in page.iter('mxCell')}
+    pstyle = old[Q + '84'].get('style')
+    sstyle = old[Q + '94'].get('style')
+    estyle_w = old[Q + '77'].get('style')
+    estyle_x = old[Q + '82'].get('style')
+    pval = {k: old[Q + v].get('value') for k, v in {'1.0': '84', '6.0': '85', '7.0': '86', '2.0': '87', '3.0': '88', '4.0': '89', '10.0': '90', '8.0': '91', '9.0': '92', '5.0': '93'}.items()}
+    PN = {'1.0': 'Authenticate & Manage Accounts', '2.0': 'Build Profile & Generate Checklist', '3.0': 'Declare Items & Assess Readiness', '4.0': 'Generate Signed QR Pass', '5.0': 'Verify QR Pass (officer)',
+          '6.0': 'Generate Guidance from Knowledge Base (RAG guidance)', '7.0': 'Deliver Guidance & Offline Content', '8.0': 'Manage Requirements, Rules & Knowledge Base',
+          '9.0': 'Review AI Suggestions & Content', '10.0': 'Manage Traveller Alerts (in-app now; SMS / e-mail planned)'}
+    ENT = {'E1': ('E1 Traveller', 'w'), 'E2': ('E2 Border Officer', 'w'), 'E3': ('E3 Administrator', 'w'), 'E3a': ('E3 Administrator (copy)', 'w'),
+           'E4': ('E4 AI / LLM Service', 'x'), 'E5': ('E5 Notification Service (planned)', 'x'), 'E6': ('E6 Official Information Sources', 'x')}
+    ST = {'D1': 'D1 Accounts & Consent', 'D1b': 'D1 Accounts & Consent (copy)', 'D2': 'D2 Profiles & Checklist Items', 'D3a': 'D3 Requirements & Rules', 'D3b': 'D3 Requirements & Rules (copy)', 'D3c': 'D3 Requirements & Rules (copy)',
+          'D4': 'D4 Readiness Assessments', 'D4c': 'D4 Readiness Assessments (copy)', 'D5': 'D5 QR Passes & Scan Log', 'D5c': 'D5 QR Passes & Scan Log (copy)', 'D6': 'D6 Knowledge Base (chunks + embeddings)', 'D6b': 'D6 Knowledge Base (copy)',
+          'D7': 'D7 Questions & Answer Sources', 'D8': 'D8 FAQ, Guidance & Media', 'D8b': 'D8 FAQ, Guidance & Media (copy)', 'D9': 'D9 AI Suggestions', 'D10': 'D10 Audit Log', 'D10c': 'D10 Audit Log (copy)', 'D11': 'D11 Notifications'}
+    # rows, top to bottom. flow = (box key, 'in' (into the process) | 'out' (from the process) | 'both', label)
+    ROWS = [
+        ('5.0', [('E2', 'in', 'Scanned or pasted token, approve / flag'), ('E2', 'out', 'Minimal readiness summary')],
+                [('D4c', 'in', 'Assessment'), ('D5c', 'both', 'QR record / scan log'), ('D10c', 'out', 'Scan audit entry')]),
+        ('1.0', [('E2', 'out', 'Officer login / session'), ('E3a', 'out', 'Admin login / session'), ('E1', 'both', 'Register, consent, login / session')],
+                [('D1', 'out', 'Account, credentials, consent')]),
+        ('2.0', [('E1', 'in', 'Nationality, purpose, border, date'), ('E1', 'out', 'Requirements & checklist')],
+                [('D3a', 'in', 'Rules, requirements, lookups'), ('D2', 'out', 'Profile, checklist items')]),
+        ('3.0', [('E1', 'in', 'Declared status (Have / Missing / Expired / N/A)'), ('E1', 'out', 'Readiness score, missing items')],
+                [('D2', 'both', 'Checklist items / declared status'), ('D4', 'out', 'Assessment (score, counts)')]),
+        ('4.0', [('E1', 'in', 'QR request'), ('E1', 'out', 'QR pass (signed token, expiry)')],
+                [('D4', 'in', 'Assessment'), ('D5', 'out', 'QR pass (digest, expiry)')]),
+        ('7.0', [('E1', 'in', 'Guidance / offline request'), ('E1', 'out', 'Guide, media, offline pack')],
+                [('D3b', 'in', 'Requirements for offline pack'), ('D8', 'in', 'Guidance steps, media')]),
+        ('6.0', [('E1', 'in', 'Question, feedback'), ('E1', 'out', 'Answer + sources or referral'), ('E4', 'out', 'Question + retrieved chunks'), ('E4', 'in', 'Generated answer')],
+                [('D8', 'in', 'FAQ entries'), ('D6', 'in', 'Retrieved chunks'), ('D7', 'out', 'Question, answer, sources')]),
+        ('9.0', [('E4', 'out', 'Source text for drafting'), ('E4', 'in', 'Draft suggestions'), ('E3', 'in', 'Approve / reject decisions'), ('E3', 'out', 'Pending suggestions and content')],
+                [('D9', 'both', 'Suggestions / review status'), ('D10', 'out', 'Review audit entry')]),
+        ('8.0', [('E3', 'in', 'Requirement, rule, FAQ, KB updates'), ('E3', 'out', 'Reports, confirmations'), ('E6', 'in', 'Official guidance & links (reviewed)')],
+                [('D10', 'out', 'Content change audit entry'), ('D6b', 'out', 'KB documents, chunks, embeddings'), ('D8b', 'out', 'FAQs, guidance, media'), ('D3c', 'out', 'Requirements, rules, versions')]),
+        ('10.0', [('E5', 'out', 'SMS / e-mail requests (planned)')],
+                [('D1b', 'in', 'Contact details'), ('D11', 'out', 'Notification record')]),
+    ]
+    VERT = [('9.0', '8.0', 'Approved changes'), ('8.0', '10.0', 'Content-update notices')]
+    EX, EW, PX, PW, SX, SW = 40, 190, 520, 260, 1050, 250
+    PITCH, PAD, GAP = 42, 18, 60
+    # geometry
+    proc, lines = {}, []   # lines: (kind, key, y, direction, label, pid)
+    y = 90
+    for pid, left, right in ROWS:
+        n = max(len(left), len(right))
+        h = 28 + (n - 1) * PITCH + 28
+        proc[pid] = (PX, y, PW, h)
+        for k, (key, d, lab) in enumerate(left):
+            lines.append(('L', key, y + 28 + k * PITCH, d, lab, pid))
+        for k, (key, d, lab) in enumerate(right):
+            lines.append(('R', key, y + 28 + k * PITCH, d, lab, pid))
+        y += h + GAP
+    boxes = {}
+    for kind, key, yy, d, lab, pid in lines:
+        b = boxes.setdefault((kind, key), [yy, yy])
+        b[0], b[1] = min(b[0], yy), max(b[1], yy)
+    box_geo = {}
+    for (kind, key), (y0, y1) in boxes.items():
+        top, bot = y0 - PAD, y1 + PAD
+        if bot - top < 36:
+            mid = (top + bot) / 2
+            top, bot = mid - 18, mid + 18
+        box_geo[(kind, key)] = (EX if kind == 'L' else SX, top, EW if kind == 'L' else SW, bot - top)
+    # rebuild page content
+    root_el = model.find('root')
+    for c in list(root_el):
+        root_el.remove(c)
+    ET.SubElement(root_el, 'mxCell', {'id': 'd0'})
+    ET.SubElement(root_el, 'mxCell', {'id': 'd1', 'parent': 'd0'})
+
+    def vtx(i, val, geo, style):
+        c = ET.SubElement(root_el, 'mxCell', {'id': i, 'parent': 'd1', 'value': val, 'style': style, 'vertex': '1'})
+        ET.SubElement(c, 'mxGeometry', {'x': str(int(geo[0])), 'y': str(int(geo[1])), 'width': str(int(geo[2])), 'height': str(int(geo[3])), 'as': 'geometry'})
+
+    vtx('title', '<b>DFD Level 1</b> - external entities (left), processes (centre), data stores (right). No flows cross. Items marked (copy) repeat an entity or store to keep lines straight.', (EX, 20, 1260, 40), 'text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=13;')
+    vtx('hdrL', '<b>External entities</b>', (EX, 62, EW, 22), 'text;html=1;align=center;fontSize=12;fontColor=#92560A;')
+    vtx('hdrP', '<b>Processes</b>', (PX, 62, PW, 22), 'text;html=1;align=center;fontSize=12;fontColor=#92560A;')
+    vtx('hdrR', '<b>Data stores</b>', (SX, 62, SW, 22), 'text;html=1;align=center;fontSize=12;fontColor=#92560A;')
+    for pid, g in proc.items():
+        vtx('P' + pid, f'<b>{pid}</b><br>{PN[pid]}', g, pstyle)
+    for (kind, key), g in box_geo.items():
+        if kind == 'L':
+            vtx('B_' + key, ENT[key][0], g, estyle_w if ENT[key][1] == 'w' else estyle_x)
+        else:
+            vtx('B_' + key, ST[key], g, sstyle)
+    ebase = 'edgeStyle=none;html=1;rounded=0;strokeWidth=1.2;fontSize=9;labelBackgroundColor=#FFFFFF;endArrow=classic;endFill=1;'
+    segs = []
+
+    def edge(i, src, tgt, x_s, y_s, x_t, y_t, lab, both, sg, tg):
+        ex, ey = (1 if x_s <= x_t else 0), (y_s - sg[1]) / sg[3]
+        nx, ny = (0 if x_s <= x_t else 1), (y_t - tg[1]) / tg[3]
+        st = ebase + f'exitX={ex};exitY={ey:.4f};entryX={nx};entryY={ny:.4f};exitPerimeter=0;entryPerimeter=0;' + ('startArrow=classic;startFill=1;' if both else '')
+        c = ET.SubElement(root_el, 'mxCell', {'id': i, 'parent': 'd1', 'value': lab, 'style': st, 'edge': '1', 'source': src, 'target': tgt})
+        ET.SubElement(c, 'mxGeometry', {'relative': '1', 'as': 'geometry'})
+
+    for n_, (kind, key, yy, d, lab, pid) in enumerate(lines):
+        pg = proc[pid]
+        bg = box_geo[(kind, key)]
+        bid = 'B_' + key
+        if kind == 'L':
+            xb, xp = bg[0] + bg[2], pg[0]
+            if d == 'in' or d == 'both':
+                edge(f'f{n_}', bid, 'P' + pid, xb, yy, xp, yy, lab, d == 'both', bg, pg)
+            else:
+                edge(f'f{n_}', 'P' + pid, bid, xp, yy, xb, yy, lab, False, pg, bg)
+            segs.append(((xb, yy), (xp, yy)))
+        else:
+            xp, xb = pg[0] + pg[2], bg[0]
+            if d == 'in':
+                edge(f'f{n_}', bid, 'P' + pid, xb, yy, xp, yy, lab, False, bg, pg)
+            elif d == 'both':
+                edge(f'f{n_}', 'P' + pid, bid, xp, yy, xb, yy, lab, True, pg, bg)
+            else:
+                edge(f'f{n_}', 'P' + pid, bid, xp, yy, xb, yy, lab, False, pg, bg)
+            segs.append(((xp, yy), (xb, yy)))
+    for n_, (a, b, lab) in enumerate(VERT):
+        ga, gb = proc[a], proc[b]
+        cx = ga[0] + ga[2] / 2
+        c = ET.SubElement(root_el, 'mxCell', {'id': f'v{n_}', 'parent': 'd1', 'value': lab, 'edge': '1', 'source': 'P' + a, 'target': 'P' + b,
+                                              'style': ebase + 'exitX=0.5;exitY=1;entryX=0.5;entryY=0;exitPerimeter=0;entryPerimeter=0;'})
+        ET.SubElement(c, 'mxGeometry', {'relative': '1', 'as': 'geometry'})
+        segs.append(((cx, ga[1] + ga[3]), (cx, gb[1])))
+    last = max(g[1] + g[3] for g in proc.values())
+    vtx('notes', '<b>Notes</b><br>1. The session / role token from 1.0 accompanies every request (not drawn).<br>2. 1.0 also writes login events to the audit log (not drawn). 3.0 and 9.0 also send reminder and alert requests to 10.0, and 8.0 sends content-update notices (the 3.0 and 9.0 requests are not drawn to keep lines straight). E5 delivers reminders to travellers and officers.<br>3. Checklist items in D2 carry the rule, version and requirement level used, so scores can be reproduced. No document numbers or uploads are stored.<br>4. AI suggestions (D9) never change published content until a second administrator approves them in 9.0; 8.0 publishes approved changes. E4 and E6 are the same external entities as in the Level 0 context diagram.', (PX - 480, last + 40, 1250, 130), 'text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;')
+    model.set('pageWidth', '1500')
+    model.set('pageHeight', str(int(last + 240)))
+    # proof: no two flow lines cross or touch
+    def cross(a, b):
+        (x1, y1), (x2, y2) = a; (x3, y3), (x4, y4) = b
+        def o(ax, ay, bx, by, cx, cy): return (bx - ax) * (cy - ay) - (by - ay) * (cx - ax)
+        d1, d2, d3, d4 = o(x3, y3, x4, y4, x1, y1), o(x3, y3, x4, y4, x2, y2), o(x1, y1, x2, y2, x3, y3), o(x1, y1, x2, y2, x4, y4)
+        return d1 * d2 < 0 and d3 * d4 < 0
+    crossings = sum(cross(segs[i], segs[j]) for i in range(len(segs)) for j in range(i + 1, len(segs)))
+    # lines must not pass through any box other than their endpoints
+    bad = 0
+    allboxes = [g for g in proc.values()] + list(box_geo.values())
+    for (p1, p2) in segs:
+        for g in allboxes:
+            x0, y0, w, h = g
+            lo, hi = min(p1[0], p2[0]), max(p1[0], p2[0])
+            ylo, yhi = min(p1[1], p2[1]), max(p1[1], p2[1])
+            if lo < x0 + w - 1 and hi > x0 + 1 and ylo < y0 + h - 1 and yhi > y0 + 1:
+                bad += 1
+    log.append((D1, 'tangled layout, 48 crossing-prone flows', f'rebuilt in three columns: {len(proc)} processes, {len(box_geo)} entity/store boxes, {len(segs)} flows; line crossings = {crossings}, lines through other boxes = {bad}', "Lecturer's feedback: entities, then processes, then data stores, with no crossing lines"))
+    print('DFD1 crossings:', crossings, 'lines through boxes:', bad)
+    assert crossings == 0 and bad == 0
+
+
+rebuild_dfd1()
+
 # ───────────────────────── 7. As-built ERD (generated from the database) ─────────────────────────
 cols, fks = {}, []
 for line in open(COLS):
